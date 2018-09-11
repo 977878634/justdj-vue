@@ -1,15 +1,23 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
+
+// elementUI
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+
 import App from './App'
 import VueRouter from 'vue-router'
 //路由文件
 import routes from './router'
+import axios from 'axios'
+
 
 Vue.config.productionTip = false;
 
-
 Vue.use(VueRouter);
+Vue.use(ElementUI)
+Vue.prototype.$axios = axios;
 
 // 如果使用模块化机制编程，导入Vue和VueRouter，要调用 Vue.use(VueRouter)
 export const router = new VueRouter({
@@ -28,3 +36,4 @@ new Vue({
   // template: '<App/>'
   render: h => h(App)
 }).$mount('#app');
+
