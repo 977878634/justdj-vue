@@ -22,6 +22,7 @@
     min-height: 1080px;
     overflow-y: scroll;
     overflow-x: hidden;
+    font-size: 16px;
   }
 
   @media screen and (min-height: 1080px) {

@@ -12,8 +12,10 @@
         <img src="../../static/img/company-log.png" style="height: 40px;width: 138px;"/>
       </div>
 
-      <div class="header-title" style="width:70%;height:100%;
-                                    display: flex;justify-content: center;align-items: center;position: relative">
+      <div class="header-title"
+           @click="handleItemClick(-1)"
+           style="width:70%;height:100%;cursor: pointer;
+                  display: flex;justify-content: center;align-items: center;position: relative">
 
         <img src="/static/img/kanban-header-main-bg.png"
              style="position:absolute;top:0;left:0;width: 100%;height: 100%;"/>
@@ -40,7 +42,7 @@
 
       <!--流程-->
       <div class="body-process"
-           style="margin-bottom:52px;margin-top: 25px;padding: 0 38px;display: flex;justify-content: flex-start;align-items: center;position: relative;
+           style="margin-bottom:52px;margin-top: 25px;padding: 0 38px;display: flex;justify-content: center;align-items: center;position: relative;
                   height: 223px">
 
         <img src="/static/img/kanban-header-left.png" style="position: absolute;top: -39px;left: -33px;height: 289px;width:213px "/>
@@ -55,7 +57,8 @@
             <div style="height:126px;display: flex;justify-content: flex-start;align-items: center">
 
               <div class="item-info-name center"
-                   style="width:126px; height: 100%; margin-bottom: 10px;position: relative">
+                   @click="handleItemClick(index)"
+                   style="width:126px; height: 100%; margin-bottom: 10px;position: relative;cursor: pointer">
 
                 <img style="width: 100%;height: 100%;position: absolute;top: 0;left: 0"
                      src="../../static/img/process_item_bg.png"/>
@@ -75,7 +78,7 @@
             </div>
 
 
-            <span v-if="index < 10" class="item-info-index center special-font" style="width:126px;color: rgb(67,154,247);font-size: 34px">
+            <span v-if="index + 1 < 10" class="item-info-index center special-font" style="width:126px;color: rgb(67,154,247);font-size: 34px">
               0{{index + 1}}
             </span>
             <span v-else class="item-info-index center special-font" style="width:138px;color: rgb(67,154,247);font-size: 34px">
@@ -91,9 +94,11 @@
       </div>
 
       <!--信息展示小面板-->
-      <div class="body-main" style="display: flex;justify-content: flex-start;align-items: flex-start;flex-wrap: wrap;margin-right: -27px">
+      <div class="body-main" style="display: flex;justify-content: space-between;align-items: flex-start;flex-wrap: wrap;margin-right: -27px">
 
-        <div v-for="(item,index) in process" class="panel-item" style="width: 430px;height: 290px;margin-right: 27px;padding: 0 27px;
+        <div v-for="(item,index) in process" class="panel-item"
+             @click="handleItemClick(index)"
+             style="width: 430px;height: 290px;margin-right: 27px;padding: 0 27px;cursor: pointer;
                 margin-bottom: 40px;box-sizing: border-box;position: relative">
 
           <img src="/static/img/panel-item-bg.png"
@@ -101,7 +106,7 @@
 
           <div class="panel-item-header" style="margin-bottom: 28px;margin-top: 26px;display: flex;justify-content: flex-start;align-items: flex-end">
 
-            <span v-if="index  < 10" class="special-font" style="color: rgb(67,154,247);font-size: 38px;margin-right: 10px;line-height: 38px">
+            <span v-if="index + 1  < 10" class="special-font" style="color: rgb(67,154,247);font-size: 38px;margin-right: 10px;line-height: 38px">
               0{{index + 1}}\
             </span>
             <span v-else class="special-font" style="color: rgb(67,154,247);font-size: 38px;margin-right: 10px;line-height: 38px">
@@ -140,6 +145,103 @@
 
     </div>
 
+
+    <el-dialog title="操作" :visible.sync="dialogVisible"
+        @close="dialogClose">
+
+      <el-form :model="formData" label-width="6.25rem">
+        <el-row>
+          <el-col :span="12">
+
+            <el-form-item label="流程名称" prop="name">
+              <el-input  v-model="formData.name" style="width: 18.75rem" ></el-input>
+            </el-form-item>
+
+          </el-col>
+
+          <el-col :span="12">
+            <el-form-item label="流程简称" prop="ename">
+              <el-input v-model="formData.ename" style="width: 18.75rem"></el-input>
+            </el-form-item>
+          </el-col>
+
+        </el-row>
+
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="温度URL" >
+              <el-input  v-model="formData.child[0].url" style="width: 18.75rem" ></el-input>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="12">
+
+            <el-form-item label="访问间隔 S">
+              <el-input-number  v-model="formData.child[0].interval" style="width: 18.75rem" :min="1"> </el-input-number>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="压力URL" >
+              <el-input  v-model="formData.child[1].url" style="width: 18.75rem" ></el-input>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="12">
+
+            <el-form-item label="访问间隔 S">
+              <el-input-number  v-model="formData.child[1].interval" style="width: 18.75rem" :min="1"> </el-input-number>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="PHURL" >
+              <el-input  v-model="formData.child[2].url" style="width: 18.75rem" ></el-input>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="12">
+
+            <el-form-item label="访问间隔 S">
+              <el-input-number  v-model="formData.child[2].interval" style="width: 18.75rem" :min="1"> </el-input-number>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="电导率URL" >
+              <el-input  v-model="formData.child[3].url" style="width: 18.75rem" ></el-input>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="12">
+
+            <el-form-item label="访问间隔 S">
+              <el-input-number  v-model="formData.child[3].interval" style="width: 18.75rem" :min="1"> </el-input-number>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+
+      </el-form>
+
+      <div slot="footer" class="dialog-footer">
+
+        <div class="center" style="width: 100%;height: 100%;">
+          <el-button type="primary" @click="addProcess">新增</el-button>
+          <el-button type="primary" @click="changeProcess" :disabled="selectItemIndex < 0">修改</el-button>
+          <el-button type="primary" @click="delProcess" :disabled="selectItemIndex < 0 ">删除</el-button>
+          <el-button type="primary" @click="dialogVisible = false">取 消</el-button>
+        </div>
+
+      </div>
+    </el-dialog>
+
   </div>
 
 </template>
@@ -150,6 +252,44 @@
 
     data() {
       return {
+        selectItemIndex: -1,
+        formData:{
+          "name": "",
+          "ename": "",
+          "child": [
+            {
+              "name": "温度",
+              "value": 0,
+              "unit": "℃",
+              "url": "",
+              "interval": 2
+            },
+            {
+              "name": "压力",
+              "value": 0,
+              "unit": "Mpa",
+              "url": "",
+              "interval": 2
+            },
+            {
+              "name": "PH",
+              "value": 0,
+              "unit": "",
+              "url": "",
+              "interval": 2
+            },
+            {
+              "name": "电导率",
+              "value": 0,
+              "unit": "us/cm",
+              "url": "",
+              "interval": 2
+            },
+
+          ],
+
+        },
+        dialogVisible:false,
         nowTimeInterval: 0,
         nowTime: '',
         intervalHandle: [],
@@ -176,7 +316,7 @@
               {
                 "name": "PH",
                 "value": 9.1,
-                "unit": "值",
+                "unit": "",
                 "url": "http://mes.mes.ycxz-china.com/api/kanban/getData?id=5b762ff95c2ba90001130cde&quotaId=8349651742",
                 "interval": 2
               },
@@ -212,7 +352,7 @@
               {
                 "name": "PH",
                 "value": "9.1",
-                "unit": "值",
+                "unit": "",
                 "url": "www.baidu.com",
                 "interval": 12
               },
@@ -229,7 +369,7 @@
           },
           {
             "name": "水洗一",
-            "ename": "Washed 一",
+            "ename": "Washed 1",
             "child": [
               {
                 "name": "温度",
@@ -248,7 +388,7 @@
               {
                 "name": "PH",
                 "value": "9.1",
-                "unit": "值",
+                "unit": "",
                 "url": "www.baidu.com",
                 "interval": 12
               },
@@ -284,7 +424,7 @@
               {
                 "name": "PH",
                 "value": "9.1",
-                "unit": "值",
+                "unit": "",
                 "url": "www.baidu.com",
                 "interval": 12
               },
@@ -320,7 +460,7 @@
               {
                 "name": "PH",
                 "value": "9.1",
-                "unit": "值",
+                "unit": "",
                 "url": "www.baidu.com",
                 "interval": 12
               },
@@ -346,6 +486,111 @@
     computed: {},
 
     methods: {
+      dialogClose: function(){
+        this.formData = {
+          "name": "",
+          "ename": "",
+          "child": [
+            {
+              "name": "温度",
+              "value": 0,
+              "unit": "℃",
+              "url": "",
+              "interval": 2
+            },
+            {
+              "name": "压力",
+              "value": 0,
+              "unit": "Mpa",
+              "url": "",
+              "interval": 2
+            },
+            {
+              "name": "PH",
+              "value": 0,
+              "unit": "",
+              "url": "",
+              "interval": 2
+            },
+            {
+              "name": "电导率",
+              "value": 0,
+              "unit": "us/cm",
+              "url": "",
+              "interval": 2
+            },
+
+          ],
+
+        };
+        this.selectItemIndex = -1;
+      },
+
+      addProcess: function(){
+        this.process.push(this.formData);
+        this.dialogVisible = false;
+      },
+
+      changeProcess: function(){
+        this.process[this.selectItemIndex] = this.formData;
+        this.dialogVisible = false;
+      },
+
+      delProcess: function(){
+        this.process.splice(this.selectItemIndex, 1);
+        this.dialogVisible = false;
+      },
+
+      handleItemClick: function(index){
+        this.selectItemIndex = index;
+        this.dialogVisible = true;
+
+        if (index > -1){
+          let temp = this.process[index];
+          this.formData = JSON.parse(JSON.stringify(temp));
+        } else{
+          this.formData = {
+            "name": "",
+            "ename": "",
+            "child": [
+              {
+                "name": "温度",
+                "value": 0,
+                "unit": "℃",
+                "url": "",
+                "interval": 2
+              },
+              {
+                "name": "压力",
+                "value": 0,
+                "unit": "Mpa",
+                "url": "",
+                "interval": 2
+              },
+              {
+                "name": "PH",
+                "value": 0,
+                "unit": "",
+                "url": "",
+                "interval": 2
+              },
+              {
+                "name": "电导率",
+                "value": 0,
+                "unit": "us/cm",
+                "url": "",
+                "interval": 2
+              },
+
+            ],
+
+          }
+        }
+
+
+      },
+
+
 
       getNowTime: function () {
         // console.log(this.nowTime);
