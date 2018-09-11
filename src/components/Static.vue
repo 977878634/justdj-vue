@@ -1,15 +1,15 @@
 <template>
 
   <div class="kanban-container"
-       style="width:100%;height:100%;box-sizing: border-box;padding: 14px 58px 0 58px">
+       style="width:100%;height:100%;box-sizing: border-box;padding: 0.875rem 3.625rem 0 3.625rem">
 
     <!--公司logo等-->
     <div class="kanban-header"
-         style="width: 100%;height: 92px;display: flex;justify-content: space-between;align-items: center;">
+         style="width: 100%;height: 5.75rem;display: flex;justify-content: space-between;align-items: center;">
 
       <div class="header-logo"
-           style="width: 300px;height: 100%;display: flex;justify-content: flex-start;align-items: center">
-        <img src="../../static/img/company-log.png" style="height: 40px;width: 138px;"/>
+           style="width: 18.75rem;height: 100%;display: flex;justify-content: flex-start;align-items: center">
+        <img src="../../static/img/company-log.png" style="height: 2.5rem;width: 8.625rem;"/>
       </div>
 
       <div class="header-title"
@@ -20,16 +20,16 @@
         <img src="/static/img/kanban-header-main-bg.png"
              style="position:absolute;top:0;left:0;width: 100%;height: 100%;"/>
 
-        <span style="color: #fff;font-size: 40px;z-index: 100">
+        <span style="color: #fff;font-size: 2.5rem;z-index: 100">
           {{ title }}
         </span>
 
       </div>
 
       <div class="header-time"
-           style="width: 300px;">
+           style="width: 18.75rem;">
 
-        <span style="color: #fff;font-size: 25px;float: right">
+        <span style="color: #fff;font-size: 1.5625rem;float: right">
            {{ nowTime }}
         </span>
 
@@ -42,10 +42,11 @@
 
       <!--流程-->
       <div class="body-process"
-           style="margin-bottom:52px;margin-top: 25px;padding: 0 38px;display: flex;justify-content: center;align-items: center;position: relative;
-                  height: 223px">
+           style="margin-top: 1.5625rem;padding: 0 2.375rem;display: flex;justify-content: center;align-items: center;position: relative;
+                  height: 13.9375rem">
 
-        <img src="/static/img/kanban-header-left.png" style="position: absolute;top: -39px;left: -33px;height: 289px;width:213px "/>
+        <img src="/static/img/kanban-header-left.png"
+             style="position: absolute;top: -2.4375rem;left: -2.0625rem;height: 18.0625rem;width:13.3125rem "/>
 
         <div class="process-item"
              v-for="(item,index) in process"
@@ -54,16 +55,16 @@
           <div class="process-item-info"
                style="display: flex;flex-direction: column;justify-content: flex-start;align-items: flex-start">
 
-            <div style="height:126px;display: flex;justify-content: flex-start;align-items: center">
+            <div style="height:7.875rem;display: flex;justify-content: flex-start;align-items: center">
 
               <div class="item-info-name center"
                    @click="handleItemClick(index)"
-                   style="width:126px; height: 100%; margin-bottom: 10px;position: relative;cursor: pointer">
+                   style="width:7.875rem; height: 100%; margin-bottom: 0.625rem;position: relative;cursor: pointer">
 
                 <img style="width: 100%;height: 100%;position: absolute;top: 0;left: 0"
                      src="../../static/img/process_item_bg.png"/>
 
-                <span class="item-name" style="font-size: 26px;color: #fff">
+                <span class="item-name" style="font-size: 1.625rem;color: #fff">
                   {{ item.name }}
                 </span>
 
@@ -71,17 +72,18 @@
 
               <img v-show="index < process.length - 1"
                    src="/static/img/double-arrow-right.png"
-                   class="item-next" style="color: #fff;height: 34px;width: 34px;margin: 0 20px" />
-
+                   class="item-next" style="color: #fff;height: 2.125rem;width: 2.125rem;margin: 0 1.25rem"/>
 
 
             </div>
 
 
-            <span v-if="index + 1 < 10" class="item-info-index center special-font" style="width:126px;color: rgb(67,154,247);font-size: 34px">
+            <span v-if="index + 1 < 10" class="item-info-index center special-font"
+                  style="width:7.875rem;color: rgb(67,154,247);font-size: 2.125rem">
               0{{index + 1}}
             </span>
-            <span v-else class="item-info-index center special-font" style="width:138px;color: rgb(67,154,247);font-size: 34px">
+            <span v-else class="item-info-index center special-font"
+                  style="width:7.875rem;color: rgb(67,154,247);font-size: 2.125rem">
               {{ index + 1}}
             </span>
 
@@ -90,48 +92,55 @@
 
         </div>
 
-        <img src="/static/img/kanban-header-right.png" style="position: absolute;bottom: -39px;right: -33px;height: 289px;width:213px "/>
+        <img src="/static/img/kanban-header-right.png"
+             style="position: absolute;bottom: -2.4375rem;right: -2.0625rem;height: 18.0625rem;width:13.3125rem "/>
       </div>
 
       <!--信息展示小面板-->
-      <div class="body-main" style="display: flex;justify-content: space-between;align-items: flex-start;flex-wrap: wrap;margin-right: -27px">
+      <div class="body-main"
+           style="display: flex;justify-content: space-between;align-items: flex-start;flex-wrap: wrap;">
 
         <div v-for="(item,index) in process" class="panel-item"
              @click="handleItemClick(index)"
-             style="width: 430px;height: 290px;margin-right: 27px;padding: 0 27px;cursor: pointer;
-                margin-bottom: 40px;box-sizing: border-box;position: relative">
+             style="width: 25.875rem;height: 18.125rem;padding: 0 1.6875rem;cursor: pointer;
+                margin-bottom: 2.5rem;box-sizing: border-box;position: relative">
 
           <img src="/static/img/panel-item-bg.png"
-          style="width: 430px;height: 290px;position: absolute;top: -8px;left:-5px;z-index: -1"/>
+               style="width: 100%;height: 100%;position: absolute;top: -0.5rem;left:-0.3125rem;z-index: -1"/>
 
-          <div class="panel-item-header" style="margin-bottom: 28px;margin-top: 26px;display: flex;justify-content: flex-start;align-items: flex-end">
+          <div class="panel-item-header"
+               style="margin-bottom: 1.75rem;margin-top: 1.625rem;display: flex;justify-content: flex-start;align-items: flex-end">
 
-            <span v-if="index + 1  < 10" class="special-font" style="color: rgb(67,154,247);font-size: 38px;margin-right: 10px;line-height: 38px">
+            <span v-if="index + 1  < 10" class="special-font"
+                  style="color: rgb(67,154,247);font-size: 2.375rem;margin-right: 0.625rem;line-height: 2.375rem">
               0{{index + 1}}\
             </span>
-            <span v-else class="special-font" style="color: rgb(67,154,247);font-size: 38px;margin-right: 10px;line-height: 38px">
+            <span v-else class="special-font"
+                  style="color: rgb(67,154,247);font-size: 2.375rem;margin-right: 0.625rem;line-height: 2.375rem">
               {{index + 1}}\
             </span>
 
-            <span style="color: #fff;font-size:30px;margin-right: 10px">
+            <span style="color: #fff;font-size:1.875rem;margin-right: 0.625rem">
               {{item.name }}
             </span>
 
-            <span style="color: rgb(153,153,153);font-size:20px;">
+            <span style="color: rgb(153,153,153);font-size:1.25rem;">
               {{ item.ename }}
             </span>
 
           </div>
 
-          <div class="panel-item-body" style="display: flex;justify-content: flex-start;align-items: flex-start;flex-wrap: wrap">
+          <div class="panel-item-body"
+               style="display: flex;justify-content: flex-start;align-items: flex-start;flex-wrap: wrap">
 
-            <div v-for="(childItem,index) in item.child" class="little-panel" style="width: 50%;height: 66px;flex-direction: column;justify-content: center;align-items: flex-start;" >
-              <span class="little-panel-name" style="color: #fff;font-size: 26px">
+            <div v-for="(childItem,index) in item.child" class="little-panel"
+                 style="width: 50%;height: 4.125rem;flex-direction: column;justify-content: center;align-items: flex-start;">
+              <span class="little-panel-name" style="color: #fff;font-size: 1.625rem">
                 {{childItem.name}}
               </span>
 
               <br/>
-              <span class="little-panel-data" style="color: rgb(67,154,247);font-size: 26px;margin-top: 5px">
+              <span class="little-panel-data" style="color: rgb(67,154,247);font-size: 1.625rem;margin-top: 0.3125rem">
                 {{ childItem.value }} {{childItem.unit}}
               </span>
             </div>
@@ -147,14 +156,14 @@
 
 
     <el-dialog title="操作" :visible.sync="dialogVisible"
-        @close="dialogClose">
+               @close="dialogClose">
 
       <el-form :model="formData" label-width="6.25rem">
         <el-row>
           <el-col :span="12">
 
             <el-form-item label="流程名称" prop="name">
-              <el-input  v-model="formData.name" style="width: 18.75rem" ></el-input>
+              <el-input v-model="formData.name" style="width: 18.75rem"></el-input>
             </el-form-item>
 
           </el-col>
@@ -169,60 +178,60 @@
 
         <el-row>
           <el-col :span="12">
-            <el-form-item label="温度URL" >
-              <el-input  v-model="formData.child[0].url" style="width: 18.75rem" ></el-input>
+            <el-form-item label="温度指标ID">
+              <el-input v-model="formData.child[0].quotaId" style="width: 18.75rem"></el-input>
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
 
             <el-form-item label="访问间隔 S">
-              <el-input-number  v-model="formData.child[0].interval" style="width: 18.75rem" :min="1"> </el-input-number>
+              <el-input-number v-model="formData.child[0].interval" style="width: 18.75rem" :min="1"></el-input-number>
             </el-form-item>
           </el-col>
         </el-row>
 
         <el-row>
           <el-col :span="12">
-            <el-form-item label="压力URL" >
-              <el-input  v-model="formData.child[1].url" style="width: 18.75rem" ></el-input>
+            <el-form-item label="压力指标ID">
+              <el-input v-model="formData.child[1].quotaId" style="width: 18.75rem"></el-input>
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
 
             <el-form-item label="访问间隔 S">
-              <el-input-number  v-model="formData.child[1].interval" style="width: 18.75rem" :min="1"> </el-input-number>
+              <el-input-number v-model="formData.child[1].interval" style="width: 18.75rem" :min="1"></el-input-number>
             </el-form-item>
           </el-col>
         </el-row>
 
         <el-row>
           <el-col :span="12">
-            <el-form-item label="PHURL" >
-              <el-input  v-model="formData.child[2].url" style="width: 18.75rem" ></el-input>
+            <el-form-item label="PH指标ID">
+              <el-input v-model="formData.child[2].quotaId" style="width: 18.75rem"></el-input>
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
 
             <el-form-item label="访问间隔 S">
-              <el-input-number  v-model="formData.child[2].interval" style="width: 18.75rem" :min="1"> </el-input-number>
+              <el-input-number v-model="formData.child[2].interval" style="width: 18.75rem" :min="1"></el-input-number>
             </el-form-item>
           </el-col>
         </el-row>
 
         <el-row>
           <el-col :span="12">
-            <el-form-item label="电导率URL" >
-              <el-input  v-model="formData.child[3].url" style="width: 18.75rem" ></el-input>
+            <el-form-item label="电导率指标ID">
+              <el-input v-model="formData.child[3].quotaId" style="width: 18.75rem"></el-input>
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
 
             <el-form-item label="访问间隔 S">
-              <el-input-number  v-model="formData.child[3].interval" style="width: 18.75rem" :min="1"> </el-input-number>
+              <el-input-number v-model="formData.child[3].interval" style="width: 18.75rem" :min="1"></el-input-number>
             </el-form-item>
           </el-col>
         </el-row>
@@ -253,7 +262,7 @@
     data() {
       return {
         selectItemIndex: -1,
-        formData:{
+        formData: {
           "name": "",
           "ename": "",
           "child": [
@@ -261,232 +270,227 @@
               "name": "温度",
               "value": 0,
               "unit": "℃",
-              "url": "",
+              "quotaId": "",
               "interval": 2
             },
             {
               "name": "压力",
               "value": 0,
               "unit": "Mpa",
-              "url": "",
+              "quotaId": "",
               "interval": 2
             },
             {
               "name": "PH",
               "value": 0,
               "unit": "",
-              "url": "",
+              "quotaId": "",
               "interval": 2
             },
             {
               "name": "电导率",
               "value": 0,
               "unit": "us/cm",
-              "url": "",
+              "quotaId": "",
               "interval": 2
             },
 
           ],
 
         },
-        dialogVisible:false,
+        dialogVisible: false,
         nowTimeInterval: 0,
         nowTime: '',
         intervalHandle: [],
         title: '智能前处理工艺看板',
-        process: [
-          {
-            "name": "预脱脂",
-            "ename": "Pre-degreasing",
-            "child": [
-              {
-                "name": "温度",
-                "value": 31,
-                "unit": "℃",
-                "url": "http://mes.mes.ycxz-china.com/api/kanban/getData?id=5b762ff95c2ba90001130cde&quotaId=8520082569",
-                "interval": 2
-              },
-              {
-                "name": "压力",
-                "value": 0.07,
-                "unit": "Mpa",
-                "url": "http://mes.mes.ycxz-china.com/api/kanban/getData?id=5b762ff95c2ba90001130cde&quotaId=8520082569",
-                "interval": 2
-              },
-              {
-                "name": "PH",
-                "value": 9.1,
-                "unit": "",
-                "url": "http://mes.mes.ycxz-china.com/api/kanban/getData?id=5b762ff95c2ba90001130cde&quotaId=8349651742",
-                "interval": 2
-              },
-              {
-                "name": "电导率",
-                "value": 2020.00,
-                "unit": "us/cm",
-                "url": "http://mes.mes.ycxz-china.com/api/kanban/getData?id=5b762ff95c2ba90001130cde&quotaId=2441859916",
-                "interval": 2
-              },
+        url: "http://mes.mes.ycxz-china.com/api/kanban/getData",
+        company_id: "5b762ff95c2ba90001130cde",
+        process:
+          [
+            {
+              "name": "预脱脂",
+              "ename": "Pre-degreasing",
+              "child": [
+                {
+                  "name": "温度",
+                  "value": 31,
+                  "unit": "℃",
+                  "quotaId": "8520082569",
+                  "interval": 2
+                },
+                {
+                  "name": "压力",
+                  "value": 0.07,
+                  "unit": "Mpa",
+                  "quotaId": "8520082569",
+                  "interval": 2
+                },
+                {
+                  "name": "PH",
+                  "value": 9.1,
+                  "unit": "",
+                  "quotaId": "8349651742",
+                  "interval": 2
+                },
+                {
+                  "name": "电导率",
+                  "value": 2020.00,
+                  "unit": "us/cm",
+                  "quotaId": "2441859916",
+                  "interval": 2
+                }
+              ]
+            },
+            {
+              "name": "主脱脂",
+              "ename": "Main-degreasing",
+              "child": [
+                {
+                  "name": "温度",
+                  "value": "31",
+                  "unit": "℃",
+                  "quotaId": "2441859916",
+                  "interval": 12
+                },
+                {
+                  "name": "压力",
+                  "value": "0.07",
+                  "unit": "Mpa",
+                  "quotaId": "2441859916",
+                  "interval": 12
+                },
+                {
+                  "name": "PH",
+                  "value": "9.1",
+                  "unit": "",
+                  "quotaId": "2441859916",
+                  "interval": 12
+                },
+                {
+                  "name": "电导率",
+                  "value": "2020.00",
+                  "unit": "us/cm",
+                  "quotaId": "2441859916",
+                  "interval": 12
+                }
 
-            ],
+              ]
+            },
+            {
+              "name": "水洗一",
+              "ename": "Washed 1",
+              "child": [
+                {
+                  "name": "温度",
+                  "value": "31",
+                  "unit": "℃",
+                  "quotaId": "2441859916",
+                  "interval": 12
+                },
+                {
+                  "name": "压力",
+                  "value": "0.07",
+                  "unit": "Mpa",
+                  "quotaId": "2441859916",
+                  "interval": 12
+                },
+                {
+                  "name": "PH",
+                  "value": "9.1",
+                  "unit": "",
+                  "quotaId": "2441859916",
+                  "interval": 12
+                },
+                {
+                  "name": "电导率",
+                  "value": "2020.00",
+                  "unit": "us/cm",
+                  "quotaId": "2441859916",
+                  "interval": 12
+                }
 
-          },
-          {
-            "name": "主脱脂",
-            "ename": "Main-degreasing",
-            "child": [
-              {
-                "name": "温度",
-                "value": "31",
-                "unit": "℃",
-                "url": "www.baidu.com",
-                "interval": 12
-              },
-              {
-                "name": "压力",
-                "value": "0.07",
-                "unit": "Mpa",
-                "url": "www.baidu.com",
-                "interval": 12
-              },
-              {
-                "name": "PH",
-                "value": "9.1",
-                "unit": "",
-                "url": "www.baidu.com",
-                "interval": 12
-              },
-              {
-                "name": "电导率",
-                "value": "2020.00",
-                "unit": "us/cm",
-                "url": "www.baidu.com",
-                "interval": 12
-              },
+              ]
+            },
+            {
+              "name": "水洗二",
+              "ename": "Washed 2",
+              "child": [
+                {
+                  "name": "温度",
+                  "value": "31",
+                  "unit": "℃",
+                  "quotaId": "2441859916",
+                  "interval": 12
+                },
+                {
+                  "name": "压力",
+                  "value": "0.07",
+                  "unit": "Mpa",
+                  "quotaId": "2441859916",
+                  "interval": 12
+                },
+                {
+                  "name": "PH",
+                  "value": "9.1",
+                  "unit": "",
+                  "quotaId": "2441859916",
+                  "interval": 12
+                },
+                {
+                  "name": "电导率",
+                  "value": "2020.00",
+                  "unit": "us/cm",
+                  "quotaId": "2441859916",
+                  "interval": 12
+                }
 
-            ],
+              ]
+            },
+            {
+              "name": "活化",
+              "ename": "activation",
+              "child": [
+                {
+                  "name": "温度",
+                  "value": "31",
+                  "unit": "℃",
+                  "quotaId": "2441859916",
+                  "interval": 12
+                },
+                {
+                  "name": "压力",
+                  "value": "0.07",
+                  "unit": "Mpa",
+                  "quotaId": "2441859916",
+                  "interval": 12
+                },
+                {
+                  "name": "PH",
+                  "value": "9.1",
+                  "unit": "",
+                  "quotaId": "2441859916",
+                  "interval": 12
+                },
+                {
+                  "name": "电导率",
+                  "value": "2020.00",
+                  "unit": "us/cm",
+                  "quotaId": "2441859916",
+                  "interval": 12
+                }
 
-          },
-          {
-            "name": "水洗一",
-            "ename": "Washed 1",
-            "child": [
-              {
-                "name": "温度",
-                "value": "31",
-                "unit": "℃",
-                "url": "www.baidu.com",
-                "interval": 12
-              },
-              {
-                "name": "压力",
-                "value": "0.07",
-                "unit": "Mpa",
-                "url": "www.baidu.com",
-                "interval": 12
-              },
-              {
-                "name": "PH",
-                "value": "9.1",
-                "unit": "",
-                "url": "www.baidu.com",
-                "interval": 12
-              },
-              {
-                "name": "电导率",
-                "value": "2020.00",
-                "unit": "us/cm",
-                "url": "www.baidu.com",
-                "interval": 12
-              },
-
-            ],
-
-          },
-          {
-            "name": "水洗二",
-            "ename": "Washed 2",
-            "child": [
-              {
-                "name": "温度",
-                "value": "31",
-                "unit": "℃",
-                "url": "www.baidu.com",
-                "interval": 12
-              },
-              {
-                "name": "压力",
-                "value": "0.07",
-                "unit": "Mpa",
-                "url": "www.baidu.com",
-                "interval": 12
-              },
-              {
-                "name": "PH",
-                "value": "9.1",
-                "unit": "",
-                "url": "www.baidu.com",
-                "interval": 12
-              },
-              {
-                "name": "电导率",
-                "value": "2020.00",
-                "unit": "us/cm",
-                "url": "www.baidu.com",
-                "interval": 12
-              },
-
-            ],
-
-          },
-          {
-            "name": "活化",
-            "ename": "activation",
-            "child": [
-              {
-                "name": "温度",
-                "value": "31",
-                "unit": "℃",
-                "url": "www.baidu.com",
-                "interval": 12
-              },
-              {
-                "name": "压力",
-                "value": "0.07",
-                "unit": "Mpa",
-                "url": "www.baidu.com",
-                "interval": 12
-              },
-              {
-                "name": "PH",
-                "value": "9.1",
-                "unit": "",
-                "url": "www.baidu.com",
-                "interval": 12
-              },
-              {
-                "name": "电导率",
-                "value": "2020.00",
-                "unit": "us/cm",
-                "url": "www.baidu.com",
-                "interval": 12
-              },
-
-            ]
-
-          },
-        ]
+              ]
+            }
+          ]
       }
     },
 
-    watch: {
-
-    },
+    watch: {},
 
     computed: {},
 
     methods: {
-      dialogClose: function(){
+      dialogClose: function () {
         this.formData = {
           "name": "",
           "ename": "",
@@ -495,28 +499,28 @@
               "name": "温度",
               "value": 0,
               "unit": "℃",
-              "url": "",
+              "quotaId": "",
               "interval": 2
             },
             {
               "name": "压力",
               "value": 0,
               "unit": "Mpa",
-              "url": "",
+              "quotaId": "",
               "interval": 2
             },
             {
               "name": "PH",
               "value": 0,
               "unit": "",
-              "url": "",
+              "quotaId": "",
               "interval": 2
             },
             {
               "name": "电导率",
               "value": 0,
               "unit": "us/cm",
-              "url": "",
+              "quotaId": "",
               "interval": 2
             },
 
@@ -526,29 +530,42 @@
         this.selectItemIndex = -1;
       },
 
-      addProcess: function(){
+      getUrl: function (company_id, quotaId) {
+
+        if (this.isEmpty(company_id))
+          return "";
+
+        if (this.isEmpty(quotaId))
+          return "";
+
+        return this.url + "?id=" + company_id + "&quotaId=" + quotaId;
+
+      },
+
+
+      addProcess: function () {
         this.process.push(this.formData);
         this.dialogVisible = false;
       },
 
-      changeProcess: function(){
+      changeProcess: function () {
         this.process[this.selectItemIndex] = this.formData;
         this.dialogVisible = false;
       },
 
-      delProcess: function(){
+      delProcess: function () {
         this.process.splice(this.selectItemIndex, 1);
         this.dialogVisible = false;
       },
 
-      handleItemClick: function(index){
+      handleItemClick: function (index) {
         this.selectItemIndex = index;
         this.dialogVisible = true;
 
-        if (index > -1){
+        if (index > -1) {
           let temp = this.process[index];
           this.formData = JSON.parse(JSON.stringify(temp));
-        } else{
+        } else {
           this.formData = {
             "name": "",
             "ename": "",
@@ -557,28 +574,28 @@
                 "name": "温度",
                 "value": 0,
                 "unit": "℃",
-                "url": "",
+                "quotaId": "",
                 "interval": 2
               },
               {
                 "name": "压力",
                 "value": 0,
                 "unit": "Mpa",
-                "url": "",
+                "quotaId": "",
                 "interval": 2
               },
               {
                 "name": "PH",
                 "value": 0,
                 "unit": "",
-                "url": "",
+                "quotaId": "",
                 "interval": 2
               },
               {
                 "name": "电导率",
                 "value": 0,
                 "unit": "us/cm",
-                "url": "",
+                "quotaId": "",
                 "interval": 2
               },
 
@@ -589,7 +606,6 @@
 
 
       },
-
 
 
       getNowTime: function () {
@@ -618,22 +634,28 @@
 
         this.process.forEach(item => {
 
-          item.child.forEach(child =>{
+          item.child.forEach(child => {
 
-            //这里循环访问接口
-            let temp = window.setInterval(function () {
-              if (! that.isEmpty(child.url)){
-                that.$axios.get(child.url)
-                  .then(res => {
+            let url = that.getUrl(that.company_id, child.quotaId);
+            console.log("url " + url + that.company_id + child.quotaId)
+            if (!that.isEmpty(url)) {
 
-                    child.value = res.data[0].value;
-                    console.log("qwe" +that.process[0].child[3].value)
+              //这里循环访问接口
+              let temp = window.setInterval(function () {
+                  that.$axios.get(url)
+                    .then(res => {
 
-                  });
-              }
-            },child.interval * 1000);
+                      child.value = res.data[0].value;
+                      console.log("qwe" + that.process[0].child[3].value)
 
-            that.intervalHandle.push(temp);
+                    });
+                }
+                , child.interval * 1000);
+
+              that.intervalHandle.push(temp);
+
+
+            }
 
           })
 
@@ -654,6 +676,8 @@
       this.nowTimeInterval = window.setInterval(this.getNowTime, 1000);
       this.getDataInterval();
 
+      this.company_id = this.$route.query.id;
+      console.log("参数" + this.$route.query.id);
     },
 
     destroyed: function () {
@@ -680,19 +704,28 @@
   .item-info-name {
   }
 
+  .kanban-container .kanban-body .body-process {
 
-  .kanban-container .kanban-body .body-process{
-
-    background: -webkit-linear-gradient(left top, rgb(26,35,78) , rgb(11,23,49)); /* Safari 5.1 - 6.0 */
-    background: -o-linear-gradient(bottom right, rgb(26,35,78) , rgb(11,23,49)); /* Opera 11.1 - 12.0 */
-    background: -moz-linear-gradient(bottom right, rgb(26,35,78) , rgb(11,23,49)); /* Firefox 3.6 - 15 */
-    background: linear-gradient(to bottom right, rgb(26,35,78) , rgb(11,23,49)); /* 标准的语法（必须放在最后） */
+    background: -webkit-linear-gradient(left top, rgb(26, 35, 78), rgb(11, 23, 49)); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(bottom right, rgb(26, 35, 78), rgb(11, 23, 49)); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(bottom right, rgb(26, 35, 78), rgb(11, 23, 49)); /* Firefox 3.6 - 15 */
+    background: linear-gradient(to bottom right, rgb(26, 35, 78), rgb(11, 23, 49)); /* 标准的语法（必须放在最后） */
 
   }
 
-  .body-main .panel-item .panel-item-body .little-panel:first-child{
+  .body-main .panel-item .panel-item-body .little-panel:first-child {
 
-    margin-bottom: 25px;
+    margin-bottom: 1.5625rem;
   }
 
+  .body-process {
+    margin-bottom: 3.25rem;
+  }
+
+  @media screen and (max-width: 1366px) {
+
+    .body-process {
+      margin-bottom: 2.25rem;
+    }
+  }
 </style>
