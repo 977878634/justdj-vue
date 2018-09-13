@@ -12,6 +12,10 @@ import VueRouter from 'vue-router'
 import routes from './router'
 import axios from 'axios'
 
+import VueParticles from 'vue-particles'
+// 粒子特效
+Vue.use(VueParticles)
+
 
 Vue.config.productionTip = false;
 

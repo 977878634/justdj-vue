@@ -1,17 +1,16 @@
-import HelloWorld from '../components/HelloWorld'
-import Static from '../components/Static'
+// import HelloWorld from '../components/HelloWorld'
+import KanBanInfo from '../components/KanBanInfo.vue'
 
 
 let routes = [
   {
     path: '/',
-    name: 'HelloWorld',
-    component: HelloWorld
+    redirect: '/kanbaninfo/0',
   },
   {
-    path: '/static',
+    path: '/kanbaninfo/:id',
     name: '',
-    component: Static
+    component: KanBanInfo
   }
 ];
 

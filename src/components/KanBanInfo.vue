@@ -1,7 +1,36 @@
 <template>
 
   <div class="kanban-container"
-       style="width:100%;height:100%;box-sizing: border-box;padding: 0.875rem 3.625rem 0 3.625rem">
+       style="width:100%;height:100%;box-sizing: border-box;padding: 0.875rem 3.625rem 0 3.625rem;">
+
+    <vue-particles
+      color="#ffffff"
+      :particleOpacity="0.4"
+      :particlesNumber="30"
+      shapeType="circle"
+      :particleSize="4"
+      linesColor="#fff"
+      :linesWidth="1"
+      :lineLinked="true"
+      :lineOpacity="0"
+      :linesDistance="150"
+      :moveSpeed="0.8"
+      :hoverEffect="true"
+      hoverMode="grab"
+      :clickEffect="true"
+      clickMode="push"
+      class="lizi"
+    >
+
+    </vue-particles>
+
+    <div v-show="isLogin" style="position: fixed;top: 85%;left: calc(50% - 59px);z-index: 200">
+
+      <el-button @click="$router.back(-1)">
+        返回上一页
+      </el-button>
+
+    </div>
 
     <!--公司logo等-->
     <div class="kanban-header"
@@ -9,7 +38,7 @@
 
       <div class="header-logo"
            style="width: 18.75rem;height: 100%;display: flex;justify-content: flex-start;align-items: center">
-        <img src="../../static/img/company-log.png" style="height: 2.5rem;width: 8.625rem;"/>
+        <img src="/static/img/company-log.png" style="height: 2.5rem;width: 8.625rem;"/>
       </div>
 
       <div class="header-title"
@@ -38,7 +67,7 @@
     </div>
 
     <!--主体信息-->
-    <div class="kanban-body" style="width: 100%;height: 100%">
+    <div class="kanban-body" style="width: 100%;">
 
       <!--流程-->
       <div class="body-process"
@@ -62,17 +91,18 @@
                    style="width:7.875rem; height: 100%; margin-bottom: 0.625rem;position: relative;cursor: pointer">
 
                 <img style="width: 100%;height: 100%;position: absolute;top: 0;left: 0"
-                     src="../../static/img/process_item_bg.png"/>
+                     src="/static/img/process_item_bg.png"/>
 
                 <span class="item-name" style="font-size: 1.625rem;color: #fff">
-                  {{ item.name }}
-                </span>
+                                  {{ item.name }}
+                                </span>
 
               </div>
 
               <img v-show="index < process.length - 1"
                    src="/static/img/double-arrow-right.png"
-                   class="item-next" style="color: #fff;height: 2.125rem;width: 2.125rem;margin: 0 1.25rem"/>
+                   class="item-next"
+                   style="color: #fff;height: 2.125rem;width: 2.125rem;margin: 0 1.25rem"/>
 
 
             </div>
@@ -80,12 +110,12 @@
 
             <span v-if="index + 1 < 10" class="item-info-index center special-font"
                   style="width:7.875rem;color: rgb(67,154,247);font-size: 2.125rem">
-              0{{index + 1}}
-            </span>
+                          0{{index + 1}}
+                        </span>
             <span v-else class="item-info-index center special-font"
                   style="width:7.875rem;color: rgb(67,154,247);font-size: 2.125rem">
-              {{ index + 1}}
-            </span>
+                          {{ index + 1}}
+                        </span>
 
           </div>
 
@@ -98,35 +128,36 @@
 
       <!--信息展示小面板-->
       <div class="body-main"
-           style="display: flex;justify-content: space-between;align-items: flex-start;flex-wrap: wrap;">
+           style="display: flex;justify-content: space-between;align-items: flex-start;flex-wrap: wrap;
+                        align-content: space-between;">
 
         <div v-for="(item,index) in process" class="panel-item"
              @click="handleItemClick(index)"
              style="width: 25.875rem;height: 18.125rem;padding: 0 1.6875rem;cursor: pointer;
-                margin-bottom: 2.5rem;box-sizing: border-box;position: relative">
+                            margin-bottom: 2.5rem;box-sizing: border-box;position: relative">
 
           <img src="/static/img/panel-item-bg.png"
-               style="width: 100%;height: 100%;position: absolute;top: -0.5rem;left:-0.3125rem;z-index: -1"/>
+               style="width: 100%;height: 100%;position: absolute;top: -0.5rem;left:-0.3125rem;z-index: 10"/>
 
           <div class="panel-item-header"
                style="margin-bottom: 1.75rem;margin-top: 1.625rem;display: flex;justify-content: flex-start;align-items: flex-end">
 
-            <span v-if="index + 1  < 10" class="special-font"
-                  style="color: rgb(67,154,247);font-size: 2.375rem;margin-right: 0.625rem;line-height: 2.375rem">
-              0{{index + 1}}\
-            </span>
+                    <span v-if="index + 1  < 10" class="special-font"
+                          style="color: rgb(67,154,247);font-size: 2.375rem;margin-right: 0.625rem;line-height: 2.375rem">
+                      0{{index + 1}}\
+                    </span>
             <span v-else class="special-font"
                   style="color: rgb(67,154,247);font-size: 2.375rem;margin-right: 0.625rem;line-height: 2.375rem">
-              {{index + 1}}\
-            </span>
+                          {{index + 1}}\
+                        </span>
 
             <span style="color: #fff;font-size:1.875rem;margin-right: 0.625rem">
-              {{item.name }}
-            </span>
+                          {{item.name }}
+                        </span>
 
             <span style="color: rgb(153,153,153);font-size:1.25rem;">
-              {{ item.ename }}
-            </span>
+                          {{ item.ename }}
+                        </span>
 
           </div>
 
@@ -134,26 +165,31 @@
                style="display: flex;justify-content: flex-start;align-items: flex-start;flex-wrap: wrap">
 
             <div v-for="(childItem,index) in item.child" class="little-panel"
-                 style="width: 50%;height: 4.125rem;flex-direction: column;justify-content: center;align-items: flex-start;">
-              <span class="little-panel-name" style="color: #fff;font-size: 1.625rem">
-                {{childItem.name}}
-              </span>
+                 style="width: 45%;height: 4.125rem;flex-direction: column;justify-content: center;align-items: flex-start;">
+                          <span class="little-panel-name" style="color: #fff;font-size: 1.625rem">
+                            {{childItem.name}}
+                          </span>
 
               <br/>
-              <span class="little-panel-data" style="color: rgb(67,154,247);font-size: 1.625rem;margin-top: 0.3125rem">
-                {{ childItem.value }} {{childItem.unit}}
-              </span>
+              <span class="little-panel-data"
+                    style="color: rgb(67,154,247);font-size: 1.625rem;margin-top: 0.3125rem;display: inline-block;margin-top: 0;width: 200px">
+                                {{ childItem.value }} {{childItem.unit}}
+                              </span>
             </div>
 
           </div>
 
         </div>
 
+        <div v-for="(item,index) in hiddenItem" class="panel-item"
+             :v-show="true"
+             style="width: 25.875rem;height: 18.125rem;padding: 0 1.6875rem;cursor: pointer;
+                margin-bottom: 2.5rem;box-sizing: border-box;position: relative">
+        </div>
 
       </div>
 
     </div>
-
 
     <el-dialog title="操作" :visible.sync="dialogVisible"
                @close="dialogClose">
@@ -186,7 +222,8 @@
           <el-col :span="12">
 
             <el-form-item label="访问间隔 S">
-              <el-input-number v-model="formData.child[0].interval" style="width: 18.75rem" :min="1"></el-input-number>
+              <el-input-number v-model="formData.child[0].interval" style="width: 18.75rem"
+                               :min="2"></el-input-number>
             </el-form-item>
           </el-col>
         </el-row>
@@ -201,7 +238,8 @@
           <el-col :span="12">
 
             <el-form-item label="访问间隔 S">
-              <el-input-number v-model="formData.child[1].interval" style="width: 18.75rem" :min="1"></el-input-number>
+              <el-input-number v-model="formData.child[1].interval" style="width: 18.75rem"
+                               :min="2"></el-input-number>
             </el-form-item>
           </el-col>
         </el-row>
@@ -216,7 +254,8 @@
           <el-col :span="12">
 
             <el-form-item label="访问间隔 S">
-              <el-input-number v-model="formData.child[2].interval" style="width: 18.75rem" :min="1"></el-input-number>
+              <el-input-number v-model="formData.child[2].interval" style="width: 18.75rem"
+                               :min="2"></el-input-number>
             </el-form-item>
           </el-col>
         </el-row>
@@ -231,7 +270,8 @@
           <el-col :span="12">
 
             <el-form-item label="访问间隔 S">
-              <el-input-number v-model="formData.child[3].interval" style="width: 18.75rem" :min="1"></el-input-number>
+              <el-input-number v-model="formData.child[3].interval" style="width: 18.75rem"
+                               :min="2"></el-input-number>
             </el-form-item>
           </el-col>
         </el-row>
@@ -256,8 +296,10 @@
 </template>
 
 <script>
+  import {addOrEditCompanyKanBan, getCompanyKanBanOne, kanbanGetData} from "../api/mes";
+
   export default {
-    name: 'Static',
+    name: 'KanBanInfo',
 
     data() {
       return {
@@ -313,30 +355,30 @@
               "child": [
                 {
                   "name": "温度",
-                  "value": 31,
+                  "value": 0,
                   "unit": "℃",
-                  "quotaId": "8520082569",
+                  "quotaId": "0",
                   "interval": 2
                 },
                 {
                   "name": "压力",
-                  "value": 0.07,
+                  "value": 0,
                   "unit": "Mpa",
-                  "quotaId": "8520082569",
+                  "quotaId": "0",
                   "interval": 2
                 },
                 {
                   "name": "PH",
-                  "value": 9.1,
+                  "value": 0,
                   "unit": "",
-                  "quotaId": "8349651742",
+                  "quotaId": "0",
                   "interval": 2
                 },
                 {
                   "name": "电导率",
-                  "value": 2020.00,
+                  "value": 0,
                   "unit": "us/cm",
-                  "quotaId": "2441859916",
+                  "quotaId": "0",
                   "interval": 2
                 }
               ]
@@ -347,31 +389,31 @@
               "child": [
                 {
                   "name": "温度",
-                  "value": "31",
+                  "value": "0",
                   "unit": "℃",
-                  "quotaId": "2441859916",
-                  "interval": 12
+                  "quotaId": "0",
+                  "interval": 2
                 },
                 {
                   "name": "压力",
-                  "value": "0.07",
+                  "value": "0",
                   "unit": "Mpa",
-                  "quotaId": "2441859916",
-                  "interval": 12
+                  "quotaId": "0",
+                  "interval": 2
                 },
                 {
                   "name": "PH",
-                  "value": "9.1",
+                  "value": "0",
                   "unit": "",
-                  "quotaId": "2441859916",
-                  "interval": 12
+                  "quotaId": "0",
+                  "interval": 2
                 },
                 {
                   "name": "电导率",
-                  "value": "2020.00",
+                  "value": "0",
                   "unit": "us/cm",
-                  "quotaId": "2441859916",
-                  "interval": 12
+                  "quotaId": "0",
+                  "interval": 2
                 }
 
               ]
@@ -382,31 +424,31 @@
               "child": [
                 {
                   "name": "温度",
-                  "value": "31",
+                  "value": "0",
                   "unit": "℃",
-                  "quotaId": "2441859916",
-                  "interval": 12
+                  "quotaId": "0",
+                  "interval": 2
                 },
                 {
                   "name": "压力",
-                  "value": "0.07",
+                  "value": "0",
                   "unit": "Mpa",
-                  "quotaId": "2441859916",
-                  "interval": 12
+                  "quotaId": "0",
+                  "interval": 2
                 },
                 {
                   "name": "PH",
-                  "value": "9.1",
+                  "value": "0",
                   "unit": "",
-                  "quotaId": "2441859916",
-                  "interval": 12
+                  "quotaId": "0",
+                  "interval": 2
                 },
                 {
                   "name": "电导率",
-                  "value": "2020.00",
+                  "value": "0",
                   "unit": "us/cm",
-                  "quotaId": "2441859916",
-                  "interval": 12
+                  "quotaId": "1234567 ",
+                  "interval": 2
                 }
 
               ]
@@ -417,31 +459,31 @@
               "child": [
                 {
                   "name": "温度",
-                  "value": "31",
+                  "value": "0",
                   "unit": "℃",
-                  "quotaId": "2441859916",
-                  "interval": 12
+                  "quotaId": "0",
+                  "interval": 2
                 },
                 {
                   "name": "压力",
-                  "value": "0.07",
+                  "value": "0",
                   "unit": "Mpa",
-                  "quotaId": "2441859916",
-                  "interval": 12
+                  "quotaId": "0",
+                  "interval": 2
                 },
                 {
                   "name": "PH",
-                  "value": "9.1",
+                  "value": "0",
                   "unit": "",
-                  "quotaId": "2441859916",
-                  "interval": 12
+                  "quotaId": "0",
+                  "interval": 2
                 },
                 {
                   "name": "电导率",
-                  "value": "2020.00",
+                  "value": "0",
                   "unit": "us/cm",
-                  "quotaId": "2441859916",
-                  "interval": 12
+                  "quotaId": "0",
+                  "interval": 2
                 }
 
               ]
@@ -452,42 +494,77 @@
               "child": [
                 {
                   "name": "温度",
-                  "value": "31",
+                  "value": "0",
                   "unit": "℃",
-                  "quotaId": "2441859916",
-                  "interval": 12
+                  "quotaId": "0",
+                  "interval": 2
                 },
                 {
                   "name": "压力",
-                  "value": "0.07",
+                  "value": "0",
                   "unit": "Mpa",
-                  "quotaId": "2441859916",
-                  "interval": 12
+                  "quotaId": "0",
+                  "interval": 2
                 },
                 {
                   "name": "PH",
-                  "value": "9.1",
+                  "value": "0",
                   "unit": "",
-                  "quotaId": "2441859916",
-                  "interval": 12
+                  "quotaId": "0",
+                  "interval": 2
                 },
                 {
                   "name": "电导率",
-                  "value": "2020.00",
+                  "value": "0",
                   "unit": "us/cm",
-                  "quotaId": "2441859916",
-                  "interval": 12
+                  "quotaId": "0",
+                  "interval": 2
                 }
 
               ]
             }
-          ]
+          ],
+        resData:{},
       }
     },
 
     watch: {},
 
-    computed: {},
+    computed: {
+      isLogin: {
+        get: function () {
+          let temp = sessionStorage.getItem("token");
+          console.log("token信息" + temp);
+          return !this.isEmpty(temp);
+        },
+        set: function () {
+
+        }
+      },
+      isSuperUser: {
+        get: function () {
+          //是不是超级管理员
+        },
+        set: function () {
+
+        }
+      },
+      hiddenItem: {
+        get: function () {
+          let temp = 8 - this.process.length;
+          let hiddenItem = [];
+          for (let i = 0; i < temp; ++i) {
+            hiddenItem.push("");
+          }
+          return hiddenItem;
+
+        },
+        set: function () {
+
+        }
+      }
+
+    },
 
     methods: {
       dialogClose: function () {
@@ -530,35 +607,51 @@
         this.selectItemIndex = -1;
       },
 
-      getUrl: function (company_id, quotaId) {
+      getParam: function (company_id, quotaId) {
 
-        if (this.isEmpty(company_id))
+        let temp = {
+          "id":"",
+          "quotaId":""
+        };
+        if (this.isEmpty(company_id)) {
           return "";
+        }
+
 
         if (this.isEmpty(quotaId))
           return "";
 
-        return this.url + "?id=" + company_id + "&quotaId=" + quotaId;
+        temp.id = company_id;
+        temp.quotaId = quotaId;
 
+        return temp;
       },
 
 
       addProcess: function () {
         this.process.push(this.formData);
         this.dialogVisible = false;
+        this.addOrUpdate();
       },
 
       changeProcess: function () {
         this.process[this.selectItemIndex] = this.formData;
-        this.dialogVisible = false;
+
+        this.addOrUpdate();
       },
 
       delProcess: function () {
         this.process.splice(this.selectItemIndex, 1);
         this.dialogVisible = false;
+        this.addOrUpdate();
       },
 
       handleItemClick: function (index) {
+        if (!this.isLogin) {
+          this.$message.info("用户未登录，无法编辑");
+          return;
+        }
+
         this.selectItemIndex = index;
         this.dialogVisible = true;
 
@@ -629,6 +722,7 @@
 
       },
 
+      //设置定时访问
       getDataInterval: function () {
         let that = this;
 
@@ -636,19 +730,27 @@
 
           item.child.forEach(child => {
 
-            let url = that.getUrl(that.company_id, child.quotaId);
-            console.log("url " + url + that.company_id + child.quotaId)
-            if (!that.isEmpty(url)) {
+            let param = that.getParam(that.company_id, child.quotaId);
+            console.log("param " + JSON.stringify(param));
 
+            if (!that.isEmpty(param)) {
+              console.log("可用参数 " + JSON.stringify(param));
               //这里循环访问接口
               let temp = window.setInterval(function () {
-                  that.$axios.get(url)
-                    .then(res => {
 
-                      child.value = res.data[0].value;
-                      console.log("qwe" + that.process[0].child[3].value)
+                  kanbanGetData(param).then(res => {
 
-                    });
+                    if ( ! that.isEmpty(res[0])) {
+                      child.value = res[0].value;
+                    }else {
+                      child.value = 0;
+                    }
+
+
+                    // console.log("实时刷新的数据" + JSON.stringify(child));
+
+                  });
+
                 }
                 , child.interval * 1000);
 
@@ -667,17 +769,62 @@
       isEmpty: function (val) {
 
         return val == undefined || val == null || val === "" || val === "www.baidu.com";
+      },
+
+      //初始化数据
+      initData: function () {
+        let that = this;
+
+        if (! this.isEmpty(this.company_id)) {
+          getCompanyKanBanOne({company_id:this.company_id}).then(res => {
+            that.resData = res;
+            if (!that.isEmpty(res.process)) {
+              that.process = res.process;
+              console.log("初始化数据" + JSON.stringify(that.process));
+
+              that.getDataInterval();
+            }
+
+          });
+        }
+
+      },
+
+      addOrUpdate: function () {
+
+        this.resData.process = this.process;
+
+        addOrEditCompanyKanBan({companyKanBanInfo:JSON.stringify(this.resData)}).then(res => {
+          if (res.code === 200){
+
+            this.$message.success("新增或修改看板信息成功");
+            this.dialogVisible = false;
+
+          } else if(res.code === -1){
+
+            this.$message.error("新增或修改看板信息失败");
+
+          }
+        }).catch(e => {
+
+        });
+
       }
 
     },
 
+
+
     mounted: function () {
 
       this.nowTimeInterval = window.setInterval(this.getNowTime, 1000);
-      this.getDataInterval();
 
       this.company_id = this.$route.query.id;
-      console.log("参数" + this.$route.query.id);
+
+      this.initData();
+
+      console.log("缓存数据" + JSON.stringify(sessionStorage.getItem("token")));
+
     },
 
     destroyed: function () {
@@ -687,6 +834,8 @@
       this.intervalHandle.forEach(item => {
         window.clearInterval(item);
       })
+
+
     }
 
   }
@@ -694,6 +843,19 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+  .kanban-container {
+    /*下面三行解决在iphone以及safari上overFlow:hidden无效*/
+    overflow: hidden;
+    position: relative;
+    background: url(/static/img/background/main_bg.png);
+    background-size: 100% 100%;
+    margin: 0;
+    padding: 0;
+    font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    font-size: 100%;
+  }
 
   .center {
     display: flex;
@@ -726,6 +888,34 @@
 
     .body-process {
       margin-bottom: 2.25rem;
+    }
+  }
+
+  @media screen and (max-height: 960px){
+
+    .kanban-container{
+      /*border: 5px solid red;*/
+      overflow: scroll;
+      overflow-x: hidden;
+    }
+
+  }
+
+  .lizi{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+  }
+
+
+</style>
+
+<style>
+  @media screen and (max-width: 1368px) {
+    /*看板界面*/
+    html {
+      font-size: 11.38px;
+
     }
   }
 </style>
