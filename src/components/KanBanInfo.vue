@@ -134,7 +134,7 @@
         <div v-for="(item,index) in process" class="panel-item"
              @click="handleItemClick(index)"
              style="width: 25.875rem;height: 18.125rem;padding: 0 1.6875rem;cursor: pointer;
-                            margin-bottom: 2.5rem;box-sizing: border-box;position: relative">
+                            margin-bottom: 2.5rem;box-sizing: border-box;position: relative;">
 
           <img src="/static/img/panel-item-bg.png"
                style="width: 100%;height: 100%;position: absolute;top: -0.5rem;left:-0.3125rem;z-index: 10"/>
@@ -299,7 +299,7 @@
   import {addOrEditCompanyKanBan, getCompanyKanBanOne, kanbanGetData} from "../api/mes";
 
   export default {
-    name: 'KanBanInfo',
+    name: 'kanbaninfo',
 
     data() {
       return {
@@ -895,17 +895,12 @@
 
     .kanban-container{
       /*border: 5px solid red;*/
-      overflow: scroll;
-      overflow-x: hidden;
+      /*overflow: scroll;*/
+      /*overflow-x: hidden;*/
     }
 
   }
 
-  .lizi{
-    position: fixed;
-    width: 100%;
-    height: 100%;
-  }
 
 
 </style>
@@ -915,7 +910,15 @@
     /*看板界面*/
     html {
       font-size: 11.38px;
-
     }
   }
+
+  .lizi{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
 </style>
