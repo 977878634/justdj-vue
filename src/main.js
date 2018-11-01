@@ -14,13 +14,14 @@ import axios from 'axios'
 
 import VueParticles from 'vue-particles'
 // 粒子特效
-Vue.use(VueParticles)
+Vue.use(VueParticles);
 
 
 Vue.config.productionTip = false;
 
 Vue.use(VueRouter);
-Vue.use(ElementUI)
+Vue.use(ElementUI);
+
 Vue.prototype.$axios = axios;
 
 // 如果使用模块化机制编程，导入Vue和VueRouter，要调用 Vue.use(VueRouter)

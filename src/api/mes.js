@@ -1,4 +1,4 @@
-import fetch from '@/common/js/fetch.js';
+import fetch from '../common/js/fetch.js';
 
 
 let base = '';

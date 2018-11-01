@@ -844,17 +844,10 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
-  .kanban-container {
-    /*下面三行解决在iphone以及safari上overFlow:hidden无效*/
-    overflow: hidden;
-    position: relative;
-    background: url(/static/img/background/main_bg.png);
-    background-size: 100% 100%;
-    margin: 0;
-    padding: 0;
-    font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    font-size: 100%;
+  .kanban-container{
+    position: fixed;
+    left: 0;
+    top: 0;
   }
 
   .center {
@@ -899,18 +892,6 @@
       /*overflow-x: hidden;*/
     }
 
-  }
-
-
-
-</style>
-
-<style>
-  @media screen and (max-width: 1368px) {
-    /*看板界面*/
-    html {
-      font-size: 11.38px;
-    }
   }
 
   .lizi{

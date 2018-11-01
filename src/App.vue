@@ -23,50 +23,6 @@
     font-size: 16px;
   }
 
-  @media screen and (min-height: 1080px) {
-    html, body {
-      overflow: hidden;
-    }
-  }
-
-  @media screen and (max-width: 2040px) {
-    html {
-      font-size: 17px;
-      box-sizing: border-box;
-    }
-  }
-
-  @media screen and (max-width: 1920px) {
-    html {
-      font-size: 16px;
-    }
-  }
-
-  @media screen and (max-width: 1680px) {
-    html {
-      font-size: 15px;
-    }
-  }
-
-  @media screen and (max-width: 1480px) {
-    html {
-      font-size: 14px;
-    }
-  }
-
-  @media screen and (max-width: 1440px) {
-    html {
-      font-size: 13px;
-    }
-  }
-
-  @media screen and (max-width: 1366px) {
-
-    body, html {
-      font-size: 11.3776px;
-    }
-  }
-
   #app {
     width: 100%;
     height: 100%;
