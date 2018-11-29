@@ -344,7 +344,7 @@
         nowTimeInterval: 0,
         nowTime: '',
         intervalHandle: [],
-        title: '智能前处理工艺看板',
+        title: '测试',
         url: "http://mes.mes.ycxz-china.com/api/kanban/getData",
         company_id: "5b762ff95c2ba90001130cde",
         process:
