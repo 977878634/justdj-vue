@@ -1,6 +1,4 @@
-# supersystem-kanban
 
-> supersystem-kanban
 
 ## Build Setup
 
