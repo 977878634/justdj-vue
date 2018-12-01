@@ -33,7 +33,7 @@
     /*下面三行解决在iphone以及safari上overFlow:hidden无效*/
     overflow: hidden;
     position: relative;
-    background: url(../static/img/background/main_bg.png) center center repeat;
+    /*background: url(../static/img/background/main_bg.png) center center repeat;*/
     margin: 0;
     padding: 0;
     font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif;

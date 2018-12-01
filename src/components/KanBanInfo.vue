@@ -38,7 +38,7 @@
 
       <div class="header-logo"
            style="width: 18.75rem;height: 100%;display: flex;justify-content: flex-start;align-items: center">
-        <img src="/static/img/company-log.png" style="height: 2.5rem;width: 8.625rem;"/>
+        <!--<img src="/static/img/company-log.png" style="height: 2.5rem;width: 8.625rem;"/>-->
       </div>
 
       <div class="header-title"
@@ -46,8 +46,8 @@
            style="width:70%;height:100%;cursor: pointer;
                   display: flex;justify-content: center;align-items: center;position: relative">
 
-        <img src="/static/img/kanban-header-main-bg.png"
-             style="position:absolute;top:0;left:0;width: 100%;height: 100%;"/>
+        <!--<img src="/static/img/kanban-header-main-bg.png"-->
+             <!--style="position:absolute;top:0;left:0;width: 100%;height: 100%;"/>-->
 
         <span style="color: #fff;font-size: 2.5rem;z-index: 100">
           {{ title }}
