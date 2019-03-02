@@ -29,7 +29,7 @@
 
             <el-dropdown v-show="isLogin">
               <span class="el-dropdown-link">
-                {{user === null ? '' : user.name}}<i class="el-icon-arrow-down el-icon--right"></i>
+                <!--{{user === null ? '' : user.name}}<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>-->
               </span>
               <el-dropdown-menu slot="dropdown" >
                 <el-dropdown-item divided @click.native="">个人中心</el-dropdown-item>
