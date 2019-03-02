@@ -36,5 +36,8 @@
     font-size: 100%;
   }
 
+  .el-dialog{
+    border-radius: 8px;
+  }
 
 </style>

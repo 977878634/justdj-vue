@@ -1,7 +1,6 @@
 import fetch from '../common/js/fetch.js';
 
 
-let base = '';
 // export const that = data => {return data};
 
 let jobServer = process.env.JOB_URL;
@@ -9,9 +8,9 @@ let jobServer = process.env.JOB_URL;
 
 
 
-/***********************现场看板************************/
-
-export const kanbanGetData= data=>{return fetch(jobServer+'/api/kanban/getData', data, 'GET')}; //获取看板数据
+/***********************登陆注册************************/
+export const signInAPI= data=>{return fetch(jobServer+'/api/login/in', data, 'post')}; //登录
+export const signOutAPI= data=>{return fetch(jobServer+'/api/login/out', data, 'post')}; //注销
 /*******************************************************/
 
 /***********************公司看板************************/
