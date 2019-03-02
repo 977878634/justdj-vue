@@ -1,8 +1,9 @@
 <template>
   <div id="app">
-
-    <router-view/>
-
+    <transition name="fade"
+                mode="out-in">
+      <router-view></router-view>
+    </transition>
   </div>
 </template>
 
@@ -18,8 +19,6 @@
   html, body {
     height: 100%;
     width: 100%;
-    overflow-y: scroll;
-    overflow-x: hidden;
     font-size: 16px;
   }
 
@@ -30,10 +29,6 @@
   }
 
   body {
-    /*下面三行解决在iphone以及safari上overFlow:hidden无效*/
-    overflow: hidden;
-    position: relative;
-    /*background: url(../static/img/background/main_bg.png) center center repeat;*/
     margin: 0;
     padding: 0;
     font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif;

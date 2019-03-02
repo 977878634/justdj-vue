@@ -9,12 +9,8 @@ import 'element-ui/lib/theme-chalk/index.css';
 import App from './App'
 import VueRouter from 'vue-router'
 //路由文件
-import routes from './router'
+import routes from './router/router.js'
 import axios from 'axios'
-
-import VueParticles from 'vue-particles'
-// 粒子特效
-Vue.use(VueParticles);
 
 
 Vue.config.productionTip = false;

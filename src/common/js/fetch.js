@@ -3,19 +3,20 @@ import {router} from '../../main'
 
 export default async (url = '', data = {}, type = 'GET', method = 'fetch') => {
     type = type.toUpperCase();
-    if (type == 'GET') {
-        let dataStr = ''; //数据拼接字符串
-        Object.keys(data).forEach(key => {
-            dataStr += key + '=' + data[key] + '&';
-        })
+    if (type === 'GET') {
+        // let dataStr = ''; //数据拼接字符串
+        // Object.keys(data).forEach(key => {
+        //     dataStr += key + '=' + data[key] + '&';
+        // });
 
-        if (dataStr !== '') {
-            dataStr = dataStr.substr(0, dataStr.lastIndexOf('&'));
-            url = url + '?' + dataStr;
-        }
+        // if (dataStr !== '') {
+            // dataStr = dataStr.substr(0, dataStr.lastIndexOf('&'));
+            url = url + '/' + dataStr;
+        // }
     }
 
-    if (window.fetch && method == 'fetch') {
+    if (window.fetch && method === 'fetch') {
+        console.log("正常流程");
         let requestConfig = {
             credentials: 'include',
             method: type,
@@ -26,10 +27,10 @@ export default async (url = '', data = {}, type = 'GET', method = 'fetch') => {
             },
             mode: "cors",
             cache: "force-cache"
-        }
+        };
 
 
-        if (type == 'POST') {
+        if (type === 'POST') {
             Object.defineProperty(requestConfig, 'body', {
                 value: JSON.stringify(data)
             })
@@ -44,6 +45,7 @@ export default async (url = '', data = {}, type = 'GET', method = 'fetch') => {
             throw new Error(error)
         }
     } else {
+      console.log("异常流程");
         return new Promise((resolve, reject) => {
             let requestObj;
             if (window.XMLHttpRequest) {
@@ -52,7 +54,7 @@ export default async (url = '', data = {}, type = 'GET', method = 'fetch') => {
                 requestObj = new ActiveXObject;
             }
             let sendData = '';
-            if (type == 'POST') {
+            if (type === 'POST') {
                 sendData = querystring.stringify(data);
             }
 
@@ -62,13 +64,13 @@ export default async (url = '', data = {}, type = 'GET', method = 'fetch') => {
             requestObj.send(sendData);
 
             requestObj.onreadystatechange = () => {
-                if (requestObj.readyState == 4) {
-                    if (requestObj.status == 200) {
+                if (requestObj.readyState === 4) {
+                    if (requestObj.status === 200) {
                         let obj = requestObj.response
                         if (typeof obj !== 'object') {
 
                             obj = JSON.parse(obj);
-                            if (obj.code == -2) {
+                            if (obj.code === -2) {
                                 sessionStorage.removeItem('user');
                                 sessionStorage.removeItem('left');
                                 sessionStorage.removeItem('token');
