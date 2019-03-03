@@ -29,7 +29,7 @@
 
             <el-dropdown v-show="isLogin">
               <span class="el-dropdown-link">
-                <!--{{user === null ? '' : user.name}}<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>-->
+                {{user === null ? '' : user.name}}<i class="el-icon-arrow-down el-icon--right"></i>
               </span>
               <el-dropdown-menu slot="dropdown" >
                 <el-dropdown-item divided @click.native="">个人中心</el-dropdown-item>
@@ -52,8 +52,8 @@
           <el-form :model="signInForm" :rules="signInRules"
                    label-width="6.25rem"
                    label-position="left">
-            <el-form-item label="手机号"  prop="phone">
-              <el-input v-model="signInForm.phone" autocomplete="off" placeholder="请输入手机号"></el-input>
+            <el-form-item label="邮箱"  prop="email">
+              <el-input v-model="signInForm.email" autocomplete="off" placeholder="请输入邮箱"></el-input>
             </el-form-item>
             <el-form-item label="密码"  prop="password">
               <el-input type="password" v-model="signInForm.password" autocomplete="off" placeholder="请输入密码"></el-input>
@@ -69,40 +69,46 @@
         <el-dialog title="注册"
                    :visible.sync="signUpDialogVisible"
                    center
+                   @close="clearAll"
                    :close-on-click-modal="false">
           <div style="width: 100%;display: flex;justify-content: center;margin-bottom: 10px">
             <el-radio-group v-model="labelPosition" size="small" >
-              <el-radio-button label="left">普通用户</el-radio-button>
-              <el-radio-button label="right">企业用户</el-radio-button>
+              <el-radio-button label="person">普通用户</el-radio-button>
+              <el-radio-button label="company">企业用户</el-radio-button>
             </el-radio-group>
           </div>
-          <el-form :model="signUpForm"
-                   v-show="labelPosition === 'left'"
+          <el-form :model="signUpFormPerson"
+                   ref="signUpFormPerson"
+                   v-show="labelPosition === 'person'"
                    label-position="left"
-                   label-width="6rem">
+                   :rules="signUpPersonRules"
+                   label-width="5rem">
 
             <el-row>
               <el-col :span="12">
-                <el-form-item label="手机号"  >
-                  <el-input v-model="signUpForm.name" autocomplete="off" style="width: 18.75rem"></el-input>
+                <el-form-item label="邮箱" prop="email">
+                  <el-input v-model="signUpFormPerson.email" autocomplete="off" style="width: 18.75rem" placeholder="请输入邮箱"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12" label="">
-                <el-button style="margin-left: 3.5rem">发送验证码</el-button>
+                <el-button style="margin-left: 4.375rem" @click="sendCode">发送验证码</el-button>
+                <el-form-item label="" style="float: right" prop="code">
+                  <el-input v-model="signUpFormPerson.code" autocomplete="off" style="width: 6.75rem" placeholder="验证码"></el-input>
+                </el-form-item>
               </el-col>
             </el-row>
 
             <el-row>
               <el-col :span="12">
-                <el-form-item label="姓名" >
-                  <el-input v-model="signUpForm.name" autocomplete="off" style="width: 18.75rem"></el-input>
+                <el-form-item label="姓名" prop="name">
+                  <el-input v-model="signUpFormPerson.name" autocomplete="off" style="width: 18.75rem" placeholder="请输入姓名"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="性别" style="float: right" >
-                  <el-radio-group v-model="signUpForm.name" size="normal" style="width: 18.75rem">
-                    <el-radio-button label="boy">男</el-radio-button>
-                    <el-radio-button label="girl">女</el-radio-button>
+                <el-form-item label="性别" style="float: right" prop="sex">
+                  <el-radio-group v-model="signUpFormPerson.sex" size="normal" style="width: 18.75rem">
+                    <el-radio-button label="0">男</el-radio-button>
+                    <el-radio-button label="1">女</el-radio-button>
                   </el-radio-group>
                 </el-form-item>
               </el-col>
@@ -110,61 +116,86 @@
 
             <el-row>
               <el-col :span="12">
-                <el-form-item label="密码" >
-                  <el-input v-model="signUpForm.name" autocomplete="off" style="width: 18.75rem"></el-input>
+                <el-form-item label="密码" prop="password">
+                  <el-input v-model="signUpFormPerson.password" autocomplete="off" style="width: 18.75rem" placeholder="请输入密码"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="重复密码" style="float: right">
-                  <el-input v-model="signUpForm.name" autocomplete="off" style="width: 18.75rem"></el-input>
+                <el-form-item label="重复" style="float: right" prop="repeatPassword">
+                  <el-input v-model="signUpFormPerson.repeatPassword" autocomplete="off" style="width: 18.75rem" placeholder="请重复密码"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
 
           </el-form>
 
-          <el-form :model="signUpForm"
-                   v-show="labelPosition === 'right'"
+          <el-form :model="signUpFormCompany"
+                   ref="signUpFormCompany"
+                   v-show="labelPosition === 'company'"
                    label-position="left"
-                   label-width="6rem">
+                   :rules="signUpCompanyRules"
+                   label-width="5.6rem">
 
             <el-row>
               <el-col :span="12">
-                <el-form-item label="手机号"  >
-                  <el-input v-model="signUpForm.name" autocomplete="off" style="width: 18.75rem"></el-input>
+                <el-form-item label="邮箱" prop="email" >
+                  <el-input v-model="signUpFormCompany.email" autocomplete="off" style="width: 18.75rem" placeholder="请输入邮箱"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12" label="">
-                <el-button style="margin-left: 3.5rem">发送验证码</el-button>
-              </el-col>
-            </el-row>
-
-            <el-row>
-              <el-col :span="12">
-                <el-form-item label="联系人" >
-                  <el-input v-model="signUpForm.name" autocomplete="off" style="width: 18.75rem"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="公司名称" style="float: right">
-                  <el-input v-model="signUpForm.name" autocomplete="off" style="width: 18.75rem"></el-input>
+                <el-button style="margin-left: 3.5rem" @click="sendCode">发送验证码</el-button>
+                <el-form-item label="" style="float: right" prop="code">
+                  <el-input v-model="signUpFormCompany.code" autocomplete="off" style="width: 7.75rem" placeholder="验证码"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
 
             <el-row>
               <el-col :span="12">
-                <el-form-item label="密码" >
-                  <el-input v-model="signUpForm.name" autocomplete="off" style="width: 18.75rem"></el-input>
+                <el-form-item label="联系人" prop="contract">
+                  <el-input v-model="signUpFormCompany.contract" autocomplete="off" style="width: 18.75rem" placeholder="请输入联系人名称"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="重复密码" style="float: right">
-                  <el-input v-model="signUpForm.name" autocomplete="off" style="width: 18.75rem"></el-input>
+                <el-form-item label="手机" style="float: right" prop="phone">
+                  <el-input v-model="signUpFormCompany.phone" autocomplete="off" style="width: 18.75rem" placeholder="请输入联系人手机号"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
 
+
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="密码" prop="password">
+                  <el-input v-model="signUpFormCompany.password" autocomplete="off" style="width: 18.75rem" placeholder="请输入密码"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="重复" style="float: right" prop="repeatPassword">
+                  <el-input v-model="signUpFormCompany.repeatPassword" autocomplete="off" style="width: 18.75rem" placeholder="请重复密码"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="公司名" prop="companyName">
+                  <el-input v-model="signUpFormCompany.companyName" autocomplete="off" style="width: 18.75rem" placeholder="请输入公司名"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="类型" style="float: right" prop="companyType">
+                  <el-select v-model="signUpFormCompany.companyType" placeholder="请选择公司类型" style="width: 18.75rem">
+                    <el-option
+                      v-for="item in companyTypeOptions"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="signUpDialogVisible = false">取 消</el-button>
@@ -177,33 +208,141 @@
 
 <script>
 
-  import {signInAPI,
+  import {
+    checkCodeAPI,
+    checkEmailAPI, companySignUpAPI, dropListOneGetApi,
+    getCodeAPI, personSignUpAPI,
+    signInAPI,
     signOutAPI
   } from "../api/job";
+  import * as util from "../common/utils/util"
 
   export default {
     data() {
+      const validateEmail = (rule, value, callback) => {
+        let checkEmail = /^[a-zA-Z0-9_-]+@([a-zA-Z0-9]+\.)+(com|cn|net|org)$/;
+        let email = value;
+        if (util.isEmpty(email)) {
+          callback(new Error('请输入邮箱'));
+        } else {
+          if (util.checkStr(email,"email")) {
+              //todo 邮箱是否已被使用
+              checkEmailAPI(email).then((res) => {
+                if (res.data === true) { //被占用
+                  //添加成功
+                  callback(new Error('邮箱已被占用'));
+                } else {
+                  callback();
+                }
+              });
+          } else {
+            callback(new Error('邮箱格式不正确'));
+          }
+        }
+      };
+      const validateCode = (rule, value, callback) =>{
+          if (util.isEmpty(value)) {
+            callback(new Error('请输入验证码'));
+          }else {
+            let email = "";
+            if (this.labelPosition === "person"){
+              email = this.signUpFormPerson.email;
+            } else {
+              email = this.signUpFormCompany.emal;
+            }
+            //todo 去线上验证
+            checkCodeAPI({"email":email,"code":value}).then(res =>{
+                if (res.code === 200){
+                  if (res.data === true){
+                    callback();
+                  } else {
+                    callback(new Error('验证码错误'));
+                  }
+                }else {
+                  callback(new Error('验证码错误'));
+                  this.$message.error(res.msg)
+                }
+            })
+
+          }
+      };
+      const validatePassword = (rule, value, callback) =>{
+        if (util.isEmpty(value)) {
+          callback(new Error('请输入密码'));
+        }else {
+          if (value.length >= 6 && value.length <= 18) {
+            callback();
+          }else {
+            callback(new Error('密码为6-18位字符串'));
+          }
+        }
+      };
+      const validateRepPassword = (rule, value, callback) =>{
+        let temp = "";
+        if(this.labelPosition === "person"){
+          temp = this.signUpFormPerson.password;
+        }else{
+          temp = this.signUpFormCompany.password;
+        }
+        if (temp === value) {
+          callback();
+        }else {
+          callback(new Error('两次输入的密码不相同'));
+        }
+      };
       return {
-        labelPosition:"left",
+        companyTypeOptions:[],
+        labelPosition:"person",
         isLogin:false,
         signInDialogVisible:false,
         signInForm:{
-          "phone":"",
+          "email":"",
           "password":""
         },
         signInRules:{
-          "phone":[
-            { required: true, message: '请输入手机号', trigger: 'blur' },
-            { min: 11, max: 11, message: '手机号为11个数字', trigger: 'blur' }
+          "email":[
+            { required: true, message: '请输入邮箱', trigger: 'blur' },
           ],
           "password":[
             { required: true, message: '请输入密码', trigger: 'blur' },
-            { min: 6, max: 16, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+            { min: 6, max: 16, message: '长度在 6 到 18 个字符', trigger: 'blur' }
           ]
         },
-        signUpForm:{
+        signUpFormPerson:{
+          "email":"",
+          "code":"",
           "name":"",
-          "area":""
+          "sex":"",
+          "password":"",
+          "repeatPassword":""
+        },
+        signUpPersonRules:{
+          "email":[{required: true, validator: validateEmail, trigger: 'blur'}],
+          "code":[{required: true, validator: validateCode, trigger: 'blur'}],
+          "name":[{required: true, message: "请输入姓名", trigger: 'blur'},
+            { min: 1, max: 15, message: '长度在 1 到 15 个字符', trigger: 'blur' }],
+          "sex":[{required: true, message: "请选择性别", trigger: 'blur'}],
+          "password":[{required: true, validator: validatePassword, trigger: 'blur'}],
+          "repeatPassword":[{required: true, validator: validateRepPassword, trigger: 'blur'}],
+        },
+        signUpFormCompany:{
+          "email":"",
+          "code":"",
+          "contract":"",
+          "phone":"",
+          "companyName":"",
+          "companyType":"",
+          "password":"",
+          "repeatPassword":""
+        },
+        "signUpCompanyRules":{
+          "email":[{required: true, validator: validateEmail, trigger: 'blur'}],
+          "code":[{required: true, validator: validateCode, trigger: 'blur'}],
+          "contract":[{required: true, message: "请输入姓名", trigger: 'blur'},
+            { min: 1, max: 15, message: '长度在 1 到 15 个字符', trigger: 'blur' }],
+          "phone":[{required: true, message: "请输入手机号", trigger: 'blur'}],
+          "password":[{required: true, validator: validatePassword, trigger: 'blur'}],
+          "repeatPassword":[{required: true, validator: validateRepPassword, trigger: 'blur'}],
         },
         signUpDialogVisible:false,
         activeIndex: '1',
@@ -213,8 +352,13 @@
     computed:{
       user:{
         get:function () {
-          console.log("get  " + localStorage.getItem("user"));
-          return JSON.parse(localStorage.getItem("user"));
+          if (util.isEmpty(localStorage.getItem("user"))) {
+            console.log("还未登录 ");
+            return {name:""};
+          }else {
+            console.log("get user " + localStorage.getItem("user"));
+            return JSON.parse(localStorage.getItem("user"));
+          }
         },
         set:function () {
 
@@ -222,22 +366,47 @@
       }
     },
     methods: {
+      clearAll:function(){
+        this.$refs["signUpFormPerson"].resetFields();
+        this.$refs["signUpFormCompany"].resetFields();
+        this.labelPosition = "person";
+      },
+      sendCode: function(){
+        let email = "";
+        if (this.labelPosition === "person"){
+          email = this.signUpFormPerson.email;
+        } else {
+          email = this.signUpFormCompany.email;
+        }
+        console.log("发送邮件 " + email);
+        if (util.isEmpty(email)) {
+          return;
+        } else {
+          if (util.checkStr(email,"email")) {} else {return;}
+        }
+        getCodeAPI(email).then((res) => {
+          if (res.code === 200){
+            this.$message.success("验证码已发送,请查收！");
+            //todo 倒计时
+          } else {
+            this.$message.error(res.msg);
+          }
+        })
+
+      },
+
       handleSelect: function (a, b) {
         console.log("当前路径" + this.$route.path);
       },
 
-      signIn: function () {
-        var loginParams = { phone:this.signInForm.phone,password: this.signInForm.password };
 
+      //登录
+      signIn: function () {
+        var loginParams = { email:this.signInForm.email,password: this.signInForm.password };
         signInAPI(loginParams).then((res) => {
           if (res.code === 200) {
-            this.$message.success(res.msg);
-            sessionStorage.setItem('token', res.data.t);
-            localStorage.setItem('token', res.data.t);
-            sessionStorage.setItem('user', JSON.stringify(res.data.u));
-            localStorage.setItem('user', JSON.stringify(res.data.u));
-            this.signInDialogVisible = false;
-            this.isLogin = true;
+            this.$message.success("登录成功");
+            this.loginSucceed(res);
           } else {
             this.$message.error({message: res.msg});
             this.isLogin = false;
@@ -248,6 +417,8 @@
         });
       },
 
+
+      //退出登录
       signOut: function () {
         var loginParams = { phone:this.signInForm.phone,password: this.signInForm.password };
 
@@ -267,12 +438,62 @@
         });
       },
 
-      signUp: function () {
 
+      //注册
+      signUp: function () {
+        if (this.labelPosition === "person"){
+          this.$refs["signUpFormPerson"].validate((valid) => {
+            if (valid) {
+              personSignUpAPI(this.signUpFormPerson).then(res => {
+                if (res.code === 200){
+                  this.$message.success("注册成功");
+                  this.signUpDialogVisible = false;
+                  this.loginSucceed(res);
+                } else {
+                  this.$message.error(res.msg)
+                }
+              })
+            } else {
+              return false;
+            }
+          });
+        } else if (this.labelPosition === "company") {
+          this.$refs["signUpFormCompany"].validate((valid) => {
+            if (valid) {
+              companySignUpAPI(this.signUpFormCompany).then(res => {
+                if (res.code === 200){
+                  this.$message.success("注册成功！");
+                  this.signUpDialogVisible = false;
+                  this.loginSucceed(res);
+                } else {
+                  this.$message.error(res.msg)
+                }
+              })
+            } else {
+              return false;
+            }
+          });
+        }
+
+      },
+
+      loginSucceed: function (res) {
+        sessionStorage.setItem('token', res.data.t);
+        localStorage.setItem('token', res.data.t);
+        sessionStorage.setItem('user', JSON.stringify(res.data.u));
+        localStorage.setItem('user', JSON.stringify(res.data.u));
+        this.signInDialogVisible = false;
+        this.isLogin = true;
       }
     },
     mounted() {
-
+      dropListOneGetApi("company_type").then((res) => {
+        if (res.code === 200){
+          this.companyTypeOptions = res.data;
+        } else {
+          this.$message.err("获取公司类型下拉列表失败" + res.msg);
+        }
+      })
     }
   }
 
