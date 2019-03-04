@@ -1,9 +1,7 @@
-import querystring from 'querystring';
-import {router} from '../../main'
 
 export default async (url = '', data = {}, type = 'GET', method = 'fetch') => {
   type = type.toUpperCase();
-  if (type === 'GET') {
+  if (type === 'GET' || type === "DELETE") {
     url = url + '/' + data.toString();
   }
 
@@ -31,13 +29,14 @@ export default async (url = '', data = {}, type = 'GET', method = 'fetch') => {
           if (typeof obj !== 'object') {
             obj = JSON.parse(obj);
             if (obj.code === 2) {
-              //todo 弹出登陆框
+              //弹出登陆框
               sessionStorage.clear();
               localStorage.clear();
             }
           }
           resolve(obj)
         } else {
+          console.log("接口访问出错");
           reject(requestObj)
         }
       }

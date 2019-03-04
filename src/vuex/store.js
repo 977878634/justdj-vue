@@ -7,23 +7,23 @@ Vue.use(Vuex)
 
 // 应用初始状态
 const state = {
-    count: 10
+  signInDialogVisible: false
 }
 
 // 定义所需的 mutations
 const mutations = {
-    INCREMENT(state) {
-        state.count++
-    },
-    DECREMENT(state) {
-        state.count--
-    }
-}
+  signInDialogVisibleTrue(state) {
+    state.signInDialogVisible = true;
+  },
+  signInDialogVisibleFalse(state) {
+    state.signInDialogVisible = false;
+  }
+};
 
 // 创建 store 实例
 export default new Vuex.Store({
-    actions,
-    getters,
-    state,
-    mutations
+  actions,
+  getters,
+  state,
+  mutations
 })

@@ -58,13 +58,17 @@
                   v-loading="listLoading"
                   :header-row-class-name="'global_table_th'"
                   :row-class-name="'global_table_tr'"
-                  :cell-class-name="global_table_normal"
+                  :cell-class-name="'global_table_normal'"
                   style="width: 100%;position: absolute;top: 0;left: 0">
-          <el-table-column prop="name" label="用户名" min-width="60" align="center">
+          <el-table-column prop="name" label="用户名" min-width="30" align="center">
           </el-table-column>
           <el-table-column prop="email" label="邮箱" min-width="80" align="center">
           </el-table-column>
           <el-table-column prop="phone" label="手机号" min-width="80" align="center">
+          </el-table-column>
+          <el-table-column prop="sex" label="性别" min-width="60" :formatter="formatUserSex" align="center">
+          </el-table-column>
+          <el-table-column prop="creditRating" label="信誉分" min-width="60" align="center">
           </el-table-column>
           <el-table-column prop="type" label="用户类型" min-width="80" :formatter="formatUserType" align="center">
           </el-table-column>
@@ -137,7 +141,8 @@
 </template>
 
 <script>
-  import {dropListOneGetApi, userPageFindAPI} from "../api/job";
+  import {deleteUserAPI, dropListOneGetApi, userPageFindAPI} from "../api/job";
+  import store from "../vuex/store"
 
   export default {
     name: "usermanagerpage",
@@ -193,15 +198,14 @@
           userStatus: "",
           pageNum:0,
           pageSize:10
-        }
-        console.log("全局变量 " + this.$store.count )
+        };
       },
       add: function () {
 
       },
       //处理页面跳转事件
       handleCurrentChange: function (val) {
-        this.filter.currentPage = val;
+        this.filter.pageNum = val - 1;
         this.query();
       },
       query: function () {
@@ -211,28 +215,63 @@
             this.userList = res.data.content;
             this.total = res.data.totalElements;
           } else {
+            if (res.code === 2){
+              this.$store.commit('signInDialogVisibleTrue');
+            }
             this.$message.error(res.msg);
           }
         }).catch(e => {
           console.log("出错了" + e);
         });
 
-      }, //todo 编辑
+      },
+      //todo 编辑
       handleEdit: function () {
 
       },
-//todo 删除
-      handleDel: function () {
+
+      handleDel: function (scop,row) {
+
+        this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          deleteUserAPI(row.id).then(res => {
+            if (res.code === 200){
+              this.query();
+              this.$message.success("删除成功");
+            } else {
+              if (res.code === 2){
+                this.$store.commit('signInDialogVisibleTrue');
+              }
+              this.$message.error(res.msg);
+            }
+          })
+        }).catch(() => {
+        });
 
       },
+
       formatUserType: function (row, column) {
         if (row.type === 0){
           return "普通用户";
-        } else {
+        } else if (row.type === 1) {
           return "企业用户";
+        }else {
+          return "";
         }
       },
 
+      formatUserSex: function (row, column) {
+        if (row.sex === "0"){
+          return "男";
+        } else if (row.sex === "1") {
+          return "女";
+        }else {
+          return "";
+        }
+      }
     },
     mounted(){
 

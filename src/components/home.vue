@@ -221,6 +221,7 @@
     signOutAPI
   } from "../api/job";
   import * as util from "../common/utils/util"
+  import store from "../vuex/store"
 
   export default {
     data() {
@@ -231,7 +232,7 @@
           callback(new Error('请输入邮箱'));
         } else {
           if (util.checkStr(email,"email")) {
-              //todo 邮箱是否已被使用
+
               checkEmailAPI(email).then((res) => {
                 if (res.data === true) { //被占用
                   //添加成功
@@ -255,7 +256,6 @@
             } else {
               email = this.signUpFormCompany.emal;
             }
-            //todo 去线上验证
             checkCodeAPI({"email":email,"code":value}).then(res =>{
                 if (res.code === 200){
                   if (res.data === true){
@@ -298,7 +298,6 @@
       return {
         companyTypeOptions:[],
         labelPosition:"person",
-        signInDialogVisible:false,
         signInForm:{
           "email":"",
           "password":""
@@ -356,6 +355,19 @@
       };
     },
     computed:{
+      signInDialogVisible:{
+        get:function(){
+          return this.$store.state.signInDialogVisible;
+        },
+        set:function(val){
+          if (val === true){
+            this.$store.commit('signInDialogVisibleTrue');
+          } else {
+            this.$store.commit('signInDialogVisibleFalse');
+          }
+
+        }
+      }
     },
     methods: {
       clearAll:function(){
@@ -375,7 +387,6 @@
           return;
         } else {
           if (util.checkStr(email,"email")) {
-            //todo 邮箱是否已被使用
             checkEmailAPI(email).then((res) => {
               if (res.data === true) { //被占用
                 //添加成功
@@ -433,6 +444,7 @@
             this.$message.success("退出登录成功");
             sessionStorage.clear();
             localStorage.clear();
+            this.$router.push({path: '/indexPage'})
           } else {
             this.$message.error({message: res.msg});
             this.isLogin = false;
