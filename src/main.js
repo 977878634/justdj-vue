@@ -11,12 +11,14 @@ import VueRouter from 'vue-router'
 //路由文件
 import routes from './router/router.js'
 import axios from 'axios'
-
+import store from './vuex/store'
+import Vuex from 'vuex'
 
 Vue.config.productionTip = false;
 
 Vue.use(VueRouter);
 Vue.use(ElementUI);
+Vue.use(Vuex)
 
 Vue.prototype.$axios = axios;
 
@@ -33,6 +35,7 @@ export const router = new VueRouter({
 new Vue({
   // el: '#app',
   router,
+  store,
   // components: { App },
   // template: '<App/>'
   render: h => h(App)

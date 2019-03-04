@@ -1,10 +1,10 @@
 <template>
     <section style="height: 100%">
-      <el-container class="el-container main-page">
-        <el-header style="position: relative">
-          <div class="home-log">
+      <el-container class="el-container main-page" style="background-color: rgb(238,238,238)">
+        <el-header style="position: relative;background-color: #545c64;padding: 0 9rem;">
+          <div class="home-log" style="background-color: #545c64;color: #fff;box-sizing: border-box">
             校园兼职
-            <span style="font-size: 1rem;margin-left: 10px">
+            <span style="font-size: 1rem;margin-left: 10px;color: #ffffff">
               <i class="el-icon-location-outline"></i>
               北京
             </span>
@@ -13,6 +13,9 @@
                    class="el-menu-demo"
                    mode="horizontal"
                    router
+                   background-color="#545c64"
+                   text-color="#fff"
+                   active-text-color="#ffd04b"
                    @select="handleSelect">
             <el-menu-item index="/indexPage" key="">首页</el-menu-item>
             <el-menu-item index="/jobPage" >兼职查询</el-menu-item>
@@ -24,22 +27,24 @@
           </el-menu>
 
           <div class="main-signIn"  >
-            <el-button type="text" @click = "signInDialogVisible = true" v-show="!isLogin">登录</el-button>
-            <el-button type="text" @click = "signUpDialogVisible = true" v-show="!isLogin">注册</el-button>
+            <el-button type="text" style="color: #fff" @click = "signInDialogVisible = true" v-show="!isLogin">登录</el-button>
+            <el-button type="text" style="color: #fff" @click = "signUpDialogVisible = true" v-show="!isLogin">注册</el-button>
 
             <el-dropdown v-show="isLogin">
-              <span class="el-dropdown-link">
+              <span style="color: #fff">
                 {{this.user.name}}<i class="el-icon-arrow-down el-icon--right"></i>
               </span>
               <el-dropdown-menu slot="dropdown" >
-                <el-dropdown-item divided @click.native="">个人中心</el-dropdown-item>
-                <el-dropdown-item divided @click.native="updatePasswordVisible = true">修改密码</el-dropdown-item>
-                <el-dropdown-item divided @click.native="signOut">退出登录</el-dropdown-item>
+                <router-link to="/personCenter">
+                  <el-dropdown-item  style="text-align: center">个人中心</el-dropdown-item>
+                </router-link>
+                <el-dropdown-item  @click.native="updatePasswordVisible = true">修改密码</el-dropdown-item>
+                <el-dropdown-item  @click.native="signOut">退出登录</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </div>
         </el-header>
-        <el-main>
+        <el-main style="margin: 15px 8.1rem 15px 8.1rem;padding: 10px 0.9rem 0px 0.9rem;background-color: #fff">
           <router-view style="height: 100%"></router-view>
         </el-main>
 
@@ -293,7 +298,6 @@
       return {
         companyTypeOptions:[],
         labelPosition:"person",
-        isLogin:false,
         signInDialogVisible:false,
         signInForm:{
           "email":"",
@@ -346,24 +350,12 @@
         },
         signUpDialogVisible:false,
         activeIndex: '1',
-        activeIndex2: '1'
+        activeIndex2: '1',
+        isLogin: false,
+        user:{name:""}
       };
     },
     computed:{
-      user:{
-        get:function () {
-          if (util.isEmpty(localStorage.getItem("user"))) {
-            console.log("还未登录 ");
-            return {name:""};
-          }else {
-            console.log("get user " + localStorage.getItem("user"));
-            return JSON.parse(localStorage.getItem("user"));
-          }
-        },
-        set:function () {
-
-        }
-      }
     },
     methods: {
       clearAll:function(){
@@ -382,16 +374,29 @@
         if (util.isEmpty(email)) {
           return;
         } else {
-          if (util.checkStr(email,"email")) {} else {return;}
-        }
-        getCodeAPI(email).then((res) => {
-          if (res.code === 200){
-            this.$message.success("验证码已发送,请查收！");
-            //todo 倒计时
+          if (util.checkStr(email,"email")) {
+            //todo 邮箱是否已被使用
+            checkEmailAPI(email).then((res) => {
+              if (res.data === true) { //被占用
+                //添加成功
+                return;
+              } else {
+                getCodeAPI(email).then((res) => {
+                  if (res.code === 200){
+                    this.$message.success("验证码已发送,请查收！");
+                    //todo 倒计时
+                  } else {
+                    this.$message.error(res.msg);
+                  }
+                })
+              }
+            });
           } else {
-            this.$message.error(res.msg);
+            return;
           }
-        })
+        }
+
+
 
       },
 
@@ -426,11 +431,11 @@
           this.isLogin = false;
           if (res.code === 200) {
             this.$message.success("退出登录成功");
+            sessionStorage.clear();
+            localStorage.clear();
           } else {
             this.$message.error({message: res.msg});
             this.isLogin = false;
-            sessionStorage.clear();
-            localStorage.clear();
           }
         }).catch((err) => {
           console.log(err);
@@ -480,6 +485,7 @@
       loginSucceed: function (res) {
         sessionStorage.setItem('token', res.data.t);
         localStorage.setItem('token', res.data.t);
+        this.user = res.data.u;
         sessionStorage.setItem('user', JSON.stringify(res.data.u));
         localStorage.setItem('user', JSON.stringify(res.data.u));
         this.signInDialogVisible = false;
@@ -487,6 +493,17 @@
       }
     },
     mounted() {
+      if (!util.isEmpty(localStorage.getItem("token"))) {
+        this.isLogin = true;
+      }
+
+      if (util.isEmpty(localStorage.getItem("user"))) {
+        console.log("还未登录 ");
+        this.user = {name:""};
+      }else {
+        this.user = JSON.parse(localStorage.getItem("user"));
+      }
+
       dropListOneGetApi("company_type").then((res) => {
         if (res.code === 200){
           this.companyTypeOptions = res.data;
@@ -506,7 +523,7 @@
   }
 
   .main-page{
-    padding: 0 9rem;
+    /*padding: 0 9rem;*/
   }
 
 
@@ -532,14 +549,14 @@
     margin-right: 15px;
     font-size: 1.4rem;
     display: flex;
-    justify-content: center;
+    justify-content: left;
     padding-bottom: 4px;
   }
 
   .main-signIn{
     position: absolute;
     top: 0;
-    right: 0;
+    right: 9rem;
     height: 100%;
     width: 120px;
     display: flex;
