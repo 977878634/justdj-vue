@@ -21,7 +21,8 @@
             <el-menu-item index="/jobPage" >兼职查询</el-menu-item>
             <el-menu-item index="/userManagerPage">用户管理</el-menu-item>
             <el-menu-item index="/jobTypeManagerPage">类别管理</el-menu-item>
-            <el-menu-item index="/jobManagerPage">兼职管理</el-menu-item>
+            <el-menu-item index="/companyJobManagerPage">企业兼职管理</el-menu-item>
+            <el-menu-item index="/adminJobManagerPage">兼职管理</el-menu-item>
             <el-menu-item index="/dataAnalysePage">数据分析</el-menu-item>
             <el-menu-item index="/messagePage">消息</el-menu-item>
           </el-menu>
