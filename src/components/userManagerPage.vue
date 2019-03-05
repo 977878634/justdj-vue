@@ -54,6 +54,7 @@
       <div style="position: relative">
         <!--列表-->
         <el-table :data="userList"
+                  stripe
                   highlight-current-row
                   v-loading="listLoading"
                   :header-row-class-name="'global_table_th'"

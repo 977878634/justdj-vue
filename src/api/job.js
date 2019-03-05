@@ -19,7 +19,15 @@ export const deleteUserAPI= data=>{return fetch(jobServer+'/tApi/user', data, 'D
 export const dropListOneGetApi= data=>{return fetch(jobServer+'/api/drop/one', data, 'GET',"")}; //获取下拉列表
 
 
-/*******************************************************/
-export const getCompanyKanBanOne = data=>{return fetch(jobServer+'/api/companyKanBan/one', data, 'GET')};
+/***********************通用接口********************************/
+export const getJobTypeAPI = data=>{return fetch(jobServer+'/api/universal/list/jobType', data, 'POST')};
 export const addOrEditCompanyKanBan = data=>{return fetch(jobServer+'/api/companyKanBan/', data, 'POST')};
+
+
+/***********************兼职相关的接口********************************/
+export const addJobAPI = data=>{return fetch(jobServer+'/tApi/jobInfo/', data, 'POST')};
+export const updateJobAPI = data=>{return fetch(jobServer+'/tApi/jobInfo/', data, 'PATCH')};
+export const getJobAPI = data=>{return fetch(jobServer+'/api/jobInfo', data, 'GET')};
+export const deleteJobAPI = data=>{return fetch(jobServer+'/tApi/jobInfo', data, 'DELETE')};
+export const companyJobPageAPI = data=>{return fetch(jobServer+'/tApi/jobInfo/company/pageFind', data, 'POST')};
 /*******************************************************/

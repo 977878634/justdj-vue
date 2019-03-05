@@ -89,5 +89,12 @@
     background-color: #eeeeee;
   }
 
+  #app .el-scrollbar__wrap {
+    max-height: 43rem;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    padding-right: 0px;
+  }
+
 
 </style>
