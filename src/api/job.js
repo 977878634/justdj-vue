@@ -16,7 +16,7 @@ export const checkCodeAPI= data=>{return fetch(jobServer+'/api/login/code/check/
 export const userPageFindAPI= data=>{return fetch(jobServer+'/tApi/user/pageFind', data, 'POST',"")}; //true 用户分页查询
 export const deleteUserAPI= data=>{return fetch(jobServer+'/tApi/user', data, 'DELETE',"")}; //true 删除用户
 /***********************下拉列表************************/
-export const dropListOneGetApi= data=>{return fetch(jobServer+'/api/drop/one', data, 'GET',"")}; //获取下拉列表
+export const dropListOneGetApi= data=>{return fetch(jobServer+'/tApi/drop/one', data, 'GET',"")}; //获取下拉列表
 
 
 /*******************************************************/
