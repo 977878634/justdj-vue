@@ -6,7 +6,7 @@
       <div style="width: 100%;" class="global_toolbar">
         <el-form :inline="true" ref="filter" :model="this.filter">
 
-          <el-form-item>
+          <el-form-item  v-show=" isEmpty(user)?false:this.contain(user.roleId,2)">
             <el-button type="primary" icon="el-icon-plus"
                        :disabled="userState"
                        @click="addButtonClick">
@@ -42,6 +42,18 @@
               </el-option>
             </el-select>
           </el-form-item>
+
+
+          <el-form-item v-show=" isEmpty(user)?false:this.contain(user.roleId,3)">
+            <el-select v-model="filter.companyId" placeholder="公司" style="width: 14rem">
+              <el-option
+                v-for="item in companyList"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+
           <el-form-item>
             <el-button type="success" icon="el-icon-search" @click.native="query" :disabled="userState">查询</el-button>
           </el-form-item>
@@ -82,7 +94,7 @@
                 <el-button size="mini" type="text" icon="el-icon-edit"
                            @click="handleEdit(scope.$index, scope.row)"></el-button>
               </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="查看" placement="top">
+              <el-tooltip class="item" effect="dark" content="查看评论" placement="top">
                 <el-button size="mini" type="text" icon="el-icon-view"
                            @click="handleShow(scope.$index, scope.row)"></el-button>
               </el-tooltip>
@@ -297,7 +309,7 @@
     addJobAPI,
     companyJobPageAPI, deleteJobAPI,
     deleteUserAPI,
-    dropListOneGetApi,
+    dropListOneGetApi, getCompanyListAPI,
     getJobTypeAPI,
     userPageFindAPI
   } from "../api/job";
@@ -340,12 +352,14 @@
         editForm_enableStatus_options: [],
         userTypeList: [],
         userStatusList: [],
+        companyList:[],
         //稍微修改--------
         filter: {
           jobName: "",
           contactPerson: "",
           jobType: [],
           payMethod: "",
+          companyId:'',
           pageNum: 0,
           pageSize: 10
         },
@@ -412,6 +426,22 @@
         set: function () {
 
         }
+      },
+      user:{
+        get: function () {
+          let str = localStorage.getItem("user");
+          if (util.isEmpty(str)) {
+            console.log("user 为空")
+            return "";
+          } else {
+            let temp = JSON.parse(str);
+            console.log("生气  " + this.contain(temp.roleId,3));
+            return temp;
+          }
+        },
+        set: function () {
+
+        }
       }
     },
     methods: {
@@ -426,6 +456,7 @@
           contactPerson: "",
           jobType: [],
           payMethod: "",
+          companyId:'',
           pageNum: 0,
           pageSize: 10
         };
@@ -456,6 +487,32 @@
       },
 
       //基本不需要修改的函数-----------------------
+      isEmpty:function(v) {
+        switch (typeof v) {
+          case 'undefined':
+            return true;
+          case 'string':
+            if (v.replace(/(^[ \t\n\r]*)|([ \t\n\r]*$)/g, '').length === 0) return true;
+            break;
+          case 'boolean':
+            if (!v) return true;
+            break;
+          case 'number':
+            if (0 === v || isNaN(v)) return true;
+            break;
+          case 'object':
+            if (null === v || v.length === 0) return true;
+            for (let i in v) {
+              return false;
+            }
+            return true;
+        }
+        return false;
+      },
+
+      contain:function(arr, val) {
+        return arr.indexOf(val) != -1 ? true : false;
+      },
 
       handleEdit: function (index, row) {
         this.editForm = JSON.parse(JSON.stringify(row));
@@ -631,6 +688,15 @@
       getJobTypeAPI().then(res => {
         if (res.code === 200) {
           this.job_type_options = res.data;
+        } else {
+          console.error("工作类型下拉列表获取失败");
+        }
+
+      });
+
+      getCompanyListAPI().then(res => {
+        if (res.code === 200) {
+          this.companyList = res.data;
         } else {
           console.error("工作类型下拉列表获取失败");
         }

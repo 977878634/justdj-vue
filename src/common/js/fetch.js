@@ -1,8 +1,13 @@
+import * as util from "../utils/util"
 
 export default async (url = '', data = {}, type = 'GET', method = 'fetch') => {
   type = type.toUpperCase();
   if (type === 'GET' || type === "DELETE") {
-    url = url + '/' + data.toString();
+    if (util.isEmpty(data)){
+      //不需要拼接url
+    } else {
+      url = url + '/' + data.toString();
+    }
   }
 
   return new Promise((resolve, reject) => {

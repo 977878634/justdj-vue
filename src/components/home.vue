@@ -21,8 +21,8 @@
           <el-menu-item index="/jobPage">兼职查询</el-menu-item>
           <el-menu-item v-show="isLogin" index="/userManagerPage">用户管理</el-menu-item>
           <el-menu-item v-show="isLogin" index="/jobTypeManagerPage">类别管理</el-menu-item>
-          <el-menu-item v-show="isLogin" index="/companyJobManagerPage">企业兼职管理</el-menu-item>
-          <el-menu-item v-show="isLogin" index="/adminJobManagerPage">兼职管理</el-menu-item>
+          <el-menu-item v-show="isLogin" index="/companyJobManagerPage">兼职管理</el-menu-item>
+          <!--<el-menu-item v-show="isLogin" index="/adminJobManagerPage">兼职管理</el-menu-item>-->
           <el-menu-item v-show="isLogin" index="/dataAnalysePage">数据分析</el-menu-item>
           <el-menu-item v-show="isLogin" index="/messagePage">消息</el-menu-item>
         </el-menu>

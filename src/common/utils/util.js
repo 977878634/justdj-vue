@@ -2,8 +2,27 @@ var SIGN_REGEXP = /([yMdhsm])(\1*)/g;
 var DEFAULT_PATTERN = 'yyyy-MM-dd';
 
 
-export function isEmpty(str) {
-  return str === null || str === undefined || str === "" || str === [];
+export function  isEmpty(v) {
+  switch (typeof v) {
+    case 'undefined':
+      return true;
+    case 'string':
+      if (v.replace(/(^[ \t\n\r]*)|([ \t\n\r]*$)/g, '').length === 0) return true;
+      break;
+    case 'boolean':
+      if (!v) return true;
+      break;
+    case 'number':
+      if (0 === v || isNaN(v)) return true;
+      break;
+    case 'object':
+      if (null === v || v.length === 0) return true;
+      for (let i in v) {
+        return false;
+      }
+      return true;
+  }
+  return false;
 }
 
 
