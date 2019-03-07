@@ -280,6 +280,16 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
+            <el-form-item label="学历要求" prop="academicRequirements">
+              <el-select v-model="editForm.academicRequirements"
+                         placeholder="请选择学历要求" style="width: 25rem">
+                <el-option
+                  v-for="item in job_academic_requirements_options"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
           </el-col>
         </el-row>
 
@@ -324,7 +334,6 @@
       VueEditor
     },
     data() {
-
       return {
         mainName: "兼职",
         //options --------------------------
@@ -353,6 +362,7 @@
         userTypeList: [],
         userStatusList: [],
         companyList:[],
+        job_academic_requirements_options:[],
         //稍微修改--------
         filter: {
           jobName: "",
@@ -378,7 +388,7 @@
           gender: -1,
           needResume: false,
           jobDetails: '',
-
+          academicRequirements:'0',
           popularScore: 0,
           enableStatus: "3"
         },
@@ -394,7 +404,8 @@
           gender: [{required: true, message: '请选择性别要求', trigger: 'blur'}],
           needResume: [{required: true, message: '请选择是否需要简历', trigger: 'blur'}],
           jobDetails: [{required: true, message: '请输入兼职详情', trigger: 'blur'}],
-          enableStatus: [{required: true, message: '请选择兼职状态', trigger: 'blur'}]
+          enableStatus: [{required: true, message: '请选择兼职状态', trigger: 'blur'}],
+          academicRequirements:[{required: true, message: '请选择学历要求', trigger: 'blur'}],
         },
         //不用改----------
         dataList: [],
@@ -480,7 +491,7 @@
           gender: -1,
           needResume: false,
           jobDetails: '',
-
+          academicRequirements: '0',
           popularScore: 0,
           enableStatus: "3"
         };
@@ -644,6 +655,15 @@
       }
     },
     mounted() {
+
+
+      dropListOneGetApi("job_academic_requirements_options").then(res => {
+        if (res.code === 200) {
+          this.job_academic_requirements_options = res.data;
+        } else {
+          console.error("学历要求下拉列表获取失败");
+        }
+      });
 
       dropListOneGetApi("user_type").then(res => {
         if (res.code === 200) {

@@ -6,92 +6,111 @@
       <div style="width: 100%;" class="global_toolbar">
         <el-form :inline="true" ref="filter" :model="this.filter">
 
-          <el-form-item>
-            <el-button type="primary" icon="el-icon-plus"
-                       :disabled="userState"
-                       @click="addButtonClick">
-              <span class="toolbar_device_add">新增</span>
-            </el-button>
-          </el-form-item>
+          <el-row>
+            <el-col :span="24" style="display: flex;justify-content: flex-start">
+              <el-form-item>
+                <el-input v-model="filter.jobName" placeholder="兼职名" style="width: 14rem">
+                </el-input>
+              </el-form-item>
 
-          <el-form-item>
-            <el-input v-model="filter.jobName" placeholder="兼职名" style="width: 14rem">
-            </el-input>
-          </el-form-item>
+              <el-form-item>
+                <el-cascader
+                  style="width: 14rem"
+                  :options="job_type_options"
+                  placeholder="职位"
+                  v-model="filter.jobType">
+                </el-cascader>
+              </el-form-item>
 
-          <el-form-item>
-            <el-input v-model="filter.contactPerson" placeholder="联系人" style="width: 14rem">
-            </el-input>
-          </el-form-item>
-
-          <el-form-item>
-            <el-cascader
-              style="width: 14rem"
-              :options="job_type_options"
-              placeholder="所属分类"
-              v-model="filter.jobType">
-            </el-cascader>
-          </el-form-item>
-
-          <el-form-item>
-            <el-select v-model="filter.payMethod" placeholder="结算方式" style="width: 14rem">
-              <el-option
-                v-for="item in job_pay_method_options"
-                :label="item.label"
-                :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
+              <el-form-item>
+                <el-select v-model="filter.payMethod" placeholder="结算方式" style="width: 14rem">
+                  <el-option
+                    v-for="item in job_pay_method_options"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+              </el-form-item>
 
 
-          <el-form-item v-show=" isEmpty(user)?false:this.contain(user.roleId,3)">
-            <el-select v-model="filter.companyId" placeholder="公司" style="width: 14rem">
-              <el-option
-                v-for="item in companyList"
-                :label="item.label"
-                :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
+              <el-form-item>
+                <el-select v-model="filter.gender" placeholder="性别要求" style="width: 14rem">
+                  <el-option
+                    v-for="item in editForm_gender_options"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+              </el-form-item>
 
-          <el-form-item>
-            <el-button type="success" icon="el-icon-search" @click.native="query" :disabled="userState">查询</el-button>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="success" @click.native="resetFilters" :disabled="userState">重置</el-button>
-          </el-form-item>
+              <el-form-item>
+                <el-select v-model="filter.academicRequirements" placeholder="学历要求" style="width: 14rem">
+                  <el-option
+                    v-for="item in job_academic_requirements_options"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+
+              <el-form-item>
+                <el-cascader
+                  placeholder="地区"
+                  style="width: 14rem"
+                  :options="region_options"
+                  v-model="filter.region">
+                </el-cascader>
+              </el-form-item>
+            </el-col>
+
+            <el-col :span="24" style="display: flex;justify-content: flex-end;">
+              <el-form-item>
+                <el-radio-group v-model="filter.sort" size="normal" style="width: 25rem">
+                  <el-radio-button label="default">推荐排序</el-radio-button>
+                  <el-radio-button label="new">最新发布</el-radio-button>
+                  <el-radio-button label="salary">工资最高</el-radio-button>
+                </el-radio-group>
+              </el-form-item>
+
+              <el-form-item style="margin-right: 0px">
+                <el-button type="primary" @click.native="resetFilters">重置</el-button>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
         </el-form>
       </div>
 
-      <div v-for="item in dataList" class="job-item" v-bind:key="item.id">
-        <div class="body-left" style="height:100%;width:60%;">
+
+      <div v-for="item in dataList" class="job-item" v-bind:key="item.id" style="background-color:#fcfaf2">
+        <div class="body-left" style="height:100%;width:60%;padding-left: 20px">
           <div class="job-title">
             {{item.jobName}}
           </div>
           <div class="job-detail">
             <div class="detail-row">
-              <span class="detail-item">
-                地区: {{item.region}}
+              <span class="detail-item" style="width: 400px;display: flex;justify-content: flex-start">
+                工作类型: {{ formatJobType(item.jobType )}}
               </span>
-              <span style="color: #aaa;font-size: 1.2rem">
+              <span style="color: #006284;font-size: 16px">
                 招聘人数: {{item.requireNum}}
               </span>
             </div>
             <div class="detail-row">
-              <span class="detail-item">
-                地区: {{item.region}}
+              <span class="detail-item" style="width: 400px;display: flex;justify-content: flex-start">
+                工作地点: {{formatRegion(item.region)  }}
               </span>
-              <span style="color: #aaa;font-size: 1.2rem">
-                招聘人数: {{item.requireNum}}
+              <span style="color: #006284;font-size: 16px">
+                学历要求: {{ formatAcademicRequirements(item.academicRequirements) }}
               </span>
             </div>
           </div>
         </div>
-        <div class="body-right">
-          <span style="font-size: 1.2rem;color: #aaa;margin-right: 25px">
+        <div class="body-right" style="padding-right: 20px">
+          <span style="font-size: 16px;color: #006284;margin-right: 25px">
             薪资 <span style="color: rgb(255,129,45);font-size: 1.4rem;font-weight: bold">{{item.salary }}</span>
           </span>
-          <span style="font-size: 1.2rem;color: #aaa;margin-right: 25px">{{formatPayMethod(item,'')}}</span>
+          <span style="font-size: 16px;color: #006284;margin-right: 25px">{{formatPayMethod(item,'')}}</span>
           <el-button type="primary">查看详情</el-button>
         </div>
 
@@ -110,183 +129,6 @@
       </div>
     </div>
 
-    <!--弹出框-->
-    <el-dialog
-      :title="title"
-      width="70%"
-      center
-      :close-on-press-escape="true"
-      @close="editDialogClose"
-      :visible.sync="editFormVisible"
-      :close-on-click-modal="false">
-
-      <el-form :model="editForm"
-               label-width="7rem"
-               :rules="editFormRules"
-               ref="editForm">
-
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="兼职名称" prop="jobName">
-              <el-input v-model="editForm.jobName" autocomplete="off" style="width: 25rem"
-                        placeholder="请输入兼职名称"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="所属分类" prop="jobType">
-              <el-cascader
-                style="width: 25rem"
-                :options="job_type_options"
-                v-model="editForm.jobType">
-              </el-cascader>
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="联系人" prop="contactPerson">
-              <el-input v-model="editForm.contactPerson" autocomplete="off" style="width: 25rem"
-                        placeholder="请输入联系人名称"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="联系方式" prop="phone">
-              <el-input v-model="editForm.phone" autocomplete="off" style="width: 25rem"
-                        placeholder="请输入联系方式"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="薪资" prop="salary">
-              <el-input-number v-model="editForm.salary" :precision="2" :min="1" :max="1000000" :step="10"
-                               label="请输入招聘人数" style="width: 25rem"></el-input-number>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="招聘人数" prop="requireNum">
-              <el-input-number v-model="editForm.requireNum" :precision="0" :min="1" :max="1000" :step="1"
-                               label="请输入招聘人数" style="width: 25rem"></el-input-number>
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row>
-
-          <el-col :span="12">
-            <el-form-item label="类型" prop="type">
-              <el-select v-model="editForm.type" placeholder="请选择类型" style="width: 25rem">
-                <el-option
-                  v-for="item in editForm_type_options"
-                  :label="item.label"
-                  :value="item.value">
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-
-          <el-col :span="12">
-            <el-form-item label="地区" v-show="editForm.type === 0">
-              <el-cascader
-                style="width: 25rem"
-                :options="region_options"
-                v-model="editForm.region">
-              </el-cascader>
-            </el-form-item>
-          </el-col>
-
-        </el-row>
-
-        <el-row v-show="editForm.type === 0">
-          <el-col :span="24">
-            <el-form-item label="详细地址">
-              <el-input v-model="editForm.workLocation" autocomplete="off" style="width: 65.875rem"
-                        placeholder="请输入详细地址"></el-input>
-            </el-form-item>
-
-          </el-col>
-        </el-row>
-
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="结算方式" prop="payMethod">
-              <el-select v-model="editForm.payMethod" placeholder="请选择结算方式" style="width: 25rem">
-                <el-option
-                  v-for="item in job_pay_method_options"
-                  :label="item.label"
-                  :value="item.value">
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="福利" prop="salaryTreatment">
-              <el-select v-model="editForm.salaryTreatment"
-                         multiple
-                         placeholder="请选择福利" style="width: 25rem">
-                <el-option
-                  v-for="item in job_salary_treatment_options"
-                  :label="item.label"
-                  :value="item.value">
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="性别要求" prop="gender">
-              <el-select v-model="editForm.gender" placeholder="请选择性别要求" style="width: 25rem">
-                <el-option
-                  v-for="item in editForm_gender_options"
-                  :label="item.label"
-                  :value="item.value">
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="需要简历" prop="needResume">
-              <el-radio-group v-model="editForm.needResume" size="normal" style="width: 25rem">
-                <el-radio-button label="false">否</el-radio-button>
-                <el-radio-button label="true">是</el-radio-button>
-              </el-radio-group>
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="状态" prop="enableStatus">
-              <el-select v-model="editForm.enableStatus" placeholder="请设置兼职状态" style="width: 25rem">
-                <el-option
-                  v-for="item in editForm_enableStatus_options"
-                  :label="item.label"
-                  :value="item.value">
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-          </el-col>
-        </el-row>
-
-        <el-row>
-          <el-form-item label="兼职详情" prop="jobDetails">
-            <vue-editor v-model="editForm.jobDetails"></vue-editor>
-          </el-form-item>
-        </el-row>
-
-      </el-form>
-
-      <div slot="footer" class="dialog-footer">
-        <el-button @click.native="editFormVisible = false">取消</el-button>
-        <el-button type="primary" @click.native="add">提交</el-button>
-      </div>
-    </el-dialog>
     <!--</div>-->
     <!--<div v-else>-->
     <!--<center><h2>亲爱的用户,您暂时没有权限查看哦.</h2></center>-->
@@ -301,7 +143,7 @@
     companyJobPageAPI, deleteJobAPI,
     deleteUserAPI,
     dropListOneGetApi, getCompanyListAPI,
-    getJobTypeAPI,
+    getJobTypeAPI, getRegionAPI,
     userPageFindAPI
   } from "../api/job";
   import store from "../vuex/store"
@@ -340,52 +182,24 @@
         job_pay_method_options: [],
         job_type_options: [],
         region_options: [],
+        addressArray: [],
         editForm_enableStatus_options: [],
         userTypeList: [],
         userStatusList: [],
         companyList: [],
+        job_academic_requirements_options: [],
+        job_type_child: [],
         //稍微修改--------
         filter: {
           jobName: "",
-          contactPerson: "",
           jobType: [],
           payMethod: "",
-          companyId: '',
+          gender: '',
+          academicRequirements: '',
+          region: [],
+          sort: 'default',
           pageNum: 0,
           pageSize: 10
-        },
-        editForm: {
-          jobName: '',
-          jobType: [],
-          contactPerson: '',
-          phone: '',
-          salary: '',
-          requireNum: '',
-          type: '',
-          region: [],
-          workLocation: '',
-          payMethod: '0',
-          salaryTreatment: [],
-          gender: -1,
-          needResume: false,
-          jobDetails: '',
-
-          popularScore: 0,
-          enableStatus: "3"
-        },
-        editFormRules: {
-          jobName: [{required: true, message: '请输入兼职名称', trigger: 'blur'}],
-          jobType: [{required: true, message: '请选择所属分类', trigger: 'blur'}],
-          contactPerson: [{required: true, message: '请输入联系人', trigger: 'blur'}],
-          phone: [{required: true, message: '请输入联系方式', trigger: 'blur'}],
-          salary: [{required: true, message: '请输入薪资', trigger: 'blur'}],
-          requireNum: [{required: true, message: '请输入招聘人数', trigger: 'blur'}],
-          type: [{required: true, message: '请选择类型', trigger: 'blur'}],
-          payMethod: [{required: true, message: '请选择结算方式', trigger: 'blur'}],
-          gender: [{required: true, message: '请选择性别要求', trigger: 'blur'}],
-          needResume: [{required: true, message: '请选择是否需要简历', trigger: 'blur'}],
-          jobDetails: [{required: true, message: '请输入兼职详情', trigger: 'blur'}],
-          enableStatus: [{required: true, message: '请选择兼职状态', trigger: 'blur'}]
         },
         //不用改----------
         dataList: [],
@@ -444,37 +258,16 @@
       resetFilters: function () {
         this.filter = {
           jobName: "",
-          contactPerson: "",
           jobType: [],
           payMethod: "",
-          companyId: '',
+          gender: '',
+          academicRequirements: '',
+          region: [],
+          sort: 'default',
           pageNum: 0,
           pageSize: 10
         };
         this.query();
-      },
-
-      resetEditForm: function () {
-        this.$refs["editForm"].resetFields();
-        this.editForm = {
-          jobName: '',
-          jobType: [],
-          contactPerson: JSON.parse(localStorage.getItem("user")).name,
-          phone: JSON.parse(localStorage.getItem("user")).phone,
-          salary: '',
-          requireNum: '',
-          type: '',
-          region: [],
-          workLocation: '',
-          payMethod: '0',
-          salaryTreatment: [],
-          gender: -1,
-          needResume: false,
-          jobDetails: '',
-
-          popularScore: 0,
-          enableStatus: "3"
-        };
       },
 
       //基本不需要修改的函数-----------------------
@@ -551,8 +344,11 @@
         console.log("分页请求");
         companyJobPageAPI(this.filter).then(res => {
           if (res.code === 200) {
-            this.dataList = res.data.content;
-            this.total = res.data.totalElements;
+            if (!util.isEmpty(res.data.content)) {
+              this.dataList = res.data.content;
+              this.total = res.data.totalElements;
+            }
+
           } else if (res.code === 2) {
             this.$store.commit('signInDialogVisibleTrue');
           } else {
@@ -593,6 +389,17 @@
 
       },
 
+      deepTraversal: function (node) {
+        if (!util.isEmpty(node)) {
+          node.forEach(a => {
+            let temp = JSON.parse(JSON.stringify(a));
+            this.deepTraversal(temp.children);
+            temp.children = "";
+            this.addressArray.push(temp);
+          });
+        }
+      },
+
       //format函数--------------------------------------
       formatPayMethod: function (row, column) {
         switch (row.payMethod) {
@@ -612,6 +419,54 @@
             return "";
         }
 
+      }
+      ,
+
+      formatJobType(jobType) {
+        let temp = JSON.parse(JSON.stringify(jobType));
+        let lastItem = temp.pop();
+        let result = "";
+        this.job_type_child.forEach(a => {
+          if (lastItem == a.value) {
+            result = a.label;
+          }
+        });
+        return result;
+      }
+      ,
+
+      formatAcademicRequirements: function (index) {
+        switch (index) {
+          case "0":
+            return "不限";
+          case "1":
+            return "专科";
+          case "2":
+            return "本科";
+          case "3":
+            return "研究生";
+          case "4":
+            return "硕士";
+          default:
+            break;
+        }
+      }
+      ,
+
+      formatRegion: function (address) {
+        let result = "";
+        if (util.isEmpty(address)) {
+          return result;
+        } else {
+          let temp = JSON.parse(JSON.stringify(address));
+          let last = temp.pop();
+          this.addressArray.forEach( a => {
+            if (a.value === last){
+              result = a.label;
+            }
+          });
+          return result;
+        }
       },
 
       formatNeedResume: function (row, column) {
@@ -635,6 +490,14 @@
       }
     },
     mounted() {
+
+      dropListOneGetApi("job_academic_requirements_options").then(res => {
+        if (res.code === 200) {
+          this.job_academic_requirements_options = res.data;
+        } else {
+          console.error("学历要求下拉列表获取失败");
+        }
+      });
 
       dropListOneGetApi("user_type").then(res => {
         if (res.code === 200) {
@@ -679,6 +542,12 @@
       getJobTypeAPI().then(res => {
         if (res.code === 200) {
           this.job_type_options = res.data;
+          if (!util.isEmpty(res.data)) {
+            this.job_type_options.forEach(a => {
+              let child = a.children;
+              this.job_type_child = this.job_type_child.concat(child);
+            })
+          }
         } else {
           console.error("工作类型下拉列表获取失败");
         }
@@ -694,9 +563,8 @@
 
       });
 
-      this.editForm.contactPerson = JSON.parse(localStorage.getItem("user")).name;
-      this.editForm.phone = JSON.parse(localStorage.getItem("user")).phone;
       this.region_options = getPositionOption();
+      this.deepTraversal(this.region_options);
       this.query();
     }
   }
@@ -724,7 +592,7 @@
   .job-item .job-title {
     height: 40%;
     width: 100%;
-    font-size: 22px;
+    font-size: 18px;
     display: flex;
     justify-content: flex-start;
     align-items: center
@@ -744,8 +612,8 @@
   }
 
   .detail-row .detail-item {
-    color: #aaa;
-    font-size: 1.2rem;
+    color: #006284;
+    font-size: 16px;
     margin-right: 150px
   }
 </style>
