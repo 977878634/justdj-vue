@@ -66,6 +66,7 @@
       <div style="position: relative">
         <!--列表-->
         <el-table :data="dataList"
+                  v-loading="loading"
                   stripe
                   highlight-current-row
                   :header-row-class-name="'global_table_th'"
@@ -335,6 +336,7 @@
     },
     data() {
       return {
+        loading:false,
         mainName: "兼职",
         //options --------------------------
         editForm_gender_options: [{
@@ -568,8 +570,10 @@
       },
 
       query: function () {
+        this.loading = true;
         console.log("分页请求");
         companyJobPageAPI(this.filter).then(res => {
+          this.loading = false;
           if (res.code === 200) {
             this.dataList = res.data.content;
             this.total = res.data.totalElements;

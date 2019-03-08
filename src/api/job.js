@@ -30,7 +30,7 @@ export const updateJobAPI = data=>{return fetch(jobServer+'/tApi/jobInfo/', data
 export const getJobAPI = data=>{return fetch(jobServer+'/api/jobInfo', data, 'GET')};
 export const deleteJobAPI = data=>{return fetch(jobServer+'/tApi/jobInfo', data, 'DELETE')};
 export const companyJobPageAPI = data=>{return fetch(jobServer+'/tApi/jobInfo/company/pageFind', data, 'POST')};
-
+export const personJobPageAPI = data=>{return fetch(jobServer+'/api/jobInfo/normal/pageFind', data, 'POST')};
 /***********************公司相关接口********************************/
 export const addCompanyAPI = data=>{return fetch(jobServer+'/api/companyInfo/', data, 'POST')};
 export const updateCompanyAPI = data=>{return fetch(jobServer+'/api/companyInfo/', data, 'PATCH')};

@@ -1,7 +1,7 @@
 <template>
   <section>
     <!--<div v-if="sele">-->
-    <div style="width: 100%;height: 100%;position: relative;">
+    <div style="width: 100%;height: 100%;position: relative;;">
       <!--工具条-->
       <div style="width: 100%;" class="global_toolbar">
         <el-form :inline="true" ref="filter" :model="this.filter">
@@ -9,12 +9,13 @@
           <el-row>
             <el-col :span="24" style="display: flex;justify-content: flex-start">
               <el-form-item>
-                <el-input v-model="filter.jobName" placeholder="兼职名" style="width: 14rem">
+                <el-input @blur="this.query" v-model="filter.jobName" placeholder="兼职名" style="width: 14rem">
                 </el-input>
               </el-form-item>
 
               <el-form-item>
                 <el-cascader
+                  @change="this.query"
                   style="width: 14rem"
                   :options="job_type_options"
                   placeholder="职位"
@@ -23,7 +24,7 @@
               </el-form-item>
 
               <el-form-item>
-                <el-select v-model="filter.payMethod" placeholder="结算方式" style="width: 14rem">
+                <el-select   @change="this.query" v-model="filter.payMethod" placeholder="结算方式" style="width: 14rem">
                   <el-option
                     v-for="item in job_pay_method_options"
                     :label="item.label"
@@ -34,7 +35,7 @@
 
 
               <el-form-item>
-                <el-select v-model="filter.gender" placeholder="性别要求" style="width: 14rem">
+                <el-select  @change="this.query" v-model="filter.gender" placeholder="性别要求" style="width: 14rem">
                   <el-option
                     v-for="item in editForm_gender_options"
                     :label="item.label"
@@ -44,7 +45,7 @@
               </el-form-item>
 
               <el-form-item>
-                <el-select v-model="filter.academicRequirements" placeholder="学历要求" style="width: 14rem">
+                <el-select @change="this.query" v-model="filter.academicRequirements" placeholder="学历要求" style="width: 14rem">
                   <el-option
                     v-for="item in job_academic_requirements_options"
                     :label="item.label"
@@ -55,6 +56,7 @@
 
               <el-form-item>
                 <el-cascader
+                  @change="this.query"
                   placeholder="地区"
                   style="width: 14rem"
                   :options="region_options"
@@ -65,7 +67,7 @@
 
             <el-col :span="24" style="display: flex;justify-content: flex-end;">
               <el-form-item>
-                <el-radio-group v-model="filter.sort" size="normal" style="width: 25rem">
+                <el-radio-group v-model="filter.sort" size="normal"  @change="this.query">
                   <el-radio-button label="default">推荐排序</el-radio-button>
                   <el-radio-button label="new">最新发布</el-radio-button>
                   <el-radio-button label="salary">工资最高</el-radio-button>
@@ -82,38 +84,41 @@
       </div>
 
 
-      <div v-for="item in dataList" class="job-item" v-bind:key="item.id" style="background-color:#fcfaf2">
-        <div class="body-left" style="height:100%;width:60%;padding-left: 20px">
-          <div class="job-title">
-            {{item.jobName}}
-          </div>
-          <div class="job-detail">
-            <div class="detail-row">
+      <div v-loading="loading"
+        style="width: 100%;height: auto;position: absolute;top: 120px;left: 0;height:calc(100% - 165px);overflow-y:scroll;overflow-x:hidden;">
+        <div v-for="item in dataList" class="job-item" v-bind:key="item.id" style="background-color:#fcfaf2">
+          <div class="body-left" style="height:100%;width:60%;padding-left: 20px">
+            <div class="job-title">
+              {{item.jobName}}
+            </div>
+            <div class="job-detail">
+              <div class="detail-row">
               <span class="detail-item" style="width: 400px;display: flex;justify-content: flex-start">
                 工作类型: {{ formatJobType(item.jobType )}}
               </span>
-              <span style="color: #006284;font-size: 16px">
+                <span style="color: #006284;font-size: 16px">
                 招聘人数: {{item.requireNum}}
               </span>
-            </div>
-            <div class="detail-row">
+              </div>
+              <div class="detail-row">
               <span class="detail-item" style="width: 400px;display: flex;justify-content: flex-start">
                 工作地点: {{formatRegion(item.region)  }}
               </span>
-              <span style="color: #006284;font-size: 16px">
+                <span style="color: #006284;font-size: 16px">
                 学历要求: {{ formatAcademicRequirements(item.academicRequirements) }}
               </span>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="body-right" style="padding-right: 20px">
+          <div class="body-right" style="padding-right: 20px">
           <span style="font-size: 16px;color: #006284;margin-right: 25px">
             薪资 <span style="color: rgb(255,129,45);font-size: 1.4rem;font-weight: bold">{{item.salary }}</span>
           </span>
-          <span style="font-size: 16px;color: #006284;margin-right: 25px">{{formatPayMethod(item,'')}}</span>
-          <el-button type="primary">查看详情</el-button>
-        </div>
+            <span style="font-size: 16px;color: #006284;margin-right: 25px">{{formatPayMethod(item,'')}}</span>
+            <el-button type="primary" @click="toDetailPage(item)">查看详情</el-button>
+          </div>
 
+        </div>
       </div>
 
       <!--分页-->
@@ -139,12 +144,9 @@
 <script>
 
   import {
-    addJobAPI,
-    companyJobPageAPI, deleteJobAPI,
-    deleteUserAPI,
+    addJobAPI, deleteJobAPI,
     dropListOneGetApi, getCompanyListAPI,
-    getJobTypeAPI, getRegionAPI,
-    userPageFindAPI
+    getJobTypeAPI, personJobPageAPI
   } from "../api/job";
   import store from "../vuex/store"
   import * as util from "../common/utils/util"
@@ -159,11 +161,12 @@
     data() {
 
       return {
+        loading:false,
         mainName: "兼职",
         //options --------------------------
         editForm_gender_options: [{
           value: -1,
-          label: '无限制'
+          label: '性别不限'
         }, {
           value: 0,
           label: '仅限男生'
@@ -194,7 +197,7 @@
           jobName: "",
           jobType: [],
           payMethod: "",
-          gender: '',
+          gender: -1,
           academicRequirements: '',
           region: [],
           sort: 'default',
@@ -250,17 +253,18 @@
       }
     },
     methods: {
-      //todo 预览效果
-      handleShow: function (index, row) {
-
+      toDetailPage:function(row){
+        this.$router.push({path: '/jobDetail/', query: {job: JSON.stringify(row)}});
+        // this.$router.push({path: '/jobDetail/' + row.id})
       },
+
       //需要修改的函数------------------------------
       resetFilters: function () {
         this.filter = {
           jobName: "",
           jobType: [],
           payMethod: "",
-          gender: '',
+          gender: -1,
           academicRequirements: '',
           region: [],
           sort: 'default',
@@ -341,8 +345,10 @@
       },
 
       query: function () {
+        this.loading = true;
         console.log("分页请求");
-        companyJobPageAPI(this.filter).then(res => {
+        personJobPageAPI(this.filter).then(res => {
+          this.loading = false;
           if (res.code === 200) {
             if (!util.isEmpty(res.data.content)) {
               this.dataList = res.data.content;
@@ -419,10 +425,9 @@
             return "";
         }
 
-      }
-      ,
+      },
 
-      formatJobType(jobType) {
+      formatJobType:function (jobType) {
         let temp = JSON.parse(JSON.stringify(jobType));
         let lastItem = temp.pop();
         let result = "";
@@ -432,8 +437,7 @@
           }
         });
         return result;
-      }
-      ,
+      },
 
       formatAcademicRequirements: function (index) {
         switch (index) {
@@ -499,21 +503,6 @@
         }
       });
 
-      dropListOneGetApi("user_type").then(res => {
-        if (res.code === 200) {
-          this.userTypeList = res.data;
-        } else {
-          console.error("用户类型下拉列表获取失败");
-        }
-      });
-
-      dropListOneGetApi("user_status").then(res => {
-        if (res.code === 200) {
-          this.userStatusList = res.data;
-        } else {
-          console.error("用户状态下拉列表获取失败");
-        }
-      });
 
       dropListOneGetApi("job_pay_method").then(res => {
         if (res.code === 200) {
@@ -523,21 +512,6 @@
         }
       });
 
-      dropListOneGetApi("job_salary_treatment").then(res => {
-        if (res.code === 200) {
-          this.job_salary_treatment_options = res.data;
-        } else {
-          console.error("福利下拉列表获取失败");
-        }
-      });
-
-      dropListOneGetApi("editForm_enableStatus_options").then(res => {
-        if (res.code === 200) {
-          this.editForm_enableStatus_options = res.data;
-        } else {
-          console.error("兼职状态下拉列表获取失败");
-        }
-      });
 
       getJobTypeAPI().then(res => {
         if (res.code === 200) {
