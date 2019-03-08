@@ -85,7 +85,7 @@
       if('WebSocket' in window){
         let url = "ws://" + process.env.COLLECTION_URL + "/api/webSocket/";
         console.log("地址 " + url);
-        this.websocket = new WebSocket("ws://localhost:9003/api/webSocket/" + this.token);
+        this.websocket = new WebSocket(url + this.token);
       }
       else{
         alert('Not support websocket')
