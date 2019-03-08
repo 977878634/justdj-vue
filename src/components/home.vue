@@ -4,7 +4,7 @@
       <el-header style="position: relative;background-color: #545c64;padding: 0 9rem;">
         <div class="home-log" style="background-color: #545c64;color: #fff;box-sizing: border-box">
           校园兼职
-          <span style="font-size: 1rem;margin-left: 10px;color: #ffffff">
+          <span style="font-size: 1rem;margin-left: 10px;color: #ffffff" @click="cityDialogVisible = true">
               <i class="el-icon-location-outline"></i>
               北京
             </span>
@@ -225,6 +225,29 @@
           <el-button type="primary" @click="signUp">确 定</el-button>
         </div>
       </el-dialog>
+
+
+      <el-dialog title="选择城市" :visible.sync="cityDialogVisible"
+                 center
+                 width="31%"
+                 :close-on-click-modal="false"
+      >
+        <!--<el-form :model="signInForm" :rules="signInRules"-->
+                 <!--label-width="6.25rem"-->
+                 <!--label-position="left">-->
+          <!--<el-form-item label="邮箱" prop="email">-->
+            <!--<el-input v-model="signInForm.email" autocomplete="off" placeholder="请输入邮箱"></el-input>-->
+          <!--</el-form-item>-->
+          <!--<el-form-item label="密码" prop="password">-->
+            <!--<el-input type="password" v-model="signInForm.password" autocomplete="off" placeholder="请输入密码"></el-input>-->
+          <!--</el-form-item>-->
+        <!--</el-form>-->
+        <div slot="footer" class="dialog-footer" center="true">
+          <el-button @click="cityDialogVisible = false">取 消</el-button>
+          <el-button type="primary">确 定</el-button>
+        </div>
+      </el-dialog>
+
     </el-container>
   </section>
 </template>
@@ -366,6 +389,7 @@
           "repeatPassword": [{required: true, validator: validateRepPassword, trigger: 'blur'}],
         },
         signUpDialogVisible: false,
+        cityDialogVisible: false,
         activeIndex: '1',
         activeIndex2: '1',
         isLogin: false,

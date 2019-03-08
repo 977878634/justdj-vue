@@ -24,7 +24,7 @@
               </el-form-item>
 
               <el-form-item>
-                <el-select   @change="this.query" v-model="filter.payMethod" placeholder="结算方式" style="width: 14rem">
+                <el-select @change="this.query" v-model="filter.payMethod" placeholder="结算方式" style="width: 14rem">
                   <el-option
                     v-for="item in job_pay_method_options"
                     :label="item.label"
@@ -35,7 +35,7 @@
 
 
               <el-form-item>
-                <el-select  @change="this.query" v-model="filter.gender" placeholder="性别要求" style="width: 14rem">
+                <el-select @change="this.query" v-model="filter.gender" placeholder="性别要求" style="width: 14rem">
                   <el-option
                     v-for="item in editForm_gender_options"
                     :label="item.label"
@@ -45,7 +45,8 @@
               </el-form-item>
 
               <el-form-item>
-                <el-select @change="this.query" v-model="filter.academicRequirements" placeholder="学历要求" style="width: 14rem">
+                <el-select @change="this.query" v-model="filter.academicRequirements" placeholder="学历要求"
+                           style="width: 14rem">
                   <el-option
                     v-for="item in job_academic_requirements_options"
                     :label="item.label"
@@ -67,7 +68,7 @@
 
             <el-col :span="24" style="display: flex;justify-content: flex-end;">
               <el-form-item>
-                <el-radio-group v-model="filter.sort" size="normal"  @change="this.query">
+                <el-radio-group v-model="filter.sort" size="normal" @change="this.query">
                   <el-radio-button label="default">推荐排序</el-radio-button>
                   <el-radio-button label="new">最新发布</el-radio-button>
                   <el-radio-button label="salary">工资最高</el-radio-button>
@@ -85,8 +86,9 @@
 
 
       <div v-loading="loading"
-        style="width: 100%;height: auto;position: absolute;top: 120px;left: 0;height:calc(100% - 165px);overflow-y:scroll;overflow-x:hidden;">
-        <div v-for="item in dataList" class="job-item" v-bind:key="item.id" style="background-color:#fcfaf2">
+           style="width: 100%;height: auto;position: absolute;top: 120px;left: 0;height:calc(100% - 165px);overflow-y:scroll;overflow-x:hidden;">
+        <div v-for="item in dataList" class="job-item" v-bind:key="item.id" style="">
+          <!--background-color:#fcfaf2-->
           <div class="body-left" style="height:100%;width:60%;padding-left: 20px">
             <div class="job-title">
               {{item.jobName}}
@@ -111,13 +113,14 @@
             </div>
           </div>
           <div class="body-right" style="padding-right: 20px">
-          <span style="font-size: 16px;color: #006284;margin-right: 25px">
-            薪资 <span style="color: rgb(255,129,45);font-size: 1.4rem;font-weight: bold">{{item.salary }}</span>
-          </span>
+            <span style="font-size: 16px;color: #006284;margin-right: 25px">
+              薪资 <span style="color: rgb(255,129,45);font-size: 1.4rem;font-weight: bold">{{item.salary }}</span>
+            </span>
             <span style="font-size: 16px;color: #006284;margin-right: 25px">{{formatPayMethod(item,'')}}</span>
+            <el-button type="primary" @click="">收藏</el-button>
             <el-button type="primary" @click="toDetailPage(item)">查看详情</el-button>
           </div>
-
+          <!--<div class="cell_dashed"></div>-->
         </div>
       </div>
 
@@ -161,7 +164,7 @@
     data() {
 
       return {
-        loading:false,
+        loading: false,
         mainName: "兼职",
         //options --------------------------
         editForm_gender_options: [{
@@ -253,7 +256,7 @@
       }
     },
     methods: {
-      toDetailPage:function(row){
+      toDetailPage: function (row) {
         this.$router.push({path: '/jobDetail/', query: {job: JSON.stringify(row)}});
         // this.$router.push({path: '/jobDetail/' + row.id})
       },
@@ -427,7 +430,7 @@
 
       },
 
-      formatJobType:function (jobType) {
+      formatJobType: function (jobType) {
         let temp = JSON.parse(JSON.stringify(jobType));
         let lastItem = temp.pop();
         let result = "";
@@ -464,8 +467,8 @@
         } else {
           let temp = JSON.parse(JSON.stringify(address));
           let last = temp.pop();
-          this.addressArray.forEach( a => {
-            if (a.value === last){
+          this.addressArray.forEach(a => {
+            if (a.value === last) {
               result = a.label;
             }
           });
@@ -589,5 +592,15 @@
     color: #006284;
     font-size: 16px;
     margin-right: 150px
+  }
+
+  .cell_dashed {
+
+    border-bottom: 1px dashed #999999;
+    height: 1rem;
+    /*width: 70%;*/
+    margin: auto;
+    margin-top: 15px;
+    margin-bottom: 20px;
   }
 </style>

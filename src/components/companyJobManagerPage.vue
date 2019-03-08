@@ -95,9 +95,9 @@
                 <el-button size="mini" type="text" icon="el-icon-edit"
                            @click="handleEdit(scope.$index, scope.row)"></el-button>
               </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="查看评论" placement="top">
+              <el-tooltip class="item" effect="dark" content="查看" placement="top">
                 <el-button size="mini" type="text" icon="el-icon-view"
-                           @click="handleShow(scope.$index, scope.row)"></el-button>
+                           @click="toDetailPage(scope.row)"></el-button>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="删除" placement="top">
                 <el-button size="mini" type="text" icon="el-icon-delete"
@@ -458,6 +458,10 @@
       }
     },
     methods: {
+      toDetailPage:function(row){
+        this.$router.push({path: '/jobDetail/', query: {job: JSON.stringify(row),isAuth:true}});
+        // this.$router.push({path: '/jobDetail/' + row.id})
+      },
       //todo 预览效果
       handleShow: function (index, row) {
 
