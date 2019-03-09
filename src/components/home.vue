@@ -47,7 +47,7 @@
           </el-dropdown>
         </div>
       </el-header>
-      <el-main style="margin: 15px 8.1rem 15px 8.1rem;padding: 10px 0.9rem 0px 0.9rem;background-color: #fff">
+      <el-main style="margin: 15px 8.1rem 15px 8.1rem;padding: 10px 0.9rem 10px 0.9rem;background-color: #fff">
         <keep-alive>
           <router-view v-if="$route.meta.keepAlive" style="height: 100%"></router-view>
         </keep-alive>

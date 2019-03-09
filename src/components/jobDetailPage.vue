@@ -22,7 +22,7 @@
           <el-button type="primary">
             报名参加
           </el-button>
-          <el-button type="primary">
+          <el-button type="primary" @click="toChatPage">
             聊一聊
           </el-button>
           <el-button type="primary">
@@ -31,7 +31,7 @@
         </el-row>
       </div>
       <div style="width: 50%;height: 160px;background-color: #eee">
-
+        待完善 公司信息
       </div>
     </div>
 
@@ -94,6 +94,10 @@
     },
     computed: {},
     methods: {
+      toChatPage:function(){
+        this.$router.push({path: '/messagePage/', query: {id: this.job.createUserId}});
+      },
+
       isEmpty:function(v) {
         switch (typeof v) {
           case 'undefined':
