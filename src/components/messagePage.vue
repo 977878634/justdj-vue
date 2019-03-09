@@ -83,7 +83,8 @@
       }
       //判断当前浏览器是否支持WebSocket
       if('WebSocket' in window){
-        let url = "ws://" + process.env.COLLECTION_URL + "/api/webSocket/";
+        let url = "ws://" + process.env.COLLECTION_URL.toString().replace('http://','') + "/api/webSocket/";
+        // let url = "ws://47.102.199.98:9003/api/webSocket/";
         console.log("地址 " + url);
         this.websocket = new WebSocket(url + this.token);
       }
