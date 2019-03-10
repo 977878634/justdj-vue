@@ -20,7 +20,6 @@ Vue.use(VueRouter);
 Vue.use(ElementUI);
 Vue.use(Vuex)
 
-Vue.prototype.$axios = axios;
 
 // 如果使用模块化机制编程，导入Vue和VueRouter，要调用 Vue.use(VueRouter)
 export const router = new VueRouter({
