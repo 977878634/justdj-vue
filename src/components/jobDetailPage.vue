@@ -2,8 +2,7 @@
   <section>
     <el-row>
       <el-col :span="24" style="display: flex;justify-content: flex-start">
-        <el-button type="primary" @click="goUp">
-          返回上一页
+        <el-button icon="el-icon-arrow-left"  @click="goUp" style="margin: 0">
         </el-button>
       </el-col>
     </el-row>
@@ -19,13 +18,13 @@
           <span> {{formatPayMethod(job)}}  |  {{ formatJobType(job.jobType )}}  |  需要{{job.requireNum}}人 | {{formatGender()}}</span>
         </el-row>
         <el-row v-show="!isAuth">
-          <el-button type="primary">
+          <el-button >
             报名参加
           </el-button>
-          <el-button type="primary" @click="toChatPage">
+          <el-button  @click="toChatPage">
             聊一聊
           </el-button>
-          <el-button type="primary">
+          <el-button >
             收藏
           </el-button>
         </el-row>

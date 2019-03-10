@@ -463,6 +463,7 @@
         signInAPI(loginParams).then((res) => {
           if (res.code === 200) {
             this.$message.success("登录成功");
+
             this.loginSucceed(res);
           } else {
             this.$message.error({message: res.msg});

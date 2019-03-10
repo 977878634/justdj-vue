@@ -2,7 +2,7 @@ import fetch from '../common/js/fetch.js';
 
 
 let jobServer = process.env.JOB_URL;
-let collectionServcer = process.env.COLLECTION_URL;
+let collectionService = process.env.COLLECTION_URL;
 
 /***********************登陆注册************************/
 export const signInAPI= data=>{return fetch(jobServer+'/api/login/in', data, 'POST')}; //登录
@@ -12,10 +12,12 @@ export const signOutAPI= data=>{return fetch(jobServer+'/api/login/out', data, '
 export const getCodeAPI= data=>{return fetch(jobServer+'/api/login/code/send', data, 'POST')}; //获取验证码
 export const checkEmailAPI= data=>{return fetch(jobServer+'/api/login/isExist', data, 'POST')}; //true 已使用 检验邮箱是否已被使用
 export const checkCodeAPI= data=>{return fetch(jobServer+'/api/login/code/check/', data, 'POST')}; //true 检验验证码是否正确
-/*************************用户相关******************************/
 
+/*************************用户相关******************************/
 export const userPageFindAPI= data=>{return fetch(jobServer+'/tApi/user/pageFind', data, 'POST',"")}; //true 用户分页查询
 export const deleteUserAPI= data=>{return fetch(jobServer+'/tApi/user', data, 'DELETE',"")}; //true 删除用户
+export const getUserAPI= data=>{return fetch(jobServer+'/api/user', data, 'GET',"")}; //true 删除用户
+export const getGroupUserAPI= data=>{return fetch(jobServer+'/api/user/group', data, 'POST',"")}; //true 获取用户组
 /***********************下拉列表************************/
 export const dropListOneGetApi= data=>{return fetch(jobServer+'/api/drop/one', data, 'GET',"")}; //获取下拉列表
 
@@ -40,3 +42,7 @@ export const getCompanyListAPI = data=>{return fetch(jobServer+'/api/companyInfo
 
 /***********************地区相关接口********************************/
 export const getRegionAPI = data=>{return fetch(jobServer+'/api/region/', data, 'POST')};//获取地区详细信息
+
+/***********************聊天消息相关接口********************************/
+export const getToFromMessage = data=>{return fetch(collectionService +'/tApi/message', data, 'GET')};//获取地区详细信息
+export const getRecentUserList = data=>{return fetch(collectionService +'/tApi/message/userList', data, 'POST')};//获取最近联系人列表
