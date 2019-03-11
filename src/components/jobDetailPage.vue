@@ -246,6 +246,7 @@
   >>> .detail > p{
     display: flex ;
     justify-content: flex-start;
-    align-items: center;
+    align-items: flex-start;
+    text-align: left;
   }
 </style>

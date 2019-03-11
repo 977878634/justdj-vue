@@ -34,13 +34,19 @@
           </el-button>
 
           <el-dropdown v-show="isLogin">
-              <span style="color: #fff">
-                {{this.user.name}}<i class="el-icon-arrow-down el-icon--right"></i>
-              </span>
+              <div style="display: flex;justify-content: flex-end;align-items: center">
+                <span style="color: #fff;margin-right: 10px">
+                  {{this.user.name}}<i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <img v-show="isEmpty(user.headImg)" src="https://justdj-umbrella.oss-cn-hangzhou.aliyuncs.com/default_header_img.png" style="width: 45px;height: 45px"/>
+                <img v-show="!isEmpty(user.headImg)" :src="user.headImg" style="width: 45px;height: 45px;border-radius: 50%"/>
+              </div>
+
             <el-dropdown-menu slot="dropdown">
               <router-link to="/personCenter">
                 <el-dropdown-item style="text-align: center">个人中心</el-dropdown-item>
               </router-link>
+              <el-dropdown-item >修改资料</el-dropdown-item>
               <el-dropdown-item @click.native="updatePasswordVisible = true">修改密码</el-dropdown-item>
               <el-dropdown-item @click.native="signOut">退出登录</el-dropdown-item>
             </el-dropdown-menu>
@@ -59,6 +65,7 @@
                  center
                  width="31%"
                  :close-on-click-modal="false"
+                 @open="signInDialogOpen"
       >
         <el-form :model="signInForm" :rules="signInRules"
                  label-width="6.25rem"
@@ -266,6 +273,7 @@
 
   export default {
     data() {
+
       const validateEmail = (rule, value, callback) => {
         let checkEmail = /^[a-zA-Z0-9_-]+@([a-zA-Z0-9]+\.)+(com|cn|net|org)$/;
         let email = value;
@@ -393,7 +401,6 @@
         activeIndex: '1',
         activeIndex2: '1',
         isLogin: false,
-        user: {name: ""}
       };
     },
     computed: {
@@ -409,9 +416,43 @@
           }
 
         }
+      },
+      user:{
+        get:function () {
+          return this.$store.state.user;
+        },
+        set:function () {
+
+        }
       }
     },
     methods: {
+      isEmpty:function(v) {
+        switch (typeof v) {
+          case 'undefined':
+            return true;
+          case 'string':
+            if (v.replace(/(^[ \t\n\r]*)|([ \t\n\r]*$)/g, '').length === 0) return true;
+            break;
+          case 'boolean':
+            if (!v) return true;
+            break;
+          case 'number':
+            if (0 === v || isNaN(v)) return true;
+            break;
+          case 'object':
+            if (null === v || v.length === 0) return true;
+            for (let i in v) {
+              return false;
+            }
+            return true;
+        }
+        return false;
+      },
+
+      signInDialogOpen:function(){
+        this.$router.push({path: '/indexPage'});
+      },
       clearAll: function () {
         this.$refs["signUpFormPerson"].resetFields();
         this.$refs["signUpFormCompany"].resetFields();
@@ -463,7 +504,6 @@
         signInAPI(loginParams).then((res) => {
           if (res.code === 200) {
             this.$message.success("登录成功");
-
             this.loginSucceed(res);
           } else {
             this.$message.error({message: res.msg});
@@ -536,6 +576,7 @@
       },
 
       loginSucceed: function (res) {
+        this.$store.commit('setHeadImg',{name:'stark',user:res.data.u});
         sessionStorage.setItem('token', res.data.t);
         localStorage.setItem('token', res.data.t);
         this.user = res.data.u;
@@ -548,6 +589,7 @@
     mounted() {
       if (!util.isEmpty(localStorage.getItem("token"))) {
         this.isLogin = true;
+        this.$store.commit('setHeadImg',{name:'stark',user:JSON.parse(localStorage.getItem("user"))});
       }
 
       if (util.isEmpty(localStorage.getItem("user"))) {

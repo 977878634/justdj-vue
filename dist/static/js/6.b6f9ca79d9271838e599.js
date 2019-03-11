@@ -1,1 +1,0 @@
-webpackJsonp([6],{g0w4:function(e,n,t){"use strict";Object.defineProperty(n,"__esModule",{value:!0});var r={render:function(){var e=this.$createElement;return(this._self._c||e)("section",[this._v("\n  兼职类别管理\n")])},staticRenderFns:[]};var a=t("C7Lr")({name:"jobTypeManagerPage"},r,!1,function(e){t("xdXP")},"data-v-47369b55",null);n.default=a.exports},xdXP:function(e,n){}});

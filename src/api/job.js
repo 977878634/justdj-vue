@@ -18,6 +18,8 @@ export const userPageFindAPI= data=>{return fetch(jobServer+'/tApi/user/pageFind
 export const deleteUserAPI= data=>{return fetch(jobServer+'/tApi/user', data, 'DELETE',"")}; //true 删除用户
 export const getUserAPI= data=>{return fetch(jobServer+'/api/user', data, 'GET',"")}; //true 删除用户
 export const getGroupUserAPI= data=>{return fetch(jobServer+'/api/user/group', data, 'POST',"")}; //true 获取用户组
+export const changeUserHeadImgAPI= data=>{return fetch(jobServer+'/tApi/user/headImg', data, 'PATCH',"")}; //true 获取用户组
+export const changeUserResumeUrlAPI= data=>{return fetch(jobServer+'/tApi/user/resumeUrl', data, 'PATCH',"")}; //true 获取用户组
 /***********************下拉列表************************/
 export const dropListOneGetApi= data=>{return fetch(jobServer+'/api/drop/one', data, 'GET',"")}; //获取下拉列表
 
@@ -46,3 +48,9 @@ export const getRegionAPI = data=>{return fetch(jobServer+'/api/region/', data, 
 /***********************聊天消息相关接口********************************/
 export const getToFromMessage = data=>{return fetch(collectionService +'/tApi/message', data, 'GET')};//获取地区详细信息
 export const getRecentUserList = data=>{return fetch(collectionService +'/tApi/message/userList', data, 'POST')};//获取最近联系人列表
+
+/***********************在线简历相关接口********************************/
+export const addOnlineResumeAPI = data=>{return fetch(jobServer+'/tApi/onlineResumeInfo', data, 'POST')};//新增在线简历
+export const updateOnlineResumeAPI = data=>{return fetch(jobServer+'/tApi/onlineResumeInfo', data, 'PATCH')};
+export const getOnlineResumeByUserIdAPI = data=>{return fetch(jobServer+'/api/onlineResumeInfo', data, 'GET')};//根据用户id查询在线简历
+export const getOnlineResumeAPI = data=>{return fetch(jobServer+'/tApi/onlineResumeInfo', data, 'GET')};//获取自己的在线简历

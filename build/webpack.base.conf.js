@@ -11,6 +11,9 @@ function resolve (dir) {
 
 
 module.exports = {
+  // externals: {
+  //   'element-ui': 'ELEMENT',
+  // },
   context: path.resolve(__dirname, '../'),
   entry: {
     app: './src/main.js'

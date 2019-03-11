@@ -78,10 +78,6 @@
               <el-button @click="inputData = ''">清空输入</el-button>
             </div>
 
-            <div style="margin-bottom: 15px">
-              <el-button>删除记录</el-button>
-            </div>
-
             <div style="margin-bottom: 15px" v-show="!contains(user.roleId,2)">
               <el-button>发送简历</el-button>
             </div>

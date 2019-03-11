@@ -172,7 +172,7 @@
           <el-col :span="12">
             <el-form-item label="薪资" prop="salary">
               <el-input-number v-model="editForm.salary" :precision="2" :min="1" :max="1000000" :step="10"
-                               label="请输入招聘人数" style="width: 25rem"></el-input-number>
+                               label="请输入薪资" style="width: 25rem"></el-input-number>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -413,7 +413,6 @@
         dataList: [],
         total: 0,
         editFormVisible: false,
-        total: 0,
         title: "",
       }
 
@@ -461,10 +460,6 @@
       toDetailPage:function(row){
         this.$router.push({path: '/jobDetail/', query: {job: JSON.stringify(row),isAuth:true}});
         // this.$router.push({path: '/jobDetail/' + row.id})
-      },
-      //todo 预览效果
-      handleShow: function (index, row) {
-
       },
       //需要修改的函数------------------------------
       resetFilters: function () {

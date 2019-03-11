@@ -5,12 +5,12 @@ import Vue from 'vue'
 // elementUI
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+// const ElementUI = require('element-ui')
 
 import App from './App'
 import VueRouter from 'vue-router'
 //路由文件
 import routes from './router/router.js'
-import axios from 'axios'
 import store from './vuex/store'
 import Vuex from 'vuex'
 

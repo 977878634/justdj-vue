@@ -7,7 +7,8 @@ Vue.use(Vuex)
 
 // 应用初始状态
 const state = {
-  signInDialogVisible: false
+  signInDialogVisible: false,
+  user:{}
 }
 
 // 定义所需的 mutations
@@ -17,6 +18,9 @@ const mutations = {
   },
   signInDialogVisibleFalse(state) {
     state.signInDialogVisible = false;
+  },
+  setHeadImg(state,stark){
+    state.user = stark.user;
   }
 };
 
