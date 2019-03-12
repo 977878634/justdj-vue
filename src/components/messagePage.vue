@@ -78,11 +78,11 @@
               <el-button @click="inputData = ''">清空输入</el-button>
             </div>
 
-            <div style="margin-bottom: 15px" v-show="!contains(user.roleId,2)">
+            <div style="margin-bottom: 15px" v-show="!this.conta(this.user.roleId,2)">
               <el-button>发送简历</el-button>
             </div>
 
-            <div style="margin-bottom: 15px" v-show="contains(user.roleId,2)">
+            <div style="margin-bottom: 15px" v-show="this.conta(this.user.roleId,2)">
               <el-button>要简历</el-button>
             </div>
 
@@ -98,7 +98,7 @@
   import store from "../vuex/store"
   import * as util from "../common/utils/util"
   import {VueEditor} from 'vue2-editor'
-  import {getGroupUserAPI, getRecentUserList, getToFromMessage, getUserAPI} from "../api/job";
+  import {getGroupUserAPI, getRecentUserList, getToFromMessage, getUnReadNumAPI, getUserAPI} from "../api/job";
 
   export default {
     name: "messagePage",
@@ -108,7 +108,6 @@
     data() {
       return {
         myScrollbar: {},
-        user: {},
         token: "",
         websocket: null,
         content: '',
@@ -127,9 +126,19 @@
         userList: []
       }
     },
-    computed: {},
+    computed: {
+      user: {
+        get:function () {
+          return this.$store.state.user;
+        },
+        set:function () {
+
+        }
+      },
+
+    },
     methods: {
-      contains:function(arr, val) {
+      conta:function(arr, val) {
         return arr.indexOf(val) != -1 ? true : false;
       },
       isEmpty:function(v) {
@@ -172,8 +181,18 @@
         getToFromMessage(id).then(res => {
           if (res.code === 200) {
             this.messageList = res.data;
+            this.getUnReadMessage();
           } else {
             this.$message.error("获取聊天记录失败");
+          }
+        })
+      },
+
+      getUnReadMessage: function () {
+        console.log("消息更新home未读消息总数")
+        getUnReadNumAPI().then(res => {
+          if (res.code === 200) {
+            this.$store.commit('setUnReadNum', {name: 'stark', num: res.data});
           }
         })
       },
@@ -359,11 +378,17 @@
           if (res.code === 200) {
             //添加用户组
             this.addGroupUserToRecentList(res.data);
+            //更新未读消息总数
+            this.getUnReadMessage();
           } else {
             console.log("获取最近联系人失败");
           }
         });
       }
+    },
+    beforeDestroy:function(){
+      console.log("页面销毁");
+      this.websocket.close();
     },
     updated: function () {
       this.scrollDown();
@@ -371,9 +396,9 @@
 
     mounted() {
       let that = this;
-      this.user = JSON.parse(localStorage.getItem("user"));
       this.token = localStorage.getItem("token");
-      if (util.isEmpty(this.user)) {
+      if (util.isEmpty(this.token)) {
+        console.log("token 为空");
         //弹出登录框
         this.$store.commit('signInDialogVisibleTrue');
       }
@@ -410,7 +435,7 @@
 
       //连接成功建立的回调方法
       this.websocket.onopen = function (event) {
-        that.$message.success("webSocket 会话连接成功");
+        // that.$message.success("消息服务 连接成功");
       };
 
       //接收到消息的回调方法
@@ -426,7 +451,8 @@
 
       //连接关闭的回调方法
       this.websocket.onclose = function () {
-        that.$message.info("webSocket 连接已关闭");
+        console.log("消息服务 连接已关闭");
+        // that.$message.info("消息服务 连接已关闭");
       };
 
       //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。

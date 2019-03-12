@@ -8,7 +8,8 @@ Vue.use(Vuex)
 // 应用初始状态
 const state = {
   signInDialogVisible: false,
-  user:{}
+  user:{},
+  unReadNum:0
 }
 
 // 定义所需的 mutations
@@ -21,6 +22,9 @@ const mutations = {
   },
   setHeadImg(state,stark){
     state.user = stark.user;
+  },
+  setUnReadNum(state,stark){
+    state.unReadNum = stark.num;
   }
 };
 

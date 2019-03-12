@@ -117,7 +117,6 @@
               薪资 <span style="color: rgb(255,129,45);font-size: 1.4rem;font-weight: bold">{{item.salary }}</span>
             </span>
             <span style="font-size: 16px;color: #006284;margin-right: 25px">{{formatPayMethod(item,'')}}</span>
-            <el-button type="primary" @click="">收藏</el-button>
             <el-button type="primary" @click="toDetailPage(item)">查看详情</el-button>
           </div>
           <!--<div class="cell_dashed"></div>-->
@@ -257,6 +256,11 @@
     },
     methods: {
       toDetailPage: function (row) {
+
+        row.userId = this.user.id;
+        let temp = JSON.parse(JSON.stringify(row));
+        // todo 数据推送到消息队列
+
         this.$router.push({path: '/jobDetail/', query: {job: JSON.stringify(row)}});
         // this.$router.push({path: '/jobDetail/' + row.id})
       },

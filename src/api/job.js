@@ -12,7 +12,7 @@ export const signOutAPI= data=>{return fetch(jobServer+'/api/login/out', data, '
 export const getCodeAPI= data=>{return fetch(jobServer+'/api/login/code/send', data, 'POST')}; //获取验证码
 export const checkEmailAPI= data=>{return fetch(jobServer+'/api/login/isExist', data, 'POST')}; //true 已使用 检验邮箱是否已被使用
 export const checkCodeAPI= data=>{return fetch(jobServer+'/api/login/code/check/', data, 'POST')}; //true 检验验证码是否正确
-
+export const changePWDAPI= data=>{return fetch(jobServer+'/tApi/login/changePassword', data, 'PATCH')}; //true 检验验证码是否正确
 /*************************用户相关******************************/
 export const userPageFindAPI= data=>{return fetch(jobServer+'/tApi/user/pageFind', data, 'POST',"")}; //true 用户分页查询
 export const deleteUserAPI= data=>{return fetch(jobServer+'/tApi/user', data, 'DELETE',"")}; //true 删除用户
@@ -36,6 +36,9 @@ export const getJobAPI = data=>{return fetch(jobServer+'/api/jobInfo', data, 'GE
 export const deleteJobAPI = data=>{return fetch(jobServer+'/tApi/jobInfo', data, 'DELETE')};
 export const companyJobPageAPI = data=>{return fetch(jobServer+'/tApi/jobInfo/company/pageFind', data, 'POST')};
 export const personJobPageAPI = data=>{return fetch(jobServer+'/api/jobInfo/normal/pageFind', data, 'POST')};
+export const collectionJobAPI = data=>{return fetch(jobServer+'/tApi/jobInfo/collection', data, 'GET')};
+export const jobSignUpAPI = data=>{return fetch(jobServer+'/tApi/jobInfo/signUp', data, 'GET')};
+export const getAllCollectionJobAPI = data=>{return fetch(jobServer+'/tApi/jobInfo/collection', data, 'POST')};
 /***********************公司相关接口********************************/
 export const addCompanyAPI = data=>{return fetch(jobServer+'/api/companyInfo/', data, 'POST')};
 export const updateCompanyAPI = data=>{return fetch(jobServer+'/api/companyInfo/', data, 'PATCH')};
@@ -48,7 +51,7 @@ export const getRegionAPI = data=>{return fetch(jobServer+'/api/region/', data, 
 /***********************聊天消息相关接口********************************/
 export const getToFromMessage = data=>{return fetch(collectionService +'/tApi/message', data, 'GET')};//获取地区详细信息
 export const getRecentUserList = data=>{return fetch(collectionService +'/tApi/message/userList', data, 'POST')};//获取最近联系人列表
-
+export const getUnReadNumAPI = data=>{return fetch(collectionService +'/tApi/message/all', data, 'GET')};//获取最近联系人列表
 /***********************在线简历相关接口********************************/
 export const addOnlineResumeAPI = data=>{return fetch(jobServer+'/tApi/onlineResumeInfo', data, 'POST')};//新增在线简历
 export const updateOnlineResumeAPI = data=>{return fetch(jobServer+'/tApi/onlineResumeInfo', data, 'PATCH')};

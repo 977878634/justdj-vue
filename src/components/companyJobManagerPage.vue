@@ -87,6 +87,8 @@
           </el-table-column>
           <el-table-column prop="needResume" label="是否需要简历" min-width="40" :formatter="formatNeedResume" align="center">
           </el-table-column>
+          <el-table-column prop="popularScore" label="热度" min-width="40" align="center">
+          </el-table-column>
           <el-table-column prop="gender" label="性别限制" min-width="40" :formatter="formatUserSex" align="center">
           </el-table-column>
           <el-table-column label="操作" width="140" align="center">
@@ -95,8 +97,12 @@
                 <el-button size="mini" type="text" icon="el-icon-edit"
                            @click="handleEdit(scope.$index, scope.row)"></el-button>
               </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="查看" placement="top">
+              <el-tooltip class="item" effect="dark" content="查看效果" placement="top">
                 <el-button size="mini" type="text" icon="el-icon-view"
+                           @click="toDetailPage(scope.row)"></el-button>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="查看投递情况" placement="top">
+                <el-button size="mini" type="text" icon="el-icon-info"
                            @click="toDetailPage(scope.row)"></el-button>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="删除" placement="top">

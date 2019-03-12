@@ -19,12 +19,18 @@
                  @select="handleSelect">
           <el-menu-item index="/indexPage" key="">首页</el-menu-item>
           <el-menu-item index="/jobPage">兼职查询</el-menu-item>
-          <el-menu-item v-show="isLogin" index="/userManagerPage">用户管理</el-menu-item>
-          <el-menu-item v-show="isLogin" index="/jobTypeManagerPage">类别管理</el-menu-item>
+          <el-menu-item v-show="isLogin && user.roleId.indexOf(3) > -1" index="/userManagerPage">用户管理</el-menu-item>
+          <el-menu-item v-show="isLogin && user.roleId.indexOf(3) > -1" index="/jobTypeManagerPage">类别管理</el-menu-item>
           <el-menu-item v-show="isLogin" index="/companyJobManagerPage">兼职管理</el-menu-item>
           <!--<el-menu-item v-show="isLogin" index="/adminJobManagerPage">兼职管理</el-menu-item>-->
           <el-menu-item v-show="isLogin" index="/dataAnalysePage">数据分析</el-menu-item>
-          <el-menu-item v-show="isLogin" index="/messagePage">消息</el-menu-item>
+          <el-menu-item v-show="isLogin && user.roleId.indexOf(2) < 0" index="/appliedJobPage">申请/收藏</el-menu-item>
+          <el-menu-item v-show="isLogin" index="/messagePage" style="position: relative">
+            <el-badge :value="unReadNum" class="item" :hidden="unReadNum <= 0" style="position: absolute;top: -10px;left: 50px">
+            </el-badge>
+            <span>消息</span>
+          </el-menu-item>
+
         </el-menu>
 
         <div class="main-signIn">
@@ -34,19 +40,22 @@
           </el-button>
 
           <el-dropdown v-show="isLogin">
-              <div style="display: flex;justify-content: flex-end;align-items: center">
+            <div style="display: flex;justify-content: flex-end;align-items: center">
                 <span style="color: #fff;margin-right: 10px">
                   {{this.user.name}}<i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
-                <img v-show="isEmpty(user.headImg)" src="https://justdj-umbrella.oss-cn-hangzhou.aliyuncs.com/default_header_img.png" style="width: 45px;height: 45px"/>
-                <img v-show="!isEmpty(user.headImg)" :src="user.headImg" style="width: 45px;height: 45px;border-radius: 50%"/>
-              </div>
+              <img v-show="isEmpty(user.headImg)"
+                   src="https://justdj-umbrella.oss-cn-hangzhou.aliyuncs.com/default_header_img.png"
+                   style="width: 45px;height: 45px"/>
+              <img v-show="!isEmpty(user.headImg)" :src="user.headImg"
+                   style="width: 45px;height: 45px;border-radius: 50%"/>
+            </div>
 
             <el-dropdown-menu slot="dropdown">
               <router-link to="/personCenter">
                 <el-dropdown-item style="text-align: center">个人中心</el-dropdown-item>
               </router-link>
-              <el-dropdown-item >修改资料</el-dropdown-item>
+              <el-dropdown-item>修改资料</el-dropdown-item>
               <el-dropdown-item @click.native="updatePasswordVisible = true">修改密码</el-dropdown-item>
               <el-dropdown-item @click.native="signOut">退出登录</el-dropdown-item>
             </el-dropdown-menu>
@@ -57,8 +66,35 @@
         <keep-alive>
           <router-view v-if="$route.meta.keepAlive" style="height: 100%"></router-view>
         </keep-alive>
-        <router-view v-if="!$route.meta.keepAlive"style="height: 100%"></router-view>
+        <router-view v-if="!$route.meta.keepAlive" style="height: 100%"></router-view>
       </el-main>
+
+      <!--修改密码弹窗-->
+      <el-dialog title="修改密码" :visible.sync="updatePasswordVisible"
+                 center
+                 width="31%"
+                 :close-on-click-modal="false">
+        <el-form :model="changePwdForm" :rules="changePwdFormRules"
+                 label-width="6.25rem"
+                 label-position="left">
+          <el-form-item label="原密码" prop="oldPassword">
+            <el-input type="password" v-model="changePwdForm.oldPassword" autocomplete="off"
+                      placeholder="请输入原密码"></el-input>
+          </el-form-item>
+          <el-form-item label="新密码" prop="newPassword">
+            <el-input type="password" v-model="changePwdForm.newPassword" autocomplete="off"
+                      placeholder="请输入新密码"></el-input>
+          </el-form-item>
+          <el-form-item label="重复密码" prop="repeatPassword">
+            <el-input type="password" v-model="changePwdForm.repeatPassword" autocomplete="off"
+                      placeholder="请重复密码"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer" center="true">
+          <el-button @click="updatePasswordVisible = false">取 消</el-button>
+          <el-button type="primary" @click="changePWD">确 定</el-button>
+        </div>
+      </el-dialog>
 
       <!--登录弹窗-->
       <el-dialog title="登录" :visible.sync="signInDialogVisible"
@@ -240,14 +276,14 @@
                  :close-on-click-modal="false"
       >
         <!--<el-form :model="signInForm" :rules="signInRules"-->
-                 <!--label-width="6.25rem"-->
-                 <!--label-position="left">-->
-          <!--<el-form-item label="邮箱" prop="email">-->
-            <!--<el-input v-model="signInForm.email" autocomplete="off" placeholder="请输入邮箱"></el-input>-->
-          <!--</el-form-item>-->
-          <!--<el-form-item label="密码" prop="password">-->
-            <!--<el-input type="password" v-model="signInForm.password" autocomplete="off" placeholder="请输入密码"></el-input>-->
-          <!--</el-form-item>-->
+        <!--label-width="6.25rem"-->
+        <!--label-position="left">-->
+        <!--<el-form-item label="邮箱" prop="email">-->
+        <!--<el-input v-model="signInForm.email" autocomplete="off" placeholder="请输入邮箱"></el-input>-->
+        <!--</el-form-item>-->
+        <!--<el-form-item label="密码" prop="password">-->
+        <!--<el-input type="password" v-model="signInForm.password" autocomplete="off" placeholder="请输入密码"></el-input>-->
+        <!--</el-form-item>-->
         <!--</el-form>-->
         <div slot="footer" class="dialog-footer" center="true">
           <el-button @click="cityDialogVisible = false">取 消</el-button>
@@ -262,9 +298,10 @@
 <script>
 
   import {
+    changePWDAPI,
     checkCodeAPI,
     checkEmailAPI, companySignUpAPI, dropListOneGetApi,
-    getCodeAPI, personSignUpAPI,
+    getCodeAPI, getUnReadNumAPI, personSignUpAPI,
     signInAPI,
     signOutAPI
   } from "../api/job";
@@ -325,6 +362,9 @@
           callback(new Error('请输入密码'));
         } else {
           if (value.length >= 6 && value.length <= 18) {
+            if (this.changePwdForm.newPassword == this.changePwdForm.oldPassword) {
+              callback(new Error('新旧密码不能相同'));
+            }
             callback();
           } else {
             callback(new Error('密码为6-18位字符串'));
@@ -344,12 +384,31 @@
           callback(new Error('两次输入的密码不相同'));
         }
       };
+      const validateRepPwd = (rule, value, callback) => {
+        let temp = this.changePwdForm.newPassword;
+        if (temp === value) {
+          callback();
+        } else {
+          callback(new Error('两次输入的密码不相同'));
+        }
+      };
       return {
+        updatePasswordVisible: false,
         companyTypeOptions: [],
         labelPosition: "person",
         signInForm: {
           "email": "",
           "password": ""
+        },
+        changePwdForm: {
+          oldPassword: '',
+          newPassword: '',
+          repeatPassword: ''
+        },
+        changePwdFormRules: {
+          "oldPassword": [{required: true, validator: validatePassword, trigger: 'blur'}],
+          "newPassword": [{required: true, validator: validatePassword, trigger: 'blur'}],
+          "repeatPassword": [{required: true, validator: validateRepPwd, trigger: 'blur'}],
         },
         signInRules: {
           "email": [
@@ -417,17 +476,43 @@
 
         }
       },
-      user:{
-        get:function () {
+      user: {
+        get: function () {
           return this.$store.state.user;
         },
-        set:function () {
+        set: function () {
+
+        }
+      },
+      unReadNum: {
+        get: function () {
+          return this.$store.state.unReadNum;
+        },
+        set: function () {
 
         }
       }
     },
     methods: {
-      isEmpty:function(v) {
+      getUnReadMessage: function () {
+        getUnReadNumAPI().then(res => {
+          if (res.code === 200) {
+            this.$store.commit('setUnReadNum', {name: 'stark', num: res.data});
+          }
+        })
+      },
+
+      changePWD: function () {
+        changePWDAPI(this.changePwdForm).then(res => {
+          if (res.code === 200) {
+            this.$message.success("密码修改成功,请重新登录");
+            this.signOut();
+          } else {
+            this.$message.error(res.msg);
+          }
+        })
+      },
+      isEmpty: function (v) {
         switch (typeof v) {
           case 'undefined':
             return true;
@@ -450,7 +535,7 @@
         return false;
       },
 
-      signInDialogOpen:function(){
+      signInDialogOpen: function () {
         this.$router.push({path: '/indexPage'});
       },
       clearAll: function () {
@@ -503,7 +588,7 @@
         var loginParams = {email: this.signInForm.email, password: this.signInForm.password};
         signInAPI(loginParams).then((res) => {
           if (res.code === 200) {
-            this.$message.success("登录成功");
+            // this.$message.success("登录成功");
             this.loginSucceed(res);
           } else {
             this.$message.error({message: res.msg});
@@ -518,6 +603,7 @@
 
       //退出登录
       signOut: function () {
+        console.log("调用退出登录");
         var loginParams = {phone: this.signInForm.phone, password: this.signInForm.password};
 
         signOutAPI().then((res) => {
@@ -576,28 +662,41 @@
       },
 
       loginSucceed: function (res) {
-        this.$store.commit('setHeadImg',{name:'stark',user:res.data.u});
+        this.$store.commit('setHeadImg', {name: 'stark', user: res.data.u});
         sessionStorage.setItem('token', res.data.t);
         localStorage.setItem('token', res.data.t);
-        this.user = res.data.u;
         sessionStorage.setItem('user', JSON.stringify(res.data.u));
         localStorage.setItem('user', JSON.stringify(res.data.u));
+        this.getUnReadMessage();
         this.signInDialogVisible = false;
         this.isLogin = true;
       }
     },
-    mounted() {
+    beforeCreate:function(){
       if (!util.isEmpty(localStorage.getItem("token"))) {
+        console.log("已经登录 ");
         this.isLogin = true;
-        this.$store.commit('setHeadImg',{name:'stark',user:JSON.parse(localStorage.getItem("user"))});
+        this.$store.commit('setHeadImg', {name: 'stark', user: JSON.parse(localStorage.getItem("user"))});
+
+      }else {
+        console.log("还未登录 ");
+      }
+    },
+    created:function(){
+      if (!util.isEmpty(localStorage.getItem("token"))) {
+        console.log("已经登录 ");
+        this.isLogin = true;
+        this.$store.commit('setHeadImg', {name: 'stark', user: JSON.parse(localStorage.getItem("user"))});
+
+      }else {
+        console.log("还未登录 ");
+      }
+    },
+    mounted() {
+      if (!this.isEmpty(this.user)) {
+        this.getUnReadMessage();
       }
 
-      if (util.isEmpty(localStorage.getItem("user"))) {
-        console.log("还未登录 ");
-        this.user = {name: ""};
-      } else {
-        this.user = JSON.parse(localStorage.getItem("user"));
-      }
 
       dropListOneGetApi("company_type").then((res) => {
         if (res.code === 200) {
@@ -664,5 +763,6 @@
     text-align: center;
     height: calc(100% - 60px);
   }
+
 
 </style>

@@ -18,14 +18,20 @@
           <span> {{formatPayMethod(job)}}  |  {{ formatJobType(job.jobType )}}  |  需要{{job.requireNum}}人 | {{formatGender()}}</span>
         </el-row>
         <el-row v-show="!isAuth">
-          <el-button >
+          <el-button  @click="jobSignUp" v-if="isJobSignUp()">
             报名参加
+          </el-button>
+          <el-button  @click="jobSignUp" v-else disabled>
+            已报名
           </el-button>
           <el-button  @click="toChatPage">
             聊一聊
           </el-button>
-          <el-button >
+          <el-button v-if="isCollection()" @click="collection">
             收藏
+          </el-button>
+          <el-button v-else @click="unCollection">
+            取消收藏
           </el-button>
         </el-row>
       </div>
@@ -65,7 +71,7 @@
 </template>
 
 <script>
-  import {dropListOneGetApi, getJobAPI, getJobTypeAPI} from "../api/job";
+  import {collectionJobAPI, dropListOneGetApi, getJobAPI, getJobTypeAPI, jobSignUpAPI} from "../api/job";
   import store from "../vuex/store"
   import * as util from "../common/utils/util"
 
@@ -88,11 +94,97 @@
         job_type_child: [],
         jobTYPE:[],
         job_salary_treatment_options:[],
+        //是否是公司里的人创建的
         isAuth:false
       }
     },
-    computed: {},
+    computed: {
+      user: {
+        get: function () {
+          return this.$store.state.user;
+        },
+        set: function () {
+
+        }
+      },
+    },
     methods: {
+      isJobSignUp:function(){
+        if (this.isEmpty(this.job.appliedUserId)){
+          return true;
+        }
+        if ( this.job.appliedUserId.indexOf(this.user.id) < 0) {
+          return true;
+        }
+      },
+      //兼职报名
+      jobSignUp: function(){
+        jobSignUpAPI(this.job.id).then(res=>{
+          if (res.code === 200){
+            this.$message.success("报名成功");
+            if (this.isEmpty(this.job.appliedUserId)) {
+              this.job.appliedUserId = [];
+            }
+            this.job.appliedUserId.push(this.user.id);
+          }else if (res.code === 2) {
+            this.$store.commit('signInDialogVisibleTrue');
+          } else {
+            this.$message.error(res.msg);
+          }
+        })
+      },
+
+      isCollection:function(){
+        console.log("1231313213213212131321")
+        if(this.isEmpty(this.user.jobId)){
+          console.log("没有收藏过");
+          return true;
+        }
+        if(this.user.jobId.indexOf(this.job.id) < 0){
+          console.log("没有收藏这个兼职");
+          return true;
+        }
+      },
+
+      collection: function(){
+        if(this.isEmpty(this.user.jobId)){
+          this.user.jobId = [];
+        }
+        collectionJobAPI(this.job.id).then(res=>{
+          if (res.code === 200){
+            this.$message.success("收藏成功");
+            this.user.jobId.push(this.job.id);
+            this.$store.commit('setHeadImg',{name:'stark',user:this.user});
+          }
+          else if (res.code === 2) {
+            this.$store.commit('signInDialogVisibleTrue');
+          } else {
+            this.$message.error("收藏失败");
+          }
+        })
+
+      },
+
+      unCollection: function(){
+        let temp = this.user.jobId;
+        collectionJobAPI(this.job.id).then(res=>{
+          if (res.code === 200){
+            this.$message.success("取消收藏成功");
+            let index = temp.indexOf(this.job.id);
+            if (index > -1) {
+              temp.splice(index, 1);
+            }
+            this.user.jobId = temp;
+            this.$store.commit('setHeadImg',{name:'stark',user:this.user});
+          } else if (res.code === 2) {
+            this.$store.commit('signInDialogVisibleTrue');
+          } else {
+            this.$message.error("取消收藏失败");
+          }
+        })
+
+      },
+
       toChatPage:function(){
         this.$router.push({path: '/messagePage/', query: {id: this.job.createUserId}});
       },
@@ -179,21 +271,6 @@
       },
     },
     mounted() {
-      // const loading = this.$loading({
-      //   lock: true,
-      //   text: '拼命加载中',
-      //   spinner: 'el-icon-loading',
-      //   background: 'rgba(0, 0, 0, 0.7)'
-      // });
-
-      // getJobAPI(this.$route.params.id).then(res => {
-      //   loading.close();
-      //   if (res.code === 200){
-      //     this.job = res.data;
-      //   } else {
-      //     console.error("获取详情失败");
-      //   }
-      // });
 
       getJobTypeAPI().then(res => {
         if (res.code === 200) {

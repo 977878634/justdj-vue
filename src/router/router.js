@@ -9,6 +9,7 @@ import messagePage from '../components/messagePage.vue'
 import userManagerPage from '../components/userManagerPage.vue'
 import personCenter from '../components/personCenter.vue'
 import jobDetail from '../components/jobDetailPage.vue'
+import appliedJobPage from '../components/appliedJobPage.vue'
 
 let routes = [
   {
@@ -31,7 +32,7 @@ let routes = [
         path: '/jobPage',
         // component: (resolve) => require(['../components/jobPage.vue'], resolve),
         component: jobPage,
-        meta: {keepAlive: true},
+        meta: {keepAlive: false},
         name: '兼职查询',
         hidden: true
       },
@@ -97,6 +98,14 @@ let routes = [
         component: jobDetail,
         meta: {keepAlive: false},
         name: '兼职详情',
+        hidden: true
+      },
+      {
+        path: '/appliedJobPage',
+        // component: (resolve) => require(['../components/jobDetailPage.vue'], resolve),
+        component: appliedJobPage,
+        meta: {keepAlive: false},
+        name: '申请/收藏',
         hidden: true
       }
     ]
