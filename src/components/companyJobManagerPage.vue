@@ -101,9 +101,9 @@
                 <el-button size="mini" type="text" icon="el-icon-view"
                            @click="toDetailPage(scope.row)"></el-button>
               </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="查看投递情况" placement="top">
+              <el-tooltip class="item" effect="dark" content="查看投递情况" placement="top" v-show="user.roleId.indexOf(2) > -1">
                 <el-button size="mini" type="text" icon="el-icon-info"
-                           @click="toDetailPage(scope.row)"></el-button>
+                           @click="toSignUpInfoPage(scope.row)"></el-button>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="删除" placement="top">
                 <el-button size="mini" type="text" icon="el-icon-delete"
@@ -447,15 +447,7 @@
       },
       user:{
         get: function () {
-          let str = localStorage.getItem("user");
-          if (util.isEmpty(str)) {
-            console.log("user 为空")
-            return "";
-          } else {
-            let temp = JSON.parse(str);
-            console.log("生气  " + this.contain(temp.roleId,3));
-            return temp;
-          }
+          return this.$store.state.user;
         },
         set: function () {
 
@@ -463,6 +455,11 @@
       }
     },
     methods: {
+      toSignUpInfoPage:function(row){
+        let temp = JSON.parse(JSON.stringify(row));
+        temp.jobDetails = '';
+        this.$router.push({path: '/jobSignUpPage/', query: {job: JSON.stringify(temp)}});
+      },
       toDetailPage:function(row){
         this.$router.push({path: '/jobDetail/', query: {job: JSON.stringify(row),isAuth:true}});
         // this.$router.push({path: '/jobDetail/' + row.id})

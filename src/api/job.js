@@ -1,6 +1,5 @@
 import fetch from '../common/js/fetch.js';
 
-
 let jobServer = process.env.JOB_URL;
 let collectionService = process.env.COLLECTION_URL;
 
@@ -16,7 +15,7 @@ export const changePWDAPI= data=>{return fetch(jobServer+'/tApi/login/changePass
 /*************************用户相关******************************/
 export const userPageFindAPI= data=>{return fetch(jobServer+'/tApi/user/pageFind', data, 'POST',"")}; //true 用户分页查询
 export const deleteUserAPI= data=>{return fetch(jobServer+'/tApi/user', data, 'DELETE',"")}; //true 删除用户
-export const getUserAPI= data=>{return fetch(jobServer+'/api/user', data, 'GET',"")}; //true 删除用户
+export const getUserAPI= data=>{return fetch(jobServer+'/api/user', data, 'GET',"")}; //true 获取用户
 export const getGroupUserAPI= data=>{return fetch(jobServer+'/api/user/group', data, 'POST',"")}; //true 获取用户组
 export const changeUserHeadImgAPI= data=>{return fetch(jobServer+'/tApi/user/headImg', data, 'PATCH',"")}; //true 获取用户组
 export const changeUserResumeUrlAPI= data=>{return fetch(jobServer+'/tApi/user/resumeUrl', data, 'PATCH',"")}; //true 获取用户组
@@ -39,6 +38,8 @@ export const personJobPageAPI = data=>{return fetch(jobServer+'/api/jobInfo/norm
 export const collectionJobAPI = data=>{return fetch(jobServer+'/tApi/jobInfo/collection', data, 'GET')};
 export const jobSignUpAPI = data=>{return fetch(jobServer+'/tApi/jobInfo/signUp', data, 'GET')};
 export const getAllCollectionJobAPI = data=>{return fetch(jobServer+'/tApi/jobInfo/collection', data, 'POST')};
+export const getAllSignUpJobAPI = data=>{return fetch(jobServer+'/tApi/jobInfo/signUp', data, 'POST')};//获取用户报名的所有兼职
+export const selectUserAPI = data=>{return fetch(jobServer+'/tApi/jobInfo/select', data, 'POST')};//公司选取报名用户
 /***********************公司相关接口********************************/
 export const addCompanyAPI = data=>{return fetch(jobServer+'/api/companyInfo/', data, 'POST')};
 export const updateCompanyAPI = data=>{return fetch(jobServer+'/api/companyInfo/', data, 'PATCH')};
@@ -57,3 +58,6 @@ export const addOnlineResumeAPI = data=>{return fetch(jobServer+'/tApi/onlineRes
 export const updateOnlineResumeAPI = data=>{return fetch(jobServer+'/tApi/onlineResumeInfo', data, 'PATCH')};
 export const getOnlineResumeByUserIdAPI = data=>{return fetch(jobServer+'/api/onlineResumeInfo', data, 'GET')};//根据用户id查询在线简历
 export const getOnlineResumeAPI = data=>{return fetch(jobServer+'/tApi/onlineResumeInfo', data, 'GET')};//获取自己的在线简历
+/***********************消息队列********************************/
+
+

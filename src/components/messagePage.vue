@@ -12,10 +12,10 @@
         <span style="font-size: 18px;font-weight: bold;margin-bottom: 15px;margin-top: 10px">最近联系列表</span>
         <div v-for="item in userList"
              @click="selectUser(item)"
-             class="user_item" style="width: 100%;height: 40px;margin-bottom: 10px">
-          <el-badge :value="item.num" class="item" :hidden="(item.num <= 0 || item.id === toUserId)">
+             class="user_item" style="width: 100%;height: 40px;margin-bottom: 15px;">
+          <el-badge :value="item.num" class="item" :hidden="(item.num <= 0 || item.id === toUserId)" style="width: 100%">
             <el-card shadow="hover"
-                     style="width: 100%;height: 100%;display: flex;justify-content: flex-start;align-items: center;"
+                     style="width: 100%;height: 40px;display: flex;justify-content: center;align-items: center;"
                      v-bind:class="{ 'user_item_select': toUserId === item.id,}">
               <span style="margin-right: 10px;font-size: 16px;font-weight: bold">{{item.name}}</span>
               <span style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis">{{item.password}}</span>
@@ -218,6 +218,7 @@
 
       //把用户加入左侧列表
       addUserToRecentList: function (id) {
+        console.log("单个用户加入聊天");
         let that = this;
         let isExist = false;
         this.userList.forEach(a => {
@@ -230,7 +231,11 @@
         } else {
           getUserAPI(id).then(res => {
             if (res.code === 200) {
+              console.log("单个用户加入列表");
               that.userList.push(res.data);
+              //直接去获取最近联系人列表
+              this.getRecentUserAndNumList();
+              //再去请求历史联系人
             } else {
               console.log("获取用户信息失败");
             }
@@ -258,8 +263,7 @@
         } else {
           console.log("当前用户有过聊天记录，清除用户列表");
           this.userList = [];
-        }
-        ;
+        };
 
         getGroupUserAPI(list).then(res => {
           if (res.code === 200) {
@@ -271,8 +275,8 @@
                     a.num = b.num;
                   }
                 })
-              })
-              this.userList = res.data;
+              });
+              this.userList = res.data.concat(this.userList);
             }
           } else {
             console.log("获取最近联系人详细信息失败");
@@ -404,18 +408,21 @@
       }
 
       this.toUserId = this.$route.query.id;
-      //直接去获取最近联系人列表
-      this.getRecentUserAndNumList();
       //先去查询组 再去查询当前用户
       if (util.isEmpty(this.toUserId)) {
         //todo 没有选中用户 直接打开聊天界面
-
+        console.log("todo 没有选中用户 直接打开聊天界面")
+        //直接去获取最近联系人列表
+        this.getRecentUserAndNumList();
       } else {
+        console.log("插入最近联系人列表")
         //插入最近联系人列表
         that.addUserToRecentList(this.toUserId)
         //todo 应该弹出聊天框
         that.getMessage(this.toUserId);
       }
+
+
 
       //判断当前浏览器是否支持WebSocket
       if ('WebSocket' in window) {

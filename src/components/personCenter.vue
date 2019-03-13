@@ -558,6 +558,7 @@
   import {VueEditor} from 'vue2-editor'
   import {getPositionOption} from "../common/js/position";
   import pdf from 'vue-pdf'
+  import {sendToMQ} from "../common/utils/util";
 
   export default {
       name: "personCenter",
@@ -659,6 +660,8 @@
         },
 
         handleEditCompanyInfo: function(){
+          console.log("发送消息到消息队列");
+          sendToMQ({name:"哈哈哈"});
           this.companyEditFormVisible = true;
         },
 

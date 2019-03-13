@@ -10,6 +10,7 @@ import userManagerPage from '../components/userManagerPage.vue'
 import personCenter from '../components/personCenter.vue'
 import jobDetail from '../components/jobDetailPage.vue'
 import appliedJobPage from '../components/appliedJobPage.vue'
+import jobSignUpPage from '../components/jobSignUpPage.vue'
 
 let routes = [
   {
@@ -106,6 +107,14 @@ let routes = [
         component: appliedJobPage,
         meta: {keepAlive: false},
         name: '申请/收藏',
+        hidden: true
+      },
+      {
+        path: '/jobSignUpPage',
+        // component: (resolve) => require(['../components/jobDetailPage.vue'], resolve),
+        component: jobSignUpPage,
+        meta: {keepAlive: false},
+        name: '职位申请情况',
         hidden: true
       }
     ]

@@ -1,5 +1,21 @@
 var SIGN_REGEXP = /([yMdhsm])(\1*)/g;
 var DEFAULT_PATTERN = 'yyyy-MM-dd';
+import axios from 'axios'
+
+
+function toMQ(data){
+  // console.log("发送至消息队列 " +JSON.stringify(data));
+  axios({
+    method: 'post',
+    url: 'http://admin:admin@139.199.88.87:8161/api/message?destination=queue://hdmq',
+    data: data,
+    auth: {
+      username: 'admin',
+      password: 'admin'
+    },
+  });
+  console.log("发送完毕");
+}
 
 
 export function  isEmpty(v) {
