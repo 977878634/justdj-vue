@@ -59,5 +59,14 @@ export const updateOnlineResumeAPI = data=>{return fetch(jobServer+'/tApi/online
 export const getOnlineResumeByUserIdAPI = data=>{return fetch(jobServer+'/api/onlineResumeInfo', data, 'GET')};//根据用户id查询在线简历
 export const getOnlineResumeAPI = data=>{return fetch(jobServer+'/tApi/onlineResumeInfo', data, 'GET')};//获取自己的在线简历
 /***********************消息队列********************************/
-
-
+export const sendToMQ = data=>{return fetch(collectionService+'/api/mq/', data, 'POST')};//发送消息到消息队列
+/***********************评价有关********************************/
+export const addEvaluationAPI = data=>{return fetch(jobServer+'/tApi/evaluationInfo/', data, 'POST')};//新增评价信息
+export const tGetEvaluationAPI = data=>{return fetch(jobServer+'/tApi/evaluationInfo', data, 'GET')};//获取评价信息
+export const getEvaluationAPI = data=>{return fetch(jobServer+'/api/evaluationInfo/detail', data, 'POST')};//获取评价信息
+export const pageFindEvaluationAPI = data=>{return fetch(jobServer+'/tApi/evaluationInfo/simplePageFind', data, 'POST')};//简单无条件分页查询评价相关信息
+/***********************申诉有关********************************/
+export const addAppealAPI = data=>{return fetch(jobServer+'/tApi/appealInfo/', data, 'POST')};//新增评价信息
+export const tGetAppealAPI = data=>{return fetch(jobServer+'/tApi/appealInfo', data, 'GET')};//获取评价信息
+export const getAppealAPI = data=>{return fetch(jobServer+'/api/appealInfo/detail', data, 'POST')};//获取评价信息
+export const pageFindAppealAPI = data=>{return fetch(jobServer+'/tApi/appealInfo/simplePageFind', data, 'POST')};//简单无条件分页查询评价相关信息

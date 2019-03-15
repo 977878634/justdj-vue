@@ -178,6 +178,7 @@
        <div style="font-size: 18px;font-weight: bold;">点击用户可查看简历或者发起聊天</div>
      </div>
    </div>
+
   </section>
 </template>
 
@@ -222,6 +223,9 @@
         }
       },
       methods: {
+        addEvaluation:function(){
+
+        },
         toChatPage:function(){
           this.$router.push({path: '/messagePage/', query: {id: this.selectNow.id}});
         },

@@ -35,9 +35,16 @@
           </el-button>
         </el-row>
       </div>
-      <div style="width: 50%;height: 160px;background-color: #eee">
-        待完善 公司信息
-      </div>
+      <el-card shadow="hover" style="width: 50%;height: 160px;" @Click="toCompanyDetailPage">
+        <div style="width:100%;height:100%;display: flex;flex-direction: column;justify-content: flex-start;align-items: center">
+          <span style="font-size: 16px;font-weight: bold;margin-top: 10px"> {{companyInfo.companyName}} </span>
+          <div style="width: 100%;display: flex;flex-direction: column;justify-content: flex-start;align-items: flex-start;padding-left: 20px">
+            <span style="font-size: 16px;margin-top: 6px">成立日期 : {{ formatDate(companyInfo.companyCreateTime)}} </span>
+            <span style="font-size: 16px;margin-top: 6px">注册资本 : {{companyInfo.registeredCapital}} ￥</span>
+            <span style="font-size: 16px;margin-top: 6px">联系人 : {{companyInfo.contact}} </span>
+          </div>
+        </div>
+      </el-card>
     </div>
 
     <!--<div class="cell_dashed"></div>-->
@@ -71,7 +78,7 @@
 </template>
 
 <script>
-  import {collectionJobAPI, dropListOneGetApi, getJobAPI, getJobTypeAPI, jobSignUpAPI} from "../api/job";
+  import {collectionJobAPI, dropListOneGetApi, getCompanyAPI, getJobAPI, getJobTypeAPI, jobSignUpAPI} from "../api/job";
   import store from "../vuex/store"
   import * as util from "../common/utils/util"
 
@@ -95,7 +102,8 @@
         jobTYPE:[],
         job_salary_treatment_options:[],
         //是否是公司里的人创建的
-        isAuth:false
+        isAuth:false,
+        companyInfo:{}
       }
     },
     computed: {
@@ -109,6 +117,11 @@
       },
     },
     methods: {
+      toCompanyDetailPage:function(){
+        // todo 公司详情界面
+
+      },
+
       isJobSignUp:function(){
         if (this.isEmpty(this.job.appliedUserId)){
           return true;
@@ -238,6 +251,16 @@
         return result;
       },
 
+
+      formatDate:function(date){
+
+        if (this.isEmpty(date)){
+          return "";
+        } else {
+          return new Date(date).toLocaleDateString();
+        }
+      },
+
       formatJobSalaryTreatment:function(){
         let temp = this.job.salaryTreatment;
         let result = [];
@@ -294,6 +317,15 @@
       } else if (this.$route.query.isAuth === true) {
         this.isAuth = true;
       }
+
+      getCompanyAPI(this.job.companyId).then(res=>{
+        if (res.code === 200){
+          this.companyInfo = res.data;
+        }else {
+          console.log("获取公司信息失败 " + res.msg);
+        }
+      });
+
 
       this.jobTYPE = this.job.jobType.concat();
 

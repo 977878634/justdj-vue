@@ -21,8 +21,9 @@
           <el-menu-item index="/jobPage">兼职查询</el-menu-item>
           <el-menu-item v-show="isLogin && user.roleId.indexOf(3) > -1" index="/userManagerPage">用户管理</el-menu-item>
           <el-menu-item v-show="isLogin && user.roleId.indexOf(3) > -1" index="/jobTypeManagerPage">类别管理</el-menu-item>
-          <el-menu-item v-show="isLogin" index="/companyJobManagerPage">兼职管理</el-menu-item>
+          <el-menu-item v-show="isLogin && (user.roleId.indexOf(2) > -1 || user.roleId.indexOf(3) > -1)" index="/companyJobManagerPage">兼职管理</el-menu-item>
           <!--<el-menu-item v-show="isLogin" index="/adminJobManagerPage">兼职管理</el-menu-item>-->
+          <el-menu-item v-show="isLogin && user.roleId.indexOf(3) > -1"  index="/appealInfoManagerPage">申诉处理</el-menu-item>
           <el-menu-item v-show="isLogin" index="/dataAnalysePage">数据分析</el-menu-item>
           <el-menu-item v-show="isLogin && user.roleId.indexOf(2) < 0" index="/appliedJobPage">申请/收藏</el-menu-item>
           <el-menu-item v-show="isLogin" index="/messagePage" style="position: relative">

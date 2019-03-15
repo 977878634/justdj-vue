@@ -78,14 +78,6 @@
               <el-button @click="inputData = ''">清空输入</el-button>
             </div>
 
-            <div style="margin-bottom: 15px" v-show="!this.conta(this.user.roleId,2)">
-              <el-button>发送简历</el-button>
-            </div>
-
-            <div style="margin-bottom: 15px" v-show="this.conta(this.user.roleId,2)">
-              <el-button>要简历</el-button>
-            </div>
-
           </div>
         </div>
 
@@ -206,6 +198,7 @@
         }
         if (message.from === "system") {
           //系统消息
+          this.messageList.push(JSON.parse(JSON.stringify(message)));
         } else {
           //用户消息 toUserId不能随便更改 检查是谁发过来的在不在最近列表里
           if (message.from !== this.toUserId){
@@ -214,6 +207,14 @@
             this.getMessage(this.toUserId);
           }
         }
+      },
+
+      //删除当前用户以及聊天记录
+      removeUser:function(){
+
+
+
+        this.toUserId = '';
       },
 
       //把用户加入左侧列表

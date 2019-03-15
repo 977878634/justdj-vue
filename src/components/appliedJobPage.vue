@@ -160,6 +160,8 @@
             </span>
               <span style="font-size: 16px;color: #006284;margin-right: 25px">{{formatPayMethod(item,'')}}</span>
               <el-button type="primary" @click="toDetailPage(item)">查看详情</el-button>
+              <el-button type="primary" @click="openEvaluationDialog(item)">评价</el-button>
+              <el-button type="primary" @click="openAppealDialog(item)">申诉</el-button>
             </div>
             <!--<div class="cell_dashed"></div>-->
           </div>
@@ -200,21 +202,99 @@
         </el-scrollbar>
       </div>
     </div>
+
+    <!--评价弹出框-->
+    <el-dialog
+      title="编辑评价"
+      width="70%"
+      center
+      :close-on-press-escape="true"
+      :visible.sync="evaluationFormVisible"
+      :close-on-click-modal="false">
+
+      <el-form
+          :model="evaluationForm"
+          label-width="7rem"
+          :rules="evaluationFormRules"
+          ref="evaluationForm">
+
+        <el-row>
+          <el-col :span="24" style="display: flex;justify-content: flex-start;align-items: center">
+            <el-form-item label="评分" prop="score" style="display: flex;align-items: center">
+              <el-rate
+                v-model="evaluationForm.score"
+                show-score
+                allow-half
+                text-color="#ff9900"
+                score-template="{value}">
+              </el-rate>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-form-item label="评价详情" prop="desc">
+            <vue-editor v-model="evaluationForm.desc"></vue-editor>
+          </el-form-item>
+        </el-row>
+
+      </el-form>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click.native="evaluationFormVisible = false">取消</el-button>
+        <el-button :disabled="!evaluationDisabled" type="primary" @click.native="addEvaluation">提交</el-button>
+      </div>
+    </el-dialog>
+
+    <!--申诉弹出框-->
+    <el-dialog
+      title="编辑申诉"
+      width="70%"
+      center
+      :close-on-press-escape="true"
+      :visible.sync="appealFormVisible"
+      :close-on-click-modal="false">
+
+      <el-form
+        :model="appealForm"
+        label-width="7rem"
+        :rules="appealFormRules"
+        ref="appealForm">
+
+        <el-row>
+          <el-form-item label="申诉详情" prop="desc">
+            <vue-editor v-model="appealForm.desc"></vue-editor>
+          </el-form-item>
+        </el-row>
+
+      </el-form>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click.native="appealFormVisible = false">取消</el-button>
+        <el-button :disabled="!appealDisabled" type="primary" @click.native="addAppeal">提交</el-button>
+      </div>
+    </el-dialog>
   </section>
 </template>
 
-<script>
-  import {
 
-  } from "../api/job";
+
+<script>
   import * as util from "../common/utils/util"
   import store from "../vuex/store"
-  import {getAllCollectionJobAPI} from "../api/job";
+  import {addAppealAPI, getAllCollectionJobAPI, tGetAppealAPI} from "../api/job";
   import {getPositionOption} from "../common/js/position";
   import {getJobTypeAPI} from "../api/job";
   import {getAllSignUpJobAPI} from "../api/job";
+  import {addEvaluationAPI} from "../api/job";
+  import {tGetEvaluationAPI} from "../api/job";
+  import {VueEditor} from 'vue2-editor'
+
   export default {
       name: "appliedJob",
+    components: {
+      VueEditor
+    },
       data(){
         return {
           labelPosition:'collection',
@@ -227,7 +307,32 @@
           allSignUpJob:[],
           passList:[],
           unPassList:[],
-          unHandleList:[]
+          unHandleList:[],
+          selectJob:{},
+          evaluationFormVisible:false,
+          evaluationForm:{
+            userId:'',
+            jobId:'',
+            score:0,
+            desc:'',
+            companyId:''
+          },
+          evaluationFormRules:{
+            score: [{required: true, message: '请打分', trigger: 'blur'}],
+            desc: [{required: true, message: '请输入评价详情', trigger: 'blur'}],
+          },
+          appealFormVisible:false,
+          appealForm:{
+            userId:'',
+            jobId:'',
+            desc:'',
+            companyId:''
+          },
+          appealFormRules:{
+            desc: [{required: true, message: '请输入申诉详情', trigger: 'blur'}],
+          },
+          evaluationDisabled:true,
+          appealDisabled:true
         }
       },
       computed:{
@@ -241,6 +346,83 @@
         },
       },
       methods:{
+        openEvaluationDialog:function(job){
+          this.selectJob = job;
+          this.evaluationFormVisible = true;
+          this.evaluationForm.jobId = job.id;
+          this.evaluationForm.userId = this.user.id;
+          this.evaluationForm.companyId = job.companyId;
+          tGetEvaluationAPI(job.id).then(res=>{
+            if (res.code === 200){
+              if (!util.isEmpty(res.data)){
+                this.evaluationDisabled = false;
+                this.evaluationForm = res.data;
+              }
+            }else if (res.code === 2) {
+              this.$store.commit('signInDialogVisibleTrue');
+            } else {
+              this.$message.error(res.msg)
+            }
+          })
+        },
+        addEvaluation:function(){
+          this.$refs["evaluationForm"].validate((valid) => {
+            if (valid) {
+              addEvaluationAPI(this.evaluationForm).then(res=>{
+                if (res.code === 200){
+                  this.$message.success("评论成功");
+                  this.evaluationFormVisible = false;
+                }else if (res.code === 2) {
+                  this.$store.commit('signInDialogVisibleTrue');
+                } else {
+                  this.$message.error(res.msg)
+                }
+              })
+            } else {
+              return false;
+            }
+          });
+        },
+
+        openAppealDialog:function(job){
+          this.selectJob = job;
+          this.appealFormVisible = true;
+          this.appealForm.jobId = job.id;
+          this.appealForm.userId = this.user.id;
+          this.appealForm.companyId = job.companyId;
+          tGetAppealAPI(job.id).then(res=>{
+            if (res.code === 200){
+              if (!util.isEmpty(res.data)){
+                this.appealDisabled = false;
+                this.appealForm = res.data;
+              }
+            }else if (res.code === 2) {
+              this.$store.commit('signInDialogVisibleTrue');
+            } else {
+              this.$message.error(res.msg)
+            }
+          })
+        },
+        addAppeal:function(){
+          this.$refs["appealForm"].validate((valid) => {
+            if (valid) {
+              addAppealAPI(this.appealForm).then(res=>{
+                if (res.code === 200){
+                  this.$message.success("申诉已提交");
+                  this.appealFormVisible = false;
+                }else if (res.code === 2) {
+                  this.$store.commit('signInDialogVisibleTrue');
+                } else {
+                  this.$message.error(res.msg)
+                }
+              })
+            } else {
+              return false;
+            }
+          });
+        },
+
+
         deepTraversal: function (node) {
           if (!util.isEmpty(node)) {
             node.forEach(a => {
@@ -313,6 +495,28 @@
             default:
               break;
           }
+        },
+        isEmpty:function(v) {
+          switch (typeof v) {
+            case 'undefined':
+              return true;
+            case 'string':
+              if (v.replace(/(^[ \t\n\r]*)|([ \t\n\r]*$)/g, '').length === 0) return true;
+              break;
+            case 'boolean':
+              if (!v) return true;
+              break;
+            case 'number':
+              if (0 === v || isNaN(v)) return true;
+              break;
+            case 'object':
+              if (null === v || v.length === 0) return true;
+              for (let i in v) {
+                return false;
+              }
+              return true;
+          }
+          return false;
         },
         toDetailPage:function(row){
           this.$router.push({path: '/jobDetail/', query: {job: JSON.stringify(row)}});

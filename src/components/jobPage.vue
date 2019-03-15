@@ -148,7 +148,7 @@
   import {
     addJobAPI, deleteJobAPI,
     dropListOneGetApi, getCompanyListAPI,
-    getJobTypeAPI, personJobPageAPI
+    getJobTypeAPI, personJobPageAPI, sendToMQ
   } from "../api/job";
   import store from "../vuex/store"
   import * as util from "../common/utils/util"
@@ -256,6 +256,13 @@
     },
     methods: {
       toDetailPage: function (row) {
+        let history = {
+          userId:'',
+          jobId:''
+        };
+        history.jobId = row.id;
+        history.userId = this.user.id;
+        sendToMQ(JSON.stringify(history)).then();
 
         row.userId = this.user.id;
         let temp = JSON.parse(JSON.stringify(row));
