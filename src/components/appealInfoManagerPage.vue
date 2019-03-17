@@ -13,11 +13,15 @@
                   :row-class-name="'global_table_tr'"
                   :cell-class-name="'global_table_normal'"
                   style="width: 100%;position: absolute;top: 0;left: 0">
-          <el-table-column prop="userName" label="申诉人" min-width="20" align="center">
+          <el-table-column prop="userInfo.name" label="申诉人" min-width="30" align="center">
           </el-table-column>
-          <el-table-column prop="createTime" label="申诉日期" min-width="20" align="center" :formatter="getNowFormatDate">
+          <el-table-column prop="userInfo.phone" label="申诉人手机" min-width="30" align="center">
           </el-table-column>
-          <el-table-column prop="companyName" label="公司" min-width="40" align="center">
+          <el-table-column prop="createTime" label="申诉日期" min-width="40" align="center" :formatter="getNowFormatDate">
+          </el-table-column>
+          <el-table-column prop="companyInfo.companyName" label="公司名称" min-width="40" align="center">
+          </el-table-column>
+          <el-table-column prop="companyInfo.contactPhone" label="公司联系方式" min-width="40" align="center">
           </el-table-column>
           <el-table-column prop="jobInfo.jobName" label="职位名称" min-width="80" align="center">
           </el-table-column>

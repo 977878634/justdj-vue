@@ -4,10 +4,10 @@
       <el-header style="position: relative;background-color: #545c64;padding: 0 9rem;">
         <div class="home-log" style="background-color: #545c64;color: #fff;box-sizing: border-box">
           校园兼职
-          <span style="font-size: 1rem;margin-left: 10px;color: #ffffff" @click="cityDialogVisible = true">
-              <i class="el-icon-location-outline"></i>
-              北京
-            </span>
+          <!--<span style="font-size: 1rem;margin-left: 10px;color: #ffffff" @click="cityDialogVisible = true">-->
+              <!--<i class="el-icon-location-outline"></i>-->
+              <!--北京-->
+            <!--</span>-->
         </div>
         <el-menu :default-active="this.$route.path"
                  class="el-menu-demo"
@@ -24,7 +24,7 @@
           <el-menu-item v-show="isLogin && (user.roleId.indexOf(2) > -1 || user.roleId.indexOf(3) > -1)" index="/companyJobManagerPage">兼职管理</el-menu-item>
           <!--<el-menu-item v-show="isLogin" index="/adminJobManagerPage">兼职管理</el-menu-item>-->
           <el-menu-item v-show="isLogin && user.roleId.indexOf(3) > -1"  index="/appealInfoManagerPage">申诉处理</el-menu-item>
-          <el-menu-item v-show="isLogin" index="/dataAnalysePage">数据分析</el-menu-item>
+          <el-menu-item v-show="isLogin && user.roleId.indexOf(3) > -1" index="/dataAnalysePage">数据分析</el-menu-item>
           <el-menu-item v-show="isLogin && user.roleId.indexOf(2) < 0" index="/appliedJobPage">申请/收藏</el-menu-item>
           <el-menu-item v-show="isLogin" index="/messagePage" style="position: relative">
             <el-badge :value="unReadNum" class="item" :hidden="unReadNum <= 0" style="position: absolute;top: -10px;left: 50px">

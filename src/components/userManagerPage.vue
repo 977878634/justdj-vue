@@ -88,6 +88,9 @@
               <el-tooltip  class="item" effect="dark" content="删除" placement="top">
                 <el-button size="mini" type="text" icon="el-icon-delete"  @click="handleDel(scope.$index, scope.row)"></el-button>
               </el-tooltip>
+              <el-tooltip  class="item" effect="dark" content="查看浏览分类" placement="top">
+                <el-button size="mini" type="text" icon="el-icon-view"  @click="handleDel(scope.$index, scope.row)"></el-button>
+              </el-tooltip>
             </template>
           </el-table-column>
         </el-table>

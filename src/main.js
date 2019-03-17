@@ -6,7 +6,7 @@ import Vue from 'vue'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 // const ElementUI = require('element-ui')
-
+import echarts from 'echarts'
 import App from './App'
 import VueRouter from 'vue-router'
 //路由文件
@@ -20,6 +20,7 @@ Vue.use(VueRouter);
 Vue.use(ElementUI);
 Vue.use(Vuex)
 
+Vue.prototype.$echarts = echarts;
 
 // 如果使用模块化机制编程，导入Vue和VueRouter，要调用 Vue.use(VueRouter)
 export const router = new VueRouter({

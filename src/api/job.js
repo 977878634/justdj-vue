@@ -23,10 +23,10 @@ export const changeUserResumeUrlAPI= data=>{return fetch(jobServer+'/tApi/user/r
 export const dropListOneGetApi= data=>{return fetch(jobServer+'/api/drop/one', data, 'GET',"")}; //获取下拉列表
 
 
-/***********************通用接口********************************/
-export const getJobTypeAPI = data=>{return fetch(jobServer+'/api/universal/list/jobType', data, 'POST')};
-export const addOrEditCompanyKanBan = data=>{return fetch(jobServer+'/api/companyKanBan/', data, 'POST')};
-
+/***********************兼职类型********************************/
+export const getJobTypeAPI = data=>{return fetch(jobServer+'/api/jobType/', data, 'GET')};
+export const deleteJobTypeAPI = data=>{return fetch(jobServer+'/api/jobType/', data, 'DELETE')};
+export const updateJobTypeAPI = data=>{return fetch(jobServer+'/api/jobType/', data, 'PATCH')};
 
 /***********************兼职相关的接口********************************/
 export const addJobAPI = data=>{return fetch(jobServer+'/tApi/jobInfo/', data, 'POST')};
@@ -70,3 +70,6 @@ export const addAppealAPI = data=>{return fetch(jobServer+'/tApi/appealInfo/', d
 export const tGetAppealAPI = data=>{return fetch(jobServer+'/tApi/appealInfo', data, 'GET')};//获取评价信息
 export const getAppealAPI = data=>{return fetch(jobServer+'/api/appealInfo/detail', data, 'POST')};//获取评价信息
 export const pageFindAppealAPI = data=>{return fetch(jobServer+'/tApi/appealInfo/simplePageFind', data, 'POST')};//简单无条件分页查询评价相关信息
+/***********************数据分析有关********************************/
+export const getJobTypeAnalyseApi = data=>{return fetch(jobServer+'/tApi/dataAnalyse/jobType', data, 'GET')};//
+export const getJobTypeHotAnalyseApi = data=>{return fetch(jobServer+'/tApi/dataAnalyse/jobTypeHot', data, 'GET')};//
