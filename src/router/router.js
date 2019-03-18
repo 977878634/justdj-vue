@@ -42,7 +42,7 @@ let routes = [
         path: '/userManagerPage',
         // component: (resolve) => require(['../components/userManagerPage.vue'], resolve),
         component: userManagerPage,
-        meta: {keepAlive: true},
+        meta: {keepAlive: false},
         name: '用户管理',
         hidden: true
       },
