@@ -16,6 +16,7 @@
         <el-input v-model="selectNode.label" style=""></el-input>
 
         <div style="margin-top: 100px">
+          <el-button @click="addItem">新增</el-button>
           <el-button @click="updateItem">修改</el-button>
           <el-button @click="deleteItem" type="danger">删除</el-button>
         </div>
@@ -30,7 +31,7 @@
   import * as util from "../common/utils/util"
   import store from "../vuex/store"
   import {VueEditor} from 'vue2-editor'
-  import {deleteJobTypeAPI, getJobTypeAPI, updateJobAPI, updateJobTypeAPI} from "../api/job";
+  import {addJobTypeAPI, deleteJobTypeAPI, getJobTypeAPI, updateJobAPI, updateJobTypeAPI} from "../api/job";
 
     export default {
       name: "jobTypeManagerPage",
@@ -77,6 +78,30 @@
             })
           }
         },
+
+        addItem: function(){
+          if (!util.isEmpty(this.selectNode.value)){
+            let temp = {
+              id:'',
+              name:''
+            };
+            temp.id = this.selectNode.value;
+            temp.name = this.selectNode.label;
+            addJobTypeAPI(temp).then(res =>{
+              if (res.code === 200){
+                this.$message.success("新增成功");
+                this.node.label = this.selectNode.label;
+                this.getData();
+                this.selectNode = {};
+              }else if (res.code === 2) {
+                this.$store.commit('signInDialogVisibleTrue');
+              } else {
+                this.$message.error(res.msg)
+              }
+            })
+          }
+        },
+
         updateItem: function () {
           console.log(123)
           if (!util.isEmpty(this.selectNode.value)){

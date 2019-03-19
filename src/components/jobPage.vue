@@ -364,10 +364,8 @@
         personJobPageAPI(this.filter).then(res => {
           this.loading = false;
           if (res.code === 200) {
-            if (!util.isEmpty(res.data.content)) {
               this.dataList = res.data.content;
               this.total = res.data.totalElements;
-            }
 
           } else if (res.code === 2) {
             this.$store.commit('signInDialogVisibleTrue');

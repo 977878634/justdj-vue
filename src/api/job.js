@@ -27,7 +27,7 @@ export const dropListOneGetApi= data=>{return fetch(jobServer+'/api/drop/one', d
 export const getJobTypeAPI = data=>{return fetch(jobServer+'/api/jobType/', data, 'GET')};
 export const deleteJobTypeAPI = data=>{return fetch(jobServer+'/api/jobType/', data, 'DELETE')};
 export const updateJobTypeAPI = data=>{return fetch(jobServer+'/api/jobType/', data, 'PATCH')};
-
+export const addJobTypeAPI = data=>{return fetch(jobServer+'/api/jobType/', data, 'POST')};
 /***********************兼职相关的接口********************************/
 export const addJobAPI = data=>{return fetch(jobServer+'/tApi/jobInfo/', data, 'POST')};
 export const updateJobAPI = data=>{return fetch(jobServer+'/tApi/jobInfo/', data, 'PATCH')};

@@ -88,9 +88,15 @@
               <el-tooltip  class="item" effect="dark" content="删除" placement="top">
                 <el-button size="mini" type="text" icon="el-icon-delete"  @click="handleDel(scope.$index, scope.row)"></el-button>
               </el-tooltip>
-              <el-tooltip  class="item" effect="dark" content="查看浏览分类" placement="top">
-                <el-button size="mini" type="text" icon="el-icon-view"  @click="handleDel(scope.$index, scope.row)"></el-button>
+              <el-tooltip  class="item" effect="dark" content="聊一聊" placement="top">
+                <el-button size="mini" type="text" icon="el-icon-message"  @click="toChatPage(scope.$index, scope.row)"></el-button>
               </el-tooltip>
+              <el-tooltip  class="item" effect="dark" content="查看公司信息" placement="top" v-if="scope.row.type === 1">
+                <el-button size="mini" type="text" icon="el-icon-view"  @click="getCompanyInfo(scope.$index, scope.row)"></el-button>
+              </el-tooltip>
+              <!--<el-tooltip  class="item" effect="dark" content="查看浏览分类" placement="top">-->
+                <!--<el-button size="mini" type="text" icon="el-icon-view"  @click="handleDel(scope.$index, scope.row)"></el-button>-->
+              <!--</el-tooltip>-->
             </template>
           </el-table-column>
         </el-table>
@@ -137,6 +143,120 @@
         <el-button type="primary" @click.native="editSubmit" :loading="editFormLoading">提交</el-button>
       </div>
     </el-dialog>
+
+    <!--公司信息弹出框-->
+    <el-dialog
+      title="用户公司信息"
+      width="70%"
+      center
+      :close-on-press-escape="true"
+      :visible.sync="companyEditFormVisible"
+      :close-on-click-modal="false">
+
+      <el-form :model="companyEditForm"
+               label-width="7rem"
+               disabled
+               ref="companyEditForm">
+
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="公司名称" prop="companyName">
+              <el-input v-model="companyEditForm.companyName" autocomplete="off" style="width: 25rem"
+                        placeholder="请输入公司名称"></el-input>
+
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="公司类型" prop="companyType">
+              <el-select v-model="companyEditForm.companyType"
+                         placeholder="请选择公司类型" style="width: 25rem">
+                <el-option
+                  v-for="item in companyTypeOptions"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+
+          <el-col :span="12">
+            <el-form-item label="成立日期" prop="companyCreateTime">
+              <el-date-picker
+                style="width: 25rem"
+                v-model="companyEditForm.companyCreateTime"
+                type="date"
+                placeholder="请选择成立日期">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="注册资本" prop="registeredCapital">
+              <el-input-number v-model="companyEditForm.registeredCapital" :precision="0" :min="1" :max="1000000" :step="1"
+                               label="请输入招聘人数" style="width: 25rem"></el-input-number>
+
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="经营范围" prop="businessScope">
+              <el-input v-model="companyEditForm.businessScope" autocomplete="off" style="width: 25rem"
+                        placeholder="请输入经营范围"></el-input>
+
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="联系人" prop="contact">
+              <el-input v-model="companyEditForm.contact" autocomplete="off" style="width: 25rem"
+                        placeholder="请输入联系人"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+
+
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="联系方式" prop="contactPhone">
+              <el-input v-model="companyEditForm.contactPhone" autocomplete="off" style="width: 25rem"
+                        placeholder="请输入联系方式"></el-input>
+
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="公司地址" prop="address">
+              <el-input v-model="companyEditForm.address" autocomplete="off" style="width: 64.125rem"
+                        placeholder="请输入公司地址"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-form-item label="公司介绍" prop="companyIntroduce">
+            <el-card shadow="hover" style="width: 60.625rem;margin-left: 1.875rem">
+              <div class="online-resume-detail" v-html="companyEditForm.companyIntroduce">
+
+              </div>
+            </el-card>
+          </el-form-item>
+        </el-row>
+
+      </el-form>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click.native="companyEditFormVisible = false">取消</el-button>
+        <el-button type="primary" @click.native="addCompany">提交</el-button>
+      </div>
+    </el-dialog>
+
     <!--</div>-->
     <!--<div v-else>-->
     <!--<center><h2>亲爱的用户,您暂时没有权限查看哦.</h2></center>-->
@@ -145,14 +265,30 @@
 </template>
 
 <script>
-  import {deleteUserAPI, dropListOneGetApi, userPageFindAPI} from "../api/job";
+  import {deleteUserAPI, dropListOneGetApi, getCompanyAPI, userPageFindAPI} from "../api/job";
   import store from "../vuex/store"
+  import * as util from "../common/utils/util"
 
   export default {
     name: "usermanagerpage",
     data() {
 
       return {
+        companyTypeOptions:[],
+        companyEditForm: {
+          companyType: '',
+          companyName: '',
+          companyCreateTime: '',
+          registeredCapital: 0,
+          businessScope:'',
+          contact:'',
+          contactPhone:'',
+          address:'',
+          companyIntroduce:'',
+          responseRate:'',
+          processingSpeed:''
+        },
+        companyEditFormVisible: false,
         filter: {
           name: "",
           email: "",
@@ -194,6 +330,22 @@
 
     },
     methods: {
+      getCompanyInfo: function(index,row){
+        this.companyEditFormVisible = true;
+        console.log("获取公司信息" + JSON.stringify(row));
+        getCompanyAPI(row.companyId).then(res => {
+          if (res.code === 200){
+            if (!util.isEmpty(res.data)) {
+              this.companyEditForm = res.data;
+            }
+          } else {
+            console.log("获取公司信息失败");
+          }
+        });
+      },
+      toChatPage:function(index,row){
+        this.$router.push({path: '/messagePage/', query: {id: row.id}});
+      },
       resetFilters: function(){
         this.filter = {
           name: "",
@@ -295,11 +447,25 @@
         }
       });
 
+      dropListOneGetApi("company_type").then((res) => {
+        if (res.code === 200) {
+          this.companyTypeOptions = res.data;
+        } else {
+          this.$message.err("获取公司类型下拉列表失败" + res.msg);
+        }
+      });
+
+
       this.query();
     }
   }
 </script>
 
 <style scoped>
-
+  >>> .online-resume-detail p{
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    text-align: left;
+  }
 </style>

@@ -56,7 +56,7 @@
               <router-link to="/personCenter">
                 <el-dropdown-item style="text-align: center">个人中心</el-dropdown-item>
               </router-link>
-              <el-dropdown-item>修改资料</el-dropdown-item>
+              <!--<el-dropdown-item>修改资料</el-dropdown-item>-->
               <el-dropdown-item @click.native="updatePasswordVisible = true">修改密码</el-dropdown-item>
               <el-dropdown-item @click.native="signOut">退出登录</el-dropdown-item>
             </el-dropdown-menu>
