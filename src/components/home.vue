@@ -363,8 +363,10 @@
           callback(new Error('请输入密码'));
         } else {
           if (value.length >= 6 && value.length <= 18) {
-            if (this.changePwdForm.newPassword == this.changePwdForm.oldPassword) {
-              callback(new Error('新旧密码不能相同'));
+            if (signUpDialogVisible !== true){
+              if (this.changePwdForm.newPassword === this.changePwdForm.oldPassword) {
+                callback(new Error('新旧密码不能相同'));
+              }
             }
             callback();
           } else {
