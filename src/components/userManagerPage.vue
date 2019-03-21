@@ -82,7 +82,7 @@
           </el-table-column>
           <el-table-column label="操作" width="140" align="center">
             <template scope="scope">
-              <el-tooltip  class="item" effect="dark" content="编辑" placement="top">
+              <el-tooltip  class="item" effect="dark" content="修改用户状态" placement="top">
                 <el-button size="mini" type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)"></el-button>
               </el-tooltip>
               <el-tooltip  class="item" effect="dark" content="删除" placement="top">
@@ -112,37 +112,6 @@
         </el-pagination>
       </div>
     </div>
-
-    <!--弹出框-->
-    <el-dialog title="添加维护记录" :visible.sync="editFormVisible" :close-on-click-modal="false">
-      <el-form :model="editForm" label-width="150px" :rules="editFormRules" ref="editForm">
-        <el-form-item label="执行维护时间" prop="time">
-          <el-date-picker
-            :editable="false"
-            v-model="editForm.time"
-            type="datetime" format="yyyy-MM-dd HH:mm:ss"
-            placeholder="执行维护时间">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="执行维护人" prop="userId">
-          <el-select v-model="editForm.userId" placeholder="执行维护人">
-            <el-option
-              v-for="item in editForm_users_options"
-              :key="item.id"
-              :label="item.nickName"
-              :value="item.id">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="维护内容" prop="content">
-          <el-input type="textarea" placeholder="请输入维护内容" v-model="editForm.content"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click.native="editFormVisible = false">取消</el-button>
-        <el-button type="primary" @click.native="editSubmit" :loading="editFormLoading">提交</el-button>
-      </div>
-    </el-dialog>
 
     <!--公司信息弹出框-->
     <el-dialog
@@ -252,11 +221,45 @@
       </el-form>
 
       <div slot="footer" class="dialog-footer">
-        <el-button @click.native="companyEditFormVisible = false">取消</el-button>
-        <el-button type="primary" @click.native="addCompany">提交</el-button>
+        <el-button @click.native="companyEditFormVisible = false">确定</el-button>
       </div>
     </el-dialog>
 
+    <!--修改用户状态-->
+    <el-dialog
+      title="编辑用户状态"
+      width="50%"
+      center
+      :close-on-press-escape="true"
+      :visible.sync="editFormVisible"
+      :close-on-click-modal="false">
+
+      <el-form :model="selectUser"
+               label-width="7rem"
+               ref="selectUser">
+
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="账户状态" prop="companyType">
+              <el-select v-model="selectUser.userStatus"
+                         placeholder="请选择账户状态" style="width: 25rem">
+                <el-option
+                  v-for="item in userStatusList"
+                  :label="item.label"
+                  :value="parseInt(item.value)">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+      </el-form>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click.native="editFormVisible = false">取消</el-button>
+        <el-button type="primary" @click.native="editUserStatus">提交</el-button>
+      </div>
+    </el-dialog>
     <!--</div>-->
     <!--<div v-else>-->
     <!--<center><h2>亲爱的用户,您暂时没有权限查看哦.</h2></center>-->
@@ -265,7 +268,7 @@
 </template>
 
 <script>
-  import {deleteUserAPI, dropListOneGetApi, getCompanyAPI, userPageFindAPI} from "../api/job";
+  import {deleteUserAPI, dropListOneGetApi, getCompanyAPI, updateUserAPI, userPageFindAPI} from "../api/job";
   import store from "../vuex/store"
   import * as util from "../common/utils/util"
 
@@ -274,6 +277,7 @@
     data() {
 
       return {
+        selectUser:{},
         companyTypeOptions:[],
         companyEditForm: {
           companyType: '',
@@ -330,6 +334,25 @@
 
     },
     methods: {
+      editUserStatus:function(){
+
+        if (!util.isEmpty(this.selectUser)){
+          updateUserAPI(this.selectUser).then(res =>{
+             if (res.code === 200){
+               this.editFormVisible = false;
+               this.$message.success("修改成功");
+                this.query();
+             }else if (res.code === 2) {
+               this.$store.commit('signInDialogVisibleTrue');
+             } else {
+               this.$message.error(res.msg)
+             }
+          })
+        }
+
+      },
+
+
       getCompanyInfo: function(index,row){
         this.companyEditFormVisible = true;
         console.log("获取公司信息" + JSON.stringify(row));
@@ -355,6 +378,7 @@
           pageNum:0,
           pageSize:10
         };
+        this.query();
       },
       add: function () {
 
@@ -382,8 +406,9 @@
 
       },
       //todo 编辑
-      handleEdit: function () {
-
+      handleEdit: function (index,row) {
+          this.selectUser = JSON.parse(JSON.stringify(row));
+          this.editFormVisible = true;
       },
 
       handleDel: function (scop,row) {

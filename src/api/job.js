@@ -15,10 +15,11 @@ export const changePWDAPI= data=>{return fetch(jobServer+'/tApi/login/changePass
 /*************************用户相关******************************/
 export const userPageFindAPI= data=>{return fetch(jobServer+'/tApi/user/pageFind', data, 'POST',"")}; //true 用户分页查询
 export const deleteUserAPI= data=>{return fetch(jobServer+'/tApi/user', data, 'DELETE',"")}; //true 删除用户
+export const updateUserAPI= data=>{return fetch(jobServer+'/tApi/user/', data, 'PATCH',"")}; //修改用户信息
 export const getUserAPI= data=>{return fetch(jobServer+'/api/user', data, 'GET',"")}; //true 获取用户
 export const getGroupUserAPI= data=>{return fetch(jobServer+'/api/user/group', data, 'POST',"")}; //true 获取用户组
-export const changeUserHeadImgAPI= data=>{return fetch(jobServer+'/tApi/user/headImg', data, 'PATCH',"")}; //true 获取用户组
-export const changeUserResumeUrlAPI= data=>{return fetch(jobServer+'/tApi/user/resumeUrl', data, 'PATCH',"")}; //true 获取用户组
+export const changeUserHeadImgAPI= data=>{return fetch(jobServer+'/tApi/user/headImg', data, 'PATCH',"")}; //
+export const changeUserResumeUrlAPI= data=>{return fetch(jobServer+'/tApi/user/resumeUrl', data, 'PATCH',"")}; //
 /***********************下拉列表************************/
 export const dropListOneGetApi= data=>{return fetch(jobServer+'/api/drop/one', data, 'GET',"")}; //获取下拉列表
 

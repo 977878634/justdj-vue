@@ -175,13 +175,13 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="密码" prop="password">
-                <el-input v-model="signUpFormPerson.password" autocomplete="off" style="width: 18.75rem"
+                <el-input type="password" v-model="signUpFormPerson.password" autocomplete="off" style="width: 18.75rem"
                           placeholder="请输入密码"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="重复" style="float: right" prop="repeatPassword">
-                <el-input v-model="signUpFormPerson.repeatPassword" autocomplete="off" style="width: 18.75rem"
+                <el-input type="password"  v-model="signUpFormPerson.repeatPassword" autocomplete="off" style="width: 18.75rem"
                           placeholder="请重复密码"></el-input>
               </el-form-item>
             </el-col>
@@ -231,13 +231,13 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="密码" prop="password">
-                <el-input v-model="signUpFormCompany.password" autocomplete="off" style="width: 18.75rem"
+                <el-input type="password" v-model="signUpFormCompany.password" autocomplete="off" style="width: 18.75rem"
                           placeholder="请输入密码"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="重复" style="float: right" prop="repeatPassword">
-                <el-input v-model="signUpFormCompany.repeatPassword" autocomplete="off" style="width: 18.75rem"
+                <el-input type="password" v-model="signUpFormCompany.repeatPassword" autocomplete="off" style="width: 18.75rem"
                           placeholder="请重复密码"></el-input>
               </el-form-item>
             </el-col>
@@ -363,7 +363,7 @@
           callback(new Error('请输入密码'));
         } else {
           if (value.length >= 6 && value.length <= 18) {
-            if (signUpDialogVisible !== true){
+            if (this.signUpDialogVisible !== true){
               if (this.changePwdForm.newPassword === this.changePwdForm.oldPassword) {
                 callback(new Error('新旧密码不能相同'));
               }
