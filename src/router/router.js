@@ -58,7 +58,7 @@ let routes = [
         path: '/companyJobManagerPage',
         // component: (resolve) => require(['../components/companyJobManagerPage.vue'], resolve),
         component: companyJobManagerPage,
-        meta: {keepAlive: true},
+        meta: {keepAlive: false},
         name: '企业兼职管理',
         hidden: true
       },
