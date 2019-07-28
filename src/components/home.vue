@@ -19,14 +19,14 @@
                  @select="handleSelect">
           <el-menu-item index="/indexPage" key="">首页</el-menu-item>
           <el-menu-item index="/jobPage">兼职查询</el-menu-item>
-          <el-menu-item v-show="isLogin && user.roleId.indexOf(3) > -1" index="/userManagerPage">用户管理</el-menu-item>
-          <el-menu-item v-show="isLogin && user.roleId.indexOf(3) > -1" index="/jobTypeManagerPage">类别管理</el-menu-item>
-          <el-menu-item v-show="isLogin && (user.roleId.indexOf(2) > -1 || user.roleId.indexOf(3) > -1)" index="/companyJobManagerPage">兼职管理</el-menu-item>
+          <el-menu-item  index="/userManagerPage">用户管理</el-menu-item>
+          <el-menu-item  index="/jobTypeManagerPage">类别管理</el-menu-item>
+          <el-menu-item  index="/companyJobManagerPage">兼职管理</el-menu-item>
           <!--<el-menu-item v-show="isLogin" index="/adminJobManagerPage">兼职管理</el-menu-item>-->
-          <el-menu-item v-show="isLogin && user.roleId.indexOf(3) > -1"  index="/appealInfoManagerPage">申诉处理</el-menu-item>
-          <el-menu-item v-show="isLogin && user.roleId.indexOf(3) > -1" index="/dataAnalysePage">数据分析</el-menu-item>
-          <el-menu-item v-show="isLogin && user.roleId.indexOf(2) < 0" index="/appliedJobPage">申请/收藏</el-menu-item>
-          <el-menu-item v-show="isLogin" index="/messagePage" style="position: relative">
+          <el-menu-item   index="/appealInfoManagerPage">申诉处理</el-menu-item>
+          <el-menu-item  index="/dataAnalysePage">数据分析</el-menu-item>
+          <el-menu-item index="/appliedJobPage">申请/收藏</el-menu-item>
+          <el-menu-item  index="/messagePage" style="position: relative">
             <el-badge :value="unReadNum" class="item" :hidden="unReadNum <= 0" style="position: absolute;top: -10px;left: 50px">
             </el-badge>
             <span>消息</span>
